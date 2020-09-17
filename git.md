@@ -4,7 +4,7 @@
 >
 > Git은 분산형 버전관리시스템 (DVCS) 중 하나이다.
 
-[vscode](https://code.visualstudio.com/ )
+[vscode](https://code.visualstudio.com/ )    추가작업 체크란에 밑에 4개 모두 체크 하고 설치
 
 [typora](https://typora.io/#windows )
 
@@ -28,7 +28,7 @@ $ git config --global user.email 'tmahek1@naver.com'
 * 설정 내용을 확인하기 위해서는 아래의 명령어를 입력한다.
 
   ```bash
-  $ git config -global -l
+  $ git config --global -l
   user.email=tmahek1@naver.com
   user.name=seohyeongtae
   ```
