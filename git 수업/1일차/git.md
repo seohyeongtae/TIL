@@ -176,3 +176,9 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 ```
 
 * origin 원격저장소의 master 브랜치로 push
+
+```bash
+$ git push -f origin master
+# 원격저장소 덮어 씌우기 쓸때 주의
+```
+
