@@ -56,8 +56,13 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
 
 5. **Configuration**
 
+   ```
+# cd /usr/local/hadoop-1.2.1/conf 
+   # vi ~ 로진행
+   ```
+   
    - **core-site.xml**
-
+   
      ```
      <property>
      
@@ -70,14 +75,14 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      <property>
      
      <name>hadoop.tmp.dir</name>
-     
+  
      <value>/usr/local/hadoop-1.2.1/tmp</value>
-     
+  
      </property>
      ```
-
+   
    - **hdfs-site.xml**
-
+   
      ```
      <property>
      
@@ -106,33 +111,33 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      <property>
      
      <name>dfs.data.dir</name>
-     
+  
      <value>/usr/local/hadoop-1.2.1/data</value>
-     
+  
      </property>
      ```
-
+   
    - **mapred-site.xml**
-
+   
      ```
      <property>
      
      <name>mapred.job.tracker</name>
-     
+  
      <value>localhost:9001</value>
-     
+  
      </property>
      ```
-
+   
    - **Hadoop 실행**
-
+   
      ```
      hadoop namenedo -format
-     
+  
      start-all.sh
      
      jps
      ```
-
+   
      
 

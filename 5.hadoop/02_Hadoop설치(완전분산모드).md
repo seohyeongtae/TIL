@@ -40,7 +40,7 @@
 
 4. **SSH 를 이요한 파일 전송 및 Jdk 원격설치**
 
-   - scp  /etc/hosts  root@secondserver:/etc/hosts  (hosts 설정한 뒤 복사)
+   - scp  /etc/hosts  root@secondserver:/etc/hosts  (hosts 설정한 뒤 복사전송)
 
      ​	scp  ./ (현재있는폴더를 나타냄)
 
@@ -58,12 +58,9 @@
 5. **Hadoop 설치**
 
 - wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
-  
-- /usr/local에 복사
-  
-- vi /etc/profile
-  
-- HADOOP_HOME 지정
+- tar xvf hadoop*
+- cp -r hadoop-1.2.1  /usr/local       에 복사
+- vi /etc/profile   (HADOOP_HOME 지정)
 
 ```
  /52번 line 밑에다가 추가 (자바와 함께 지정함)
@@ -75,89 +72,192 @@ export JAVA_HOME CLASSPATH  HADOOP_HOME
 PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
 ```
 
+- scp  /etc/profile  root@secondserver:/etc/profile   (설정한 profile 복사전송)
+
+
+
+6. **Configuration**
+
+```
+# cd /usr/local/hadoop-1.2.1/conf 
+# vi ~ 로 진행
+```
+
+- **core-site.xml**
+
+  ```
+  <property>
+  
+  <name>fs.default.name</name>
+  
+  <value>hdfs://mainserver:9000</value>
+                (Namenode server)
+  </property>
+  
+  <property>
+  
+  <name>hadoop.tmp.dir</name>
+  
+  <value>/usr/local/hadoop-1.2.1/tmp</value>
+  
+  </property>
+  
+  ```
+
+- **hdfs-site.xml**
+
+  ```
+  <property>
+  
+  <name>dfs.replication</name>
+  
+  <value>2</value> 
+    (몇개를 복제할 것인지 - 파일의 신뢰성 확보 파일 및 컴퓨터 손상 대비)
+  </property>
+  
+  <property>
+  
+  <name>dfs.webhdfs.enabled</name>
+  
+  <value>true</value>
+  
+  </property>
+  
+  <property>
+  
+  <name>dfs.name.dir</name>
+  
+  <value>/usr/local/hadoop-1.2.1/name</value>
+  
+  </property>
+  
+  <property>
+  
+  <name>dfs.data.dir</name>
+  
+  <value>/usr/local/hadoop-1.2.1/data</value>
+  
+  </property>
+  ```
+
+- **mapred-site.xml**
+
+  ```
+  <property>
+  
+  <name>mapred.job.tracker</name>
+  
+  <value>mainserver:9001</value>
+  
+  </property>
+  ```
+
+- marsters   (보조Namenode 서버설정)
+
+  ```
+  secondsever (로 수정)
+  ```
+
+- slaves  (Datanode 서버설정)
+
+  ```
+  secondserver
+  dataserver (로 수정)
+  ```
+
+  
+
+- **Hadoop 실행**
+
+  ```
+  hadoop namenedo -format
+  
+  start-all.sh
+  
+  jps  - 각 서버별로 지정된 jsp 가 나온다
+  ex)
+main server
+  4327 JobTracker
+  4460 Jps
+  4158 NameNode
+  
+  secondserver
+  3476 SecondaryNameNode
+  3655 Jps
+  3550 TaskTracker
+  3407 DataNode
+  
+  
+  dataserver
+  3313 DataNode
+  3393 TaskTracker
+  3559 Jps
+  
+  192.168.111.120:50070  으로 확인
+  ```
+  
+
+
+
+## 가상분산모드로 전환
+
+> 완전분산모드에서 가상분산모드로 전환시키기
+
+```
+기존 .ssh authorized_keys 삭제하고 다시 설정하기
+ssh-keygen -t dsa -P '' -f ~/.ssh/id_dsa
+cat id_dsa.pub >> authorized_keys 
+#ssh dataserver 확인하기
+
+# cd /usr/local/hadoop-1.2.1/
+# rm -rf name tmp  다시 format 하기 위해 삭제 
+(data가 없는 이유는 second/dataserver 에만 데이터가 들어가기 때문에)
+vi /etc/hosts  - main만 남기고 삭제 
+
+conf 로 들어가기
+vi masters
+vi slaves  두개 localhost 로 바꾸기 
+vi hdfs-site.xml   replication  1로 바꾸기
+
+# hadoop namenode -format
+하둡1.2.1 디렉터리 안에  name 생성되었는지 확인
+
+start-all.sh
+tmp, data 생성되었는지 확인
+
+jps
+8193 SecondaryNameNode
+8088 DataNode
+8392 TaskTracker
+7950 NameNode
+8286 JobTracker
+8511 Jps
+
+jps 다 생성되었는지 확인
+
+```
+
+
+
+### 문제 발생시!!
+
+> Stop 먼저 한뒤 폴더들을 삭제하고 어디에 문제가 있는지 확인 후 다시 처음부터 진행
+
+```
+stop-all.sh
+name, data, tmp 삭제
+trouble shooting
+
+hadoop namenode -format
+start-all.sh
+
+```
 
 
 
 
-5. **Configuration**
 
-   - **core-site.xml**
 
-     ```
-     <property>
-     
-     <name>fs.default.name</name>
-     
-     <value>hdfs://localhost:9000</value>
-                   (namenode server)
-     </property>
-     
-     <property>
-     
-     <name>hadoop.tmp.dir</name>
-     
-     <value>/usr/local/hadoop-1.2.1/tmp</value>
-     
-     </property>
-     ```
 
-   - **hdfs-site.xml**
 
-     ```
-     <property>
-     
-     <name>dfs.replication</name>
-     
-     <value>1</value> 
-       (몇개를 복제할 것인지 - 파일의 신뢰성 확보 파일 및 컴퓨터 손상 대비)
-     </property>
-     
-     <property>
-     
-     <name>dfs.webhdfs.enabled</name>
-     
-     <value>true</value>
-     
-     </property>
-     
-     <property>
-     
-     <name>dfs.name.dir</name>
-     
-     <value>/usr/local/hadoop-1.2.1/name</value>
-     
-     </property>
-     
-     <property>
-     
-     <name>dfs.data.dir</name>
-     
-     <value>/usr/local/hadoop-1.2.1/data</value>
-     
-     </property>
-     ```
-
-   - **mapred-site.xml**
-
-     ```
-     <property>
-     
-     <name>mapred.job.tracker</name>
-     
-     <value>localhost:9001</value>
-     
-     </property>
-     ```
-
-   - **Hadoop 실행**
-
-     ```
-     hadoop namenedo -format
-     
-     start-all.sh
-     
-     jps
-     ```
-
-     
 
