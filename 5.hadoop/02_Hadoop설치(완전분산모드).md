@@ -1,4 +1,4 @@
-### Hadoop 설치 (가상분산모드) 교재 42p~
+### Hadoop 설치 (완전분산모드) 교재 42p~
 
 > 완전분산모드란 각 컴퓨터에 Namenode / 보조Namenode / Datanode 를 지정하여 처리
 >
@@ -152,20 +152,28 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
   </property>
   ```
 
-- marsters   (보조Namenode 서버설정)
+- **marsters   (보조Namenode 서버설정)**
 
   ```
   secondsever (로 수정)
   ```
 
-- slaves  (Datanode 서버설정)
+- **slaves  (Datanode 서버설정)**
 
   ```
   secondserver
   dataserver (로 수정)
   ```
 
-  
+- **hadoop.env.sh**  (설정안해도 실행은 된다.)
+
+  ```
+  9 export JAVA_HOME=/usr/local/jdk1.8.0
+  10 export HADOOP_HOME_WARN_SUPPRESS="TRUE"
+  하둡 운영시 하둡 홈 디렉터리에 손쉽게 접근하기 위해 HADOOP_HOME 을 PATH로 설정하는데
+  하둡을 구동하는 셀 스크립트에서도 HADOOP_HOME을 정의하기 때문에 Warning 발생 이를 방지 하기 위해 위의 설정 추가
+  (9,10 라인에 추가)
+  ```
 
 - **Hadoop 실행**
 
@@ -255,9 +263,16 @@ start-all.sh
 
 
 
+## 맵리듀스 실행 예시
 
+```
 
+# hadoop fs -mkdir /air
+[root@mainserver 다운로드]# hadoop fs -put 2007.csv  /air
+[root@mainserver 다운로드]# cd /usr/local/hadoop-1.2.1/  
+      (hadoop-examples-1.2.1.jar 있는곳으로 이동) 
+[root@mainserver hadoop-1.2.1]# hadoop jar hadoop-examples-1.2.1.jar  wordcount /air   /output
+      (wordcount 맵리듀스 동작)   air 폴더 안에있는 것을 output 에 뿌려라
 
-
-
+```
 

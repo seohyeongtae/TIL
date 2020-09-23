@@ -57,13 +57,12 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
 5. **Configuration**
 
    ```
-# cd /usr/local/hadoop-1.2.1/conf 
-   # vi ~ 로진행
+   # cd /usr/local/hadoop-1.2.1/conf 
+   
+      # vi ~ 로진행
    ```
-   
-   - **core-site.xml**
-   
-     ```
+*  - **core-site.xml**
+
      <property>
      
      <name>fs.default.name</name>
@@ -75,12 +74,12 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      <property>
      
      <name>hadoop.tmp.dir</name>
-  
+      
      <value>/usr/local/hadoop-1.2.1/tmp</value>
-  
+      
      </property>
      ```
-   
+
    - **hdfs-site.xml**
    
      ```
@@ -111,9 +110,9 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      <property>
      
      <name>dfs.data.dir</name>
-  
+    
      <value>/usr/local/hadoop-1.2.1/data</value>
-  
+    
      </property>
      ```
    
@@ -123,17 +122,29 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      <property>
      
      <name>mapred.job.tracker</name>
-  
+    
      <value>localhost:9001</value>
-  
+    
      </property>
      ```
    
+- **hadoop.env.sh**
+
+```
+9 export JAVA_HOME=/usr/local/jdk1.8.0
+10 export HADOOP_HOME_WARN_SUPPRESS="TRUE"
+하둡 운영시 하둡 홈 디렉터리에 손쉽게 접근하기 위해 HADOOP_HOME 을 PATH로 설정하는데
+하둡을 구동하는 셀 스크립트에서도 HADOOP_HOME을 정의하기 때문에 Warning 발생 이를 방지 하기 위해 위의 설정 추가
+(9,10 라인에 추가)
+```
+
+
+
    - **Hadoop 실행**
    
      ```
      hadoop namenedo -format
-  
+    
      start-all.sh
      
      jps
