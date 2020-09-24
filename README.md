@@ -7,11 +7,11 @@
 
 ## [Spring](./3_spring)
 
-## [Linux](./linux)
+## [Linux](./4_linux)
 
 ## [Hadoop](./5_hadoop)
 
-## [Git](./git 수업)
+## [Git](./git수업)
 
 
 
