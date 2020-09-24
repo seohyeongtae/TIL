@@ -219,8 +219,8 @@ ssh-keygen -t dsa -P '' -f ~/.ssh/id_dsa
 cat id_dsa.pub >> authorized_keys 
 #ssh dataserver 확인하기
 
-# cd /usr/local/hadoop-1.2.1/
-# rm -rf name tmp  다시 format 하기 위해 삭제 
+ # cd /usr/local/hadoop-1.2.1/
+ # rm -rf name tmp  다시 format 하기 위해 삭제 
 (data가 없는 이유는 second/dataserver 에만 데이터가 들어가기 때문에)
 vi /etc/hosts  - main만 남기고 삭제 
 
@@ -229,7 +229,7 @@ vi masters
 vi slaves  두개 localhost 로 바꾸기 
 vi hdfs-site.xml   replication  1로 바꾸기
 
-# hadoop namenode -format
+ # hadoop namenode -format
 하둡1.2.1 디렉터리 안에  name 생성되었는지 확인
 
 start-all.sh
@@ -268,7 +268,7 @@ start-all.sh
 ## 맵리듀스 실행 예시
 
 ```
-# hadoop fs -mkdir /air
+ # hadoop fs -mkdir /air
 [root@mainserver 다운로드]# hadoop fs -put 2007.csv  /air
 [root@mainserver 다운로드]# cd /usr/local/hadoop-1.2.1/  
       (hadoop-examples-1.2.1.jar 있는곳으로 이동) 
