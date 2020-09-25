@@ -264,7 +264,7 @@ public class ChartController {
 
 * view > main.jsp
 
-  > jstl 를 쓰기 위해 추가
+  > jstl(자바서버페이지표준태그라이브러리) 를 쓰기 위해 추가 c:choose
   >
   > highcart 쓰기위해 script 추가
   >
