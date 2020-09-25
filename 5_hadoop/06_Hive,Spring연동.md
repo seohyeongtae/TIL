@@ -1,6 +1,10 @@
 ## HIVE, Spring 연동
 
 >기본적으로 web dynamic project 만든것과 동일하게 진행한다.
+>
+>web project lib 은 web-inf 밑 lib에다가 넣기 
+>
+>java 내부에서 test ex(hive 데이터 test)의 경우 Properties 로
 
 Web Dynamic Project -> 
 
