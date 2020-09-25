@@ -179,27 +179,24 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
 
   ```
   hadoop namenedo -format
-  
   start-all.sh
   
   jps  - 각 서버별로 지정된 jsp 가 나온다
-  ex)
-main server
-  4327 JobTracker
-  4460 Jps
-  4158 NameNode
+  ex) main server
+   4327 JobTracker
+   4460 Jps
+   4158 NameNode
   
   secondserver
-  3476 SecondaryNameNode
-  3655 Jps
-  3550 TaskTracker
-  3407 DataNode
-  
+   3476 SecondaryNameNode
+   3655 Jps
+   3550 TaskTracker
+   3407 DataNode
   
   dataserver
-  3313 DataNode
-  3393 TaskTracker
-  3559 Jps
+   3313 DataNode
+   3393 TaskTracker
+   3559 Jps
   
   192.168.111.120:50070  으로 확인
   ```

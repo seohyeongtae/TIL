@@ -12,5 +12,7 @@
 
 * [Hive예제,Java연동](./05_Hive예제,Java연동.md)
 
+* [Hive,Spring연동](./06_Hive,Spring연동.md)
+
   
 
