@@ -1,0 +1,445 @@
+Data  를 기준으로
+
+저장공간을 만든다. TABLE
+
+대소문자를 구분하지 않지만 다른 프로그램 코드와 비교하기 위해 대부분 대문자를 쓴다.
+'' 안에는 대소문자 구분을 한다.
+
+DROP TABLE USERS;       - 테이블 삭제
+
+CREATE TABLE USERS(
+ ID VARCHAR2(10) PRIMARY KEY,                    VARCHAR2 - 자바 String 개념
+ PWD VARCHAR2(10),                                  NUMBER - 자바 int 개념
+ NAME VARCHAR2(10)
+ REGDATE DATE
+);
+
+CREATE TABLE ITEMS(
+ ID VARCHAR2(10) PRIMARY KEY,
+ NAME VARCHAR2(10),
+ PRICE NUMBER(10) 
+);
+
+DESC USERS;             테이블이 정상적으로 만들어졌는지 확인
+DESC ITEM;
+
+
+
+Create - 
+INSERT INTO USERS VALUES('id01','pwd01','이말숙');
+INSERT INTO ITEMS VALUES('it01','바지',2000,SYSDATE);   -SYSDATE 입력안받음 자동으로 입력됨
+
+Read(Retrieve) - 
+SELECT * FROM USERS;
+
+Update - 
+UPDATE USERS SET PWD='pwd01', NAME='홍말숙' WHERE ID='id01'
+(where id 는 꼭써야한다 안쓰면 모든 데이터의 비밀번호, 이름이 바뀐다)
+
+Delete - 
+DELETE FROM USERS WHERE ID='id01';
+(한번 삭제하면 다시 되돌릴수 없다)
+
+
+NVL(이름,0) = null 값을 0으로 출력
+AS NAME 바꿀이름 = 바꾼 이름으로 출력
+|| 두가지 열을 붙여서 출력
+|| '' ||  열사이에 띄어쓰기
+|| '-' || 
+SELECT ENAME ||'-'|| JOB FROM EMP;
+ORDER BY ASC 오름차순 
+ORDER BY DESC 내림차순
+
+
+                              20200730 목요일 94P~
+
+
+WHERE '이름'    필요한 데이터만 출력 연산자도 활용할 수 있다.
+
+AND 추가 조건넣을때 사용
+AND HIREDATE > TO_DATE('1981/02/01', 'YYYY/MM/DD')
+AND HIREDATE > TO_DATE('1981/03', 'YYYY/MM')
+         DATE 입력값을 정확한 DATE값으로 나오게 하고 싶을때 - 스트링값을 데이트 값으로 변환
+
+AND TO_CHAR(HIREDATE,'YYYY/MM') = '1981/02'
+        DATE 로 입력된 값을 STRING 형식으로 바꿔서 비교, 출력
+
+OR 도 추가 조건넣을때
+
+!=   <>   ^=  NOT  등가 비교연산자 NOT 은 이름앞에
+
+SELECT * FROM EMP
+WHERE SAL IN (3000,5000);
+두가지 값 구할때 사용 OR 과 비슷 3000이거나 5000인 값
+SELECT * FROM EMP
+WHERE JOB IN ('ANALYST','MANAGER');
+스트링도 가능 
+SELECT * FROM EMP
+WHERE JOB NOT IN ('ANALYST','MANAGER')
+NOT IN 은 () 안에 제외하고 조회
+
+
+BETWEEN A AND B 연산자 최소값,최대값 사이 조회
+SELECT * FROM EMP
+WHERE SAL BETWEEN 2000 AND 3000;
+
+SELECT * FROM EMP
+WHERE SAL NOT BETWEEN 2000 AND 3000;
+앞에 NOT 을 붙이면 사이를 제외하고 조회
+
+
+SELECT * FROM EMP
+WHERE ENAME LIKE '%S%' S가 들어가면 무조건   /'%S' 끝이 S  /'S%'  시작이 S 
+
+SELECT * FROM EMP
+WHERE ENAME LIKE '_L%'   두번째가 L 인 값
+
+SELECT * FROM EMP
+WHERE ENAME LIKE 'A\_L%' ESCAPE '\';
+_ 가 문자로 데이터로 입력되있을때 \외 다른 문자를 찾고 싶을때도 사용가능하다.
+
+NULL 은 값이 없으므로 = 로 비교가 안된다
+그럴때는 IS NULL / IS NOT NULL 로 비교
+
+
+SELECT ENAME, SAL FROM EMP WHERE SAL < 1000
+UNION
+SELECT ENAME, SAL FROM EMP WHERE SAL > 3000;
+
+SELECT ENAME, SAL,DEPTNO AS DEP FROM EMP WHERE DEPTNO IN(10,20)
+INTERSECT
+SELECT ENAME, SAL,DEPTNO FROM EMP WHERE DEPTNO IN(10);
+
+열의 수는 같아야 한다. SELECT 옆에 조회하고자하는 열의 수
+열의 수는 같지만 출력되는 열의 이름(컬럼명) 이 먼저쓴 열의 이름으로 나오기 때문에
+두번째 결과는 열의 이름과 다른 결과값이 나옴.
+열의 수와 열의 이름을 같은걸로 조회하는 것이 맞다.
+UNION = 2개의 결과값을 합쳐서 조회  중복된 결과값은 제외
+UNION ALL = 중복된 결과값 제거없이 조회 
+MINUS = 차집합 결과값이 다른것만
+INTERSECT  두 결과값이 같은것만 교집합  = 웬만하면 AND 로 구현가능하다.
+
+124페이지에 연산자 우선순위 있음
+
+
+SELECT INITCAP(ENAME)AS ENAME,SAL FROM EMP;
+괄호안 문자 데이터 중 첫글자는 대문자, 나머지는 소문자로
+AS로 이름설정해서 깔끔하게 해준것
+UPPER  모두 대문자
+LOWER 모두 소문자로 변환하여 반환
+
+SELECT NAME,LENGTH(NAME) FROM PRODUCT;
+LENGTH 문자열의 길이를 구하는 함수 한글도 2바이트지만 숫자는 1로 취급
+SELECT NAME,LENGTH(NAME) FROM PRODUCT
+WHERE LENGTH(NAME) > 1;
+활용법
+
+LENGTHB  는 바이트로 출력 한글 = 2씩 더해짐 
+오라클 버전에 따라서 한글을 한글자에 3바이트로 취급하는 경우도 있다 
+          3바이트로 기억하자
+
+SELECT LENGTH('한글'),LENGTHB('한글') FROM DUAL;  
+// DUAL 은 작성기 안에 함수만 작동시키겠다는 뜻
+
+
+SUBSTR = 문자열 일부를 추출하는 함수
+SELECT JOB, SUBSTR(JOB,1,2) FROM EMP;   - JOB 첫번째 두번째 자리만 출력
+(문자열데이터,시작위치,추출길이)
+SUBSTA(JOB,3)  - 3번째부터 끝까지 추출
+
+
+SELECT INSTR('JMILL@TONESOL.COM','@') FROM DUAL;
+        INSTR   @ 가 몇번위치에 있는지
+
+
+SELECT REPLACE (ENAME,'A') FROM EMP;
+' ' 안에있는걸 없애라 대체할 문자를 입력안하면 삭제됨
+SELECT REPLACE (ENAME,'A','-') FROM EMP;
+대체할문자를 입력하면 그 문자로 바뀜
+
+
+데이터의 빈 공간을 특정 문자로 채우는 LPAD, RPAD 함수
+SELECT LPAD(ENAME,10,'#') FROM EMP;
+왼쪽부터 10자리를 채우고 빈공간은 #으로 채우겠다.
+화면에 줄맞추기 식으로 사용할때 하지만 !!!숫자는 가공하면 안된다!!!
+데이터가 변할수 있음
+SELECT RPAD('971225-',14, '*') AS JMNO FROM DUAL;
+주문번호 뒷자리 * 로 표시할때
+
+SELECT RPAD(SUBSTR('970128-1182763',1,7),14,'*') FROM EMP;
+두가지 함수 활용 주민번호 뒷자리 *로 표시
+
+
+TRIM 특정 문자 지우는 함수
+삭제할 문자를 지정하지 않았을때 공백을 지움
+
+ROUND 반올림함수
+ROUND(1234.5678)    1235
+ROUND(1234.5678, 0)   1235
+ROUND(1234.5678, 1)   1234.6
+ROUND(1234.5678, 2)   1234.57
+ROUND(1234.5678, -1)   1230
+ROUND(1234.5678, -2)   1200
+
+TRUNC  버림함수
+
+
+지정된 숫자와 가까운 정수 찾기
+CEIL   올림
+FLOOR  버림
+
+MOD  숫자를 나눈 나머지값
+
+!!!숫자 연산은 DB데이터를 건드는것보다 자바에서 계산해서 가지고와라!!
+
+
+      날짜데이터
+SYSDATE     오늘
+SYSDATE-1  어제
+SYSDATE+1  내일
+
+SELECT ENAME, SAL, HIREDATE FROM EMP
+WHERE HIREDATE =  TO_DATE(?,'YYYY/MM/DD');
+ ? 는 자바에서  String 값 대입하면된다. 추후에 
+(둘다 데이트 형식으로 맞추기위해 TODATE 썼음)
+
+ADD_MONTHS(SYSDATE, 3)
+월더하기 (오늘날짜에 3개월 더하기)
+SELECT HIREDATE, ADD_MONTHS(HIREDATE,120) FROM EMP
+입사 10주년 날짜 구하기
+
+SELECT ENAME, HIREDATE, TRUNC(SYSDATE-HIREDATE) FROM EMP
+입사 후 몇일지났는지 구하기
+
+
+MONTHS_BETWEEN( , )  두 날짜 간의 개월수 차이구하는 함수
+SELECT ENAME, HIREDATE, TRUNC(SYSDATE-HIREDATE),
+TRUNC(MONTHS_BETWEEN(SYSDATE,HIREDATE)/12)
+FROM EMP;
+입사한지 몇년인지
+
+
+SELECT ENAME, TO_CHAR(HIREDATE,'YY/MM/DD'), SAL FROM EMP;
+             TO_CHAR 는 String 형식으로 바꾸는것
+
+SELECT ENAME, TO_CHAR(HIREDATE,'YY/MM/DD:HH,MI,SS'), SAL FROM EMP;
+SELECT TO_CHAR(SYSDATE,'YY/MM/DD:HH,MI,SS'), SAL FROM EMP;
+'YY/MM/DD:HH,MI,SS'
+년월일:시분초
+
+SELECT ROUND(HIREDATE,'YYYY') FROM EMP;
+날짜도 반올림, 버림 가능 ROUND TRUNC
+          기준 포맷은 155페이지 표에있음
+
+숫자에 문자열을 더하면 되지만
+문자열에 숫자를 더하면 안된다.
+
+TO_CHAR
+TO_NUMBER
+TO_DATE
+
+
+SELECT TRIM(TO_CHAR(SAL,'$999,999')) FROM EMP;
+공백제거하고 출력 범위를 넓게 정하고 한국돈은 앞에 L 붙이기
+
+INSERT INTO ITEMS VALUES ('it88','청바지',100,TO_DATE('20200730','YYYY/MM/DD'));
+20200730 자리를 ? 로 넣고 자바에서 활용
+
+
+NVL(숫자열,0) 
+NVL(문자열,'변환값') 
+
+NVL2(숫자열,'N','Y')  
+NULL 이아니면  N 으로
+NULL 이면 Y로 변환
+SELECT ENAME, NVL(COMM,0), NVL2(COMM,'N','Y'),
+NVL2(COMM, SAL+COMM*12, SAL*12)
+FROM EMP;
+
+
+        CASE 문 예시
+SELECT ENAME, JOB, 
+CASE JOB
+ WHEN 'MANAGER' THEN SAL*1.1
+ WHEN 'ANALYST' THEN SAL*1.2
+ ELSE SAL *0.9
+END AS BONUS
+,SAL 
+FROM EMP;
+
+금액에 따라 상중하로 나눠서 GRADE 열에 넣고 싶을떄
+SELECT ENAME, JOB,
+CASE 
+ WHEN SAL >= 4000 THEN '상'
+ WHEN SAL >= 3000 THEN '중'
+ ELSE '하'
+END AS GRADE
+,SAL 
+FROM EMP;
+
+
+
+
+                                   174 ~ 175 페이지 예제 정답
+ 
+                   예제 1)
+SELECT EMPNO, RPAD(SUBSTR(EMPNO,1,2),4,'*') AS MASKING_EMPNO, 
+ENAME,RPAD(SUBSTR(ENAME,1,1),5,'*') AS MASKING_ENAME
+FROM EMP
+WHERE LENGTH(ENAME) <6 
+AND LENGTH(ENAME) >=5 ;
+
+
+                    예제 2)
+SELECT EMPNO,ENAME,SAL, TRUNC(TO_NUMBER(SAL/21.5),2) AS DAY_PAY
+, ROUND(TO_NUMBER(SAL/21.5/8),1) AS TIME_PAY
+FROM EMP;
+
+                    예제 3)
+SELECT EMPNO, ENAME,HIREDATE, NEXT_DAY(ADD_MONTHS((HIREDATE),3),'월요일') AS R_JOB,
+NVL(COMM ,'0') AS COMM
+FROM EMP;
+
+
+
+                   예제 4)
+SELECT EMPNO,ENAME,MGR,
+CASE 
+ WHEN MGR IS NULL THEN '0000' 
+ WHEN SUBSTR((TRIM(TO_CHAR(MGR,'9999'))),1,2) = '75' THEN '5555'
+ WHEN SUBSTR((TRIM(TO_CHAR(MGR,'9999'))),1,2) = '76' THEN '6666'
+ WHEN SUBSTR((TRIM(TO_CHAR(MGR,'9999'))),1,2) = '77' THEN '7777'
+ WHEN SUBSTR((TRIM(TO_CHAR(MGR,'9999'))),1,2) = '78' THEN '8888'
+ ELSE TRIM(TO_CHAR(MGR,'9999'))
+ END AS CHG_MGR
+ FROM EMP;
+
+
+SELECT EMPNO,ENAME,MGR,          위에께 정확한 정답
+CASE 
+ WHEN MGR IS NULL THEN '0000' 
+ WHEN SUBSTR(MGR,1,2) = '75' THEN '5555'
+ WHEN SUBSTR(MGR,1,2) = '76' THEN '6666'
+ WHEN SUBSTR(MGR,1,2) = '77' THEN '7777'
+ WHEN SUBSTR(MGR,1,2) = '78' THEN '8888'
+ ELSE TRIM(TO_CHAR(MGR,'9999'))
+ END AS CHG_MGR
+ FROM EMP;
+
+
+
+
+SELECT ENAME, JOB, SAL,
+CASE JOB
+WHEN 'MANAGER' THEN SAL*1.1
+WHEN 'CLERK' THEN SAL*2.0
+ELSE SAL*0.3
+END AS TOTAL
+FROM EMP;
+
+SELECT ENAME, JOB, SAL, 
+DECODE(JOB,
+'MANAGER', SAL*1.1,
+'CLERK', SAL *2.0,
+SAL*0.3
+) AS TOTAL
+FROM EMP;
+
+위에 두개 다 같은 답을 도출함 DECODE 같은 경우 기준이 되는 데이터(답)을 먼저 저장한후
+해당 데이터 값에 따른 결과를 내보내는 함수 
+
+
+                      177페이지 다중행 함수와 데이터 그룹화
+
+SELECT SUM(SAL) FROM EMP;       모든 행의 합이 한 행에 나온다. 
+(다중행과 함께 쓸수 없다) EX) SELECT ENAME, SUM(SAL) FROM EMP;  함께 쓸수 없음
+
+다중행 함수 - SUM  , COUNT  ,   MAX ,   MIN,   AVG
+COUNT(*) 전체 행의 수 안에 따로 컬럼이름 넣어도됨
+
+SELECT SUM(DISTINCT SAL), SUM(SAL) FROM EMP;
+DISTINCT 는 중복제거이기 때문에 값이 달라진다. 
+
+
+SELECT COUNT(*) FROM EMP
+WHERE DEPTNO = 10;
+카운트는 주로 밑에 조건을 달아서 많이 사용한다.
+SELECT COUNT(DISTINCT SAL)  중복을 제외한 열의 개수 
+
+COUNT는 NULL 값을 기본적으로 제외하고 센다
+
+SELECT COUNT(*)
+FROM EMP
+WHERE COMM IS NULL;
+커미션을 받지 않는 사람은 몇명인가
+그냥 SELECT COUNT(COMM) 으로 하면 NULL 값을 가진 사람은 제외하고 카운트됨
+
+
+               177페이지 7장  그룹화
+SELECT DEPTNO, AVG(SAL)
+FROM EMP
+GROUP BY DEPTNO;
+ 부서별로 그룹을 지은다음 그 부서별 평균을 구한다.
+
+SELECT TO_CHAR(HIREDATE,'YYYY/MM'), AVG(SAL)
+FROM EMP
+GROUP BY TO_CHAR(HIREDATE,'YYYY/MM')
+   입사월에 따른 평균 세부적인 그룹화도 가능하다.
+대신 똑같이 형변환을 하고 똑같이 써야한다.
+
+SELECT JOB, ROUND(AVG(SAL),2)
+FROM EMP
+GROUP BY JOB;
+
+SELECT DEPTNO, JOB, ROUND(AVG(SAL),2)
+FROM EMP
+GROUP BY DEPTNO, JOB
+ORDER BY 1;
+2가지 이상 그룹화도 가능하면 OREDER BY 는 정렬 하라는 뜻
+1은 DEPTNO 순서대로 정렬 2는 두번째있는 JOB 별로 정렬
+
+
+SELECT DEPTNO, JOB, AVG(SAL)
+FROM EMP
+WHERE SAL >= 2000
+GROUP BY DEPTNO, JOB;
+     COUNT와 마찬가지로 WHERE 등 조건으로 세부구분
+
+
+SELECT DEPTNO, JOB, AVG(SAL)
+FROM EMP
+WHERE SAL >= 2000
+GROUP BY DEPTNO, JOB
+HAVING AVG(SAL) >= 3000;
+ORDER BY 2;
+
+ 그룹화 함수에 조건을 주고 싶다면 GROUP BY 밑에 
+HAVING 으로 넣는다.  (ORDER BY 보다는 위에씀)
+WHERE 절이 먼저 계산된뒤 HAVING 절 계산됨
+
+
+
+
+
+
+
+오라클 관리자 
+111111   비밀번호
+111111   
+
+포트 1521 // 
+서버 2030 // 
+Http 8080 // 관리자 접속 웹포트
+
+http://127.0.0.1   내 컴퓨터로 접속하겠다. 
+http://127.0.0.1:8080/apex/f?p=4950
+http://192.168.0.31:8080/apex/f?p=4950
+
+
+
+
+ItemTest1.java - select all
+ItemTest2.java - select 1
+ItemTest3.java - insert
+ItemTest4.java - update
+ItemTest5.java - delete

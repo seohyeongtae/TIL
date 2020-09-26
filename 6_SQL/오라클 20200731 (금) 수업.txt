@@ -1,0 +1,280 @@
+
+
+                         215 페이지      조인
+
+조인 = 두개 이상의 테이블 데이터를 가로로 연결한 것
+
+SELECT*FROM EMP,DEPT;
+EMP = 14개의열
+DEPT = 4개의열
+총 56개의 열이 조회된다.  조건을 입력해야 한다.
+
+SELECT*FROM EMP e,DEPT d
+WHERE e.DEPTNO = d.DEPTNO ;
+  (자바처럼 칼럼을 따로 지정할 수 있다. )
+
+
+/*직원의 기본 정보와 부서 이름 부서 지역을 조회 하시오.*/
+SELECT e.EMPNO,e.ENAME, d.DNAME, d.LOC  FROM EMP e,DEPT d
+WHERE e.DEPTNO = d.DEPTNO ;
+
+SELECT e.EMPNO,e.ENAME, d.DNAME, d.LOC  FROM EMP e,DEPT d
+WHERE e.DEPTNO = d.DEPTNO
+AND e.ENAME LIKE '%C%'
+AND d.LOC IN('NEW YORK','CHICAGO') ;
+
+
+등가조인 (EQ 조인)
+비등가조인 (NON EQ조인)
+자체조인 (SELF 조인)
+외부조인 (OUTER 조인)
+
+        등가조인은
+PK 와 FK 가 연결되어있어야 한다. 같은 데이터가 여러개가 있으면 값이 이상해질 수 있으니
+
+SELECT e.EMPNO,e.ENAME, d.DNAME,   DEPTNO   d.LOC  FROM EMP e,DEPT d
+WHERE e.DEPTNO = d.DEPTNO ;
+DEPTNO 가 들어있으면 둘중 어느쪽 데이터인지 모르기 때문에 한곳으로 명시를 해주던가
+빼야 한다. 
+
+
+         비등가조인
+SELECT e.ENAME, e.SAL, s.GRADE, s.LOSAL, s.HISAL
+FROM EMP e , SALGRADE s
+WHERE e.SAL BETWEEN s.LOSAL AND s.HISAL;
+
+
+           셀프조인
+자신과 같은 컬럼을 조인 자신의 FK 와 PK 를 연결
+SELECT e1.ENAME, e1.JOB, e2.ENAME FROM EMP e1, EMP e2
+WHERE e1.MGR = e2.EMPNO ;
+
+
+             외부조인 - 셀프조인 했을때 누락된 데이터가 있을때 활용한다.
+왼쪽 외부조인 (왼쪽에 누락된 데이터 기준)
+SELECT e1.ENAME, e1.JOB, e2.ENAME FROM EMP e1, EMP e2
+WHERE e1.MGR = e2.EMPNO(+) ;
+
+오른쪽 외부조인 (오른쪽에 누락된 데이터 기준)
+SELECT e1.ENAME, e1.JOB, e2.ENAME FROM EMP e1, EMP e2
+WHERE e1.MGR(+) = e2.EMPNO ;
+
+/*전 직원의 정보를 조회 하시오 단, COMM의 GRADE 를 출력하시오.*/
+SELECT e.ENAME, e.COMM, s.GRADE FROM EMP e , SALGRADE s
+WHERE e.COMM BETWEEN s.LOSAL(+) AND s.HISAL(+);
+
+
+/* 전직원의 정보를 출력한다. 
+EMPNO ENAME   MGRNAME 매니저이름   DNAME 부서이름  SALGRADE */
+
+SELECT e1.EMPNO, e1.ENAME, e2.ENAME , d.DNAME, s.GRADE FROM EMP e1, EMP e2, DEPT d, SALGRADE s
+WHERE e1.MGR = e2.EMPNO(+)
+AND e1.DEPTNO = d.DEPTNO
+AND e1.SAL BETWEEN s.LOSAL AND s.HISAL;
+
+
+
+       SQL-99 표준문법 조인   - 꼭 기억하기 외부시험에서 많이 사용, 다른프로그램에서많이사용
+  등가조인    
+     오라클용
+SELECT e.ENAME, d.DNAME FROM EMP e,DEPT d
+WHERE e.DEPTNO = d.DEPTNO;
+
+       표준문법
+SELECT e.ENAME, d.DNAME FROM EMP e NATURAL JOIN DEPT d;
+           등가조인을  NATURAL JOIN 으로 사용한다. 
+
+SELECT e.ENAME, d.DNAME FROM EMP e JOIN DEPT d USING (DEPTNO);
+                JOIN ~ USING 도 등가조인
+SELECT e.ENAME, d.DNAME FROM EMP e JOIN DEPT d ON (e.DEPTNO = d.DEPTNO);
+              ON 뒤에는 등식을  UISING 뒤에는 해당 칼럼명만
+            
+
+
+   외부조인(OUTER JOIN)
+    오라클용
+SELECT e1.ENAME, e2.ENAME
+FROM EMP e1, EMP e2
+WHERE e1.MGR = e2.EMPNO(+);
+
+
+     표준문법
+SELECT e1.ENAME, e2.ENAME
+FROM EMP e1 LEFT OUTER JOIN EMP e2 ON (e1.MGR = e2.EMPNO);
+
+SELECT e1.ENAME, e2.ENAME
+FROM EMP e1 FULL OUTER JOIN EMP e2 ON (e1.MGR = e2.EMPNO);
+      FULL OUTER JOIN 은 왼쪽,오른쪽 외부조인 모두 조회 가능
+       오라클은 양쪽에 (+) 를 써도 구현을 안해줌
+
+
+
+     오라클 문법
+SELECT e1.EMPNO, e1.ENAME, e2.ENAME , d.DNAME, s.GRADE FROM EMP e1, EMP e2, DEPT d, SALGRADE s
+WHERE e1.MGR = e2.EMPNO(+)
+AND e1.DEPTNO = d.DEPTNO
+AND e1.SAL BETWEEN s.LOSAL AND s.HISAL;
+
+  표준문법 위에 문법이랑 비교
+SELECT e1.EMPNO, e1.ENAME, e2.ENAME , d.DNAME, s.GRADE FROM 
+EMP e1 LEFT OUTER JOIN  EMP e2 ON (e1.MGR = e2.EMPNO)
+JOIN DEPT d ON (e1.DEPTNO = d.DEPTNO)
+JOIN SALGRADE s ON(e1.SAL BETWEEN s.LOSAL AND s.HISAL);
+
+
+
+
+                     /*239 페이지 예제 1번*/
+SELECT d.DEPTNO, d.DNAME, e.EMPNO, e.ENAME, e.SAL
+FROM EMP e JOIN DEPT d ON(e.DEPTNO = d.DEPTNO)
+WHERE SAL > 2000
+ORDER BY 1, 5;
+
+                     /*239 페이지 예제 2번*/
+SELECT d.DEPTNO, d.DNAME, TRUNC(AVG(SAL),0) AS AVG_SAL, MAX(SAL) AS MAX_SAL, MIN(SAL) AS MIN_SAL, COUNT(*)
+FROM EMP e JOIN DEPT d ON (e.DEPTNO = d.DEPTNO)
+GROUP BY d.DEPTNO, d.DNAME;
+
+                      /*239 페이지 예제 3번*/
+SELECT d.DEPTNO, d.DNAME, e.EMPNO,e.ENAME, e.JOB,e.SAL 
+FROM EMP e RIGHT OUTER JOIN DEPT d ON (e.DEPTNO = d.DEPTNO)
+ORDER BY 1, 4, 2 ;
+
+                      /*240 페이지 예제 4번*/
+SELECT d.DEPTNO, d.DNAME, e1.EMPNO, e1.ENAME, e1.MGR, e1.SAL, e2.DEPTNO AS DEPTNO_1 ,  s.LOSAL, s.HISAL, s.GRADE,
+e2.EMPNO AS MGR_EMPNO, e2.ENAME AS MGR_ENAME FROM
+EMP e1 LEFT OUTER JOIN EMP e2 ON (e1.MGR = e2.EMPNO)
+RIGHT OUTER JOIN DEPT d ON (e1.DEPTNO = d.DEPTNO)
+LEFT OUTER JOIN SALGRADE s ON (e1.SAL BETWEEN s.LOSAL AND s.HISAL)
+ORDER BY 1, 3;
+
+                     예제4번 오라클형
+SELECT d.DEPTNO, d.DNAME, e1.EMPNO, e1.ENAME, e1.MGR, e1.SAL, e2.DEPTNO AS DEPTNO_1 ,  s.LOSAL, s.HISAL, s.GRADE,
+e2.EMPNO AS MGR_EMPNO, e2.ENAME AS MGR_ENAME FROM EMP e1, EMP e2, DEPT d, SALGRADE s
+WHERE e1.MGR = e2.EMPNO(+)
+AND e1.DEPTNO(+) = d.DEPTNO
+AND e1.SAL BETWEEN s.LOSAL(+) AND s.HISAL(+)
+ORDER BY 1,3;
+
+
+
+               242페이지 9장 SQL문 속 또 다른 SQL문, 서브쿼리
+
+SELECT AVG(SAL) FROM EMP
+WHERE DEPTNO = (SELECT DEPTNO FROM EMP
+WHERE ENAME = 'ADAMS');
+
+  
+SELECT * FROM EMP
+WHERE SAL > (SELECT AVG(SAL) FROM EMP
+WHERE DEPTNO = (SELECT DEPTNO FROM EMP
+WHERE ENAME = 'ADAMS')
+GROUP BY DEPTNO);
+
+
+
+ NEW YORK 에서 근무하는 직원들의 평균보다 높은 월급을 받은 사람들을 출력하라
+출력 값 = 이름, 부서명, 급여
+
+SELECT e.ENAME, d.DNAME, e.SAL FROM 
+EMP e JOIN DEPT d ON (e.DEPTNO = d.DEPTNO)
+WHERE SAL > (SELECT AVG(SAL) FROM EMP
+WHERE DEPTNO = ( SELECT DEPTNO FROM DEPT
+WHERE LOC = 'NEW YORK')
+GROUP BY DEPTNO);
+   - 조인문은 마지막에 출력할때만 하면 된다. 이중커리는 값만 구해서 대입하는 것이기
+때문에 () 안에 조인문으로 어렵게 할 필요가 없다.
+
+
+/* ALLEN 입사한 월에 들어온 직원들을 조회하시오 */
+SELECT * FROM EMP
+WHERE TO_CHAR(HIREDATE,'YY/MM') = (SELECT TO_CHAR(HIREDATE,'YY/MM') FROM EMP
+WHERE ENAME = 'ALLEN'); 
+
+
+                       다중 서브쿼리
+  WHERE 절에 사용되는 서브쿼리
+   
+/*SCOTT 과 JAMES 가 속한 부서의 직원들을 조회 하시오*/
+SELECT * FROM EMP
+WHERE DEPTNO IN (SELECT DEPTNO FROM EMP
+WHERE ENAME IN ('SCOTT','JAMES'));
+!!!!!안에 결과 값이 2개 이기 때문에 = 으로 받을 수 없다. !!!!!
+
+
+SELECT * FROM EMP
+WHERE SAL IN (SELECT MAX(SAL) FROM EMP 
+GROUP BY DEPTNO);
+           SELECT 옆에 컬럼을 안적은뒤 GROUP BY 만 쓰면 그 값만 딱 나온다.
+      컬럼이 들어가면 결과값이 여러개가 되고 비교대상과 열의 개수가 맞지 않기때문에
+결과가 안나온다.
+
+SELECT * FROM EMP
+WHERE (DEPTNO,SAL) IN (SELECT DEPTNO, MAX(SAL) FROM EMP 
+GROUP BY DEPTNO);
+           컬럼이 들어갔을때는 위와 같이 () 안에 같은 열을 넣어줘서 작성한다.
+
+
+
+SELECT * FROM EMP
+WHERE SAL > ANY (SELECT  AVG(SAL) FROM EMP 
+GROUP BY DEPTNO);
+  = 로 하게되면 결과값이 나오지 않으며 등호비교를 할 수 가 없지만
+ > ANY 를 넣으면 조건식을 만족하는 서브쿼리의 결과가 하나 이상이면 TRUE
+부서 10,20,30,40 각 평균들 중에 하나라도 만족하면 출력됨  (많이안씀)
+
+
+
+FROM 절에 사용하는 서브쿼리
+ 기존에 있는 테이블을 그대로 쓰는 것이 아니라 내가 원하는 조건에 맞게끔
+여러가지 테이블을 만들고(JOIN) 을 걸어서 그렇게 만들어진 테이블의 결과값을
+서브쿼리로 사용할때
+
+SELECT E10.EMPNO, E10.ENAME, E10.DEPTNO, D.DNAME, D.LOC
+  FROM (SELECT * FROM EMP WHERE DEPTNO = 10 ) E10,
+           (SELECT * FROM DEPT) D
+ WHERE E10.DPTNO = D.DEPTNO;
+
+위는 간단한 경우지만 조인을 이용해 새로운 테이블, 결과값을 만들었을때 활용할 수 있다. 
+
+
+ SELECT 절에 사용하는 서브쿼리 (컬럼안에 들어간다)
+
+FROM, SELECT  서브쿼리는 데이터 처리속도가 늦어지기 때문에 많이 사용되지는 않는다.
+웬만하면 JOIN 을 활용한 WHERE 절을 쓰자.
+
+
+
+/*262페이지 예제 1번*/
+SELECT e.JOB, e.EMPNO, e.ENAME, e.SAL, e.DEPTNO, d.DNAME
+FROM EMP e, DEPT d
+WHERE e.DEPTNO = d.DEPTNO
+AND e.JOB = (SELECT JOB FROM EMP
+WHERE ENAME = 'ALLEN')
+ORDER BY -e.SAL;
+
+/*262페이지 예제 2번*/
+
+SELECT e.EMPNO, e.ENAME, d.DNAME, e.HIREDATE, d.LOC, e.SAL, s.GRADE FROM EMP e, DEPT d, SALGRADE s
+WHERE e.DEPTNO = d.DEPTNO
+AND e.SAL BETWEEN s.LOSAL AND s.HISAL
+AND SAL > (SELECT AVG(SAL) FROM EMP)
+ORDER BY -e.SAL, e.EMPNO;
+
+/*262페이지 예제 3번*/
+
+SELECT e.EMPNO, e.ENAME, e.JOB, e.DEPTNO, d.DNAME, d.LOC FROM EMP e, DEPT d
+WHERE e.DEPTNO = d.DEPTNO
+AND JOB IN (SELECT JOB FROM EMP WHERE DEPTNO = 10)
+AND JOB NOT IN (SELECT JOB FROM EMP WHERE DEPTNO = 30);
+
+
+/*263 페이지 예제 4번 */
+
+SELECT e.EMPNO, e.ENAME, e.SAL , s.GRADE FROM EMP e, SALGRADE s
+WHERE e.SAL BETWEEN s.LOSAL AND s.HISAL
+AND SAL > (SELECT MAX(SAL) FROM EMP 
+WHERE JOB = 'SALESMAN')
+ORDER BY 1;
+
+
