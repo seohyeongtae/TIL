@@ -64,24 +64,22 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
 *  - **core-site.xml**
 
      <property>
-     
      <name>fs.default.name</name>
-     
+       
      <value>hdfs://localhost:9000</value>
                    (namenode server)
      </property>
-     
+       
      <property>
-     
+       
      <name>hadoop.tmp.dir</name>
-      
+       
      <value>/usr/local/hadoop-1.2.1/tmp</value>
-      
+       
      </property>
-     ```
 
-   - **hdfs-site.xml**
-   
+- **hdfs-site.xml**
+  
      ```
      <property>
      
@@ -110,9 +108,9 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      <property>
      
      <name>dfs.data.dir</name>
-    
+        
      <value>/usr/local/hadoop-1.2.1/data</value>
-    
+        
      </property>
      ```
    
@@ -128,7 +126,7 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
      </property>
      ```
    
-- **hadoop.env.sh**
+- **hadoop-env.sh**
 
 ```
 9 export JAVA_HOME=/usr/local/jdk1.8.0
@@ -143,8 +141,8 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
    - **Hadoop 실행**
    
      ```
-     hadoop namenedo -format
-    
+     hadoop namenode -format
+        
      start-all.sh
      
      jps
