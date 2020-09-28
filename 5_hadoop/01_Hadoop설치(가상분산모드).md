@@ -60,23 +60,28 @@ PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:.:$PATH
    # cd /usr/local/hadoop-1.2.1/conf 
    
       # vi ~ 로진행
+      
    ```
-*  - **core-site.xml**
+*  **core-site.xml**
 
+     ```
      <property>
      <name>fs.default.name</name>
-       
+     
      <value>hdfs://localhost:9000</value>
                    (namenode server)
      </property>
-       
+     
      <property>
-       
+     
      <name>hadoop.tmp.dir</name>
-       
+     
      <value>/usr/local/hadoop-1.2.1/tmp</value>
-       
+     
      </property>
+     ```
+     
+     
 
 - **hdfs-site.xml**
   
