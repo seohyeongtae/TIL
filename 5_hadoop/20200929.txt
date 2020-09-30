@@ -1,0 +1,48 @@
+
+CREATE TABLE userstatus(
+date STRING,
+fn STRING,
+day STRING,
+count INT
+)
+PARTITIONED BY (logdate STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+
+
+ LOAD DATA LOCAL INPATH '/root/logs/userstatus.log' OVERWRITE INTO TABLE userstatus PARTITION (logdate = '2020-09-29')
+
+
+hive --service hiveserver2
+
+
+
+CREATE TABLE shopclick(
+date STRING,
+fn STRING,
+id STRING,
+item STRING,
+price INT,
+age INT,
+gender STRING
+)
+
+PARTITIONED BY (logdate STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+ LOAD DATA LOCAL INPATH '/root/logs/data.log' OVERWRITE INTO TABLE shopclick PARTITION (logdate = '2020-09-29')
+
+
+SELECT id, sum(price)AS sum FROM shopclick GROUP BY id;
+
+
+
+
+
+
