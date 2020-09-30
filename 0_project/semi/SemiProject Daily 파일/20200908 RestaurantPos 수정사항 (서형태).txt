@@ -1,0 +1,42 @@
+
+	src/com/mybatis
+sales mapper 수정
+  	insert
+	search
+   SQL문 수정
+
+
+	
+
+	src/com/controller
+Menu Controller
+- editmenu.mc 
+menu 컬럼중 img2(edit), img3(del) 을 이용하여 del 기능 추가
+
+
+Util
+- 기존 코드로 변경 foods 안으로 들어가게
+
+
+
+
+	web/view/table/
+order
+-function deleteRow(ths)
+
+-function change(num, id) {
+
+-function displayorder(datas) {
+	
+전체적으로 수정
+
+
+
+
+	web/view/admin
+menu
+html 부분
+수정하기, 추가하기 form에  enctype="multipart/form-data"  추가했으며
+del input 추가하고 edit input 부분 name 변경했습니다.
+
+

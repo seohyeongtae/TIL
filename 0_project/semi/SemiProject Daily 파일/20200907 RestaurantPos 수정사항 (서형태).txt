@@ -1,0 +1,57 @@
+
+	web/view/admin/menu
+
+- script 전체적으로 추가했습니다.
+
+- Html
+			<h1>메뉴</h1>
+				<div id="order">
+					<div id="cate" class="row">
+				<a class="col-sm-3" type="button" id="cate-food" href="javascript:void(0);" onclick="sendData(1)">전류</a>
+				<a class="col-sm-3" type="button" id="cate-fruit" href="javascript:void(0);" onclick="sendData(2)">안주류</a>
+					<a class="col-sm-3" type="button" id="cate-anju" href="javascript:void(0);" onclick="sendData(3)">탕류</a>
+						<a class="col-sm-3" type="button" id="cate-drink" href="javascript:void(0);" onclick="sendData(4)">주류</a>
+				</div>
+				<div id="menu">	
+
+
+	주의사항 추가하였습니다.
+
+
+	수정/추가하기 div쪽 전체적으로 수정했습니다. (td / option / input 속성값)
+
+ 
+
+
+	src/com/controller/util
+
+- util 이미지 다운받는 주소 변경 제 파일명인 semi 로 바꿨습니다.
+
+
+
+
+	src/com/controller/MenuController
+- 제일 하단에 editmenu
+              addmenu
+추가했습니다.
+
+
+
+	src/com/vo/Menu
+- 이미지 파일 받기 위해   MultipartFile mf; 
+추가했으며 mf getter/setter  등록과
+toString mf 추가하여 다시 등록했습니다.
+
+
+
+
+	src/com/mapper/menumapper
+- insert, delet mapper 수정했습니다.
+
+
+
+view 이미지에 null.jpg 넣어놨습니다.
+
+이미지를 등록해주세요 이미지로
+메뉴 추가시 이미지를 등록하지 않을경우 저 이미지가 기본값으로 나옵니다.
+
