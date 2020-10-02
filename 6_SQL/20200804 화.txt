@@ -1,0 +1,56 @@
+장바구니에도 고유 시퀀스 번호를 넣어놓기
+
+장바구니에 넣었을때 변하는 금액 ex 할인율 , 날짜
+
+주문정보 - 배송지, 토탈금액, 카드결제정보, 배송상태 모든것들이 들어가야한다.
+테이블이 너무 커지기 때문에 따로 빠질 수 도 있다. 
+
+주문정보 - 주문상세정보 연관성이 있어야한다 키값에 공통점을 줘서 쉽게 알아볼수 있게
+
+카테고리 테이블 생성 대분류/소분류
+
+
+키값 VARCHAR2 가 아니더라도 NUMBER 로 시퀀스 넣어도된다.
+
+
+1. RDBMS
+- oracle, mysql(mariadb), mssql
+
+2. SQL
+- DQL, DDL, DML, DCL, TCL
+
+3. DQL
+- Fucntion, Group, JOIN, Sub Query
+
+4. DDL
+- CREATE, DROP, ALTER
+
+5. DML
+- INSERT, DELETE, UPDATE
+
+6. TCL
+- commit, rollback
+
+7. Sequence
+
+8. RANK
+
+
+
+
+   RANK
+
+SELECT ENAME,SAL, RANK() OVER(ORDER BY SAL DESC) AS RANK FROM EMP;
+공동 순위 계산 EX) 2등 2명이면 다음 등수는 4로 적힘
+
+SELECT ENAME,SAL, DENSE_RANK() OVER(ORDER BY SAL DESC) AS RANK FROM EMP;
+공동 순위 숫자 취급안함 2,2 두개여도 다음 등수는 3으로 적힘
+
+SELECT ENAME, SAL, RANK FROM(
+SELECT ENAME,SAL, RANK() OVER(ORDER BY SAL DESC) AS RANK FROM EMP)
+WHERE RANK <5;
+바로 WHERE 절을 쓸수 없기 때문에 서브쿼리로 RANK 를 컬럼으로 생성한뒤 
+WHERE 절을 사용한다.
+
+
+
