@@ -5,6 +5,8 @@
   * [P51] Network Setting(vmnetcfg 파일을 VMWare 설치 디렉토리에 복사)
 
      Network Setting은 고정 IP 환경을 만들기 위해
+     
+     https://www.filehorse.com/download-vmware-player/44878/
 
     
 
