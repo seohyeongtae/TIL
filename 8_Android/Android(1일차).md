@@ -276,3 +276,149 @@ public class MainActivity extends AppCompatActivity {
 
 
 ### 168~169P 문제 풀어보기 (정답확인하기)
+
+> P168 두개의 이미지뷰에 이미지 번갈아 보여주기
+
+```java
+package org.techtown.mission03;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    ImageView imageView01;
+    ImageView imageView02;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        imageView01 = findViewById(R.id.imageView01);
+        imageView02 = findViewById(R.id.imageView02);
+
+        Button button01 = findViewById(R.id.button01);
+        button01.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                moveImageUp();
+            }
+        });
+
+        Button button02 = findViewById(R.id.button02);
+        button02.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                moveImageDown();
+            }
+        });
+
+        moveImageUp();
+    }
+
+    private void moveImageDown() {
+        imageView01.setImageResource(0);
+        imageView02.setImageResource(R.drawable.beach);
+
+        imageView01.invalidate();
+        imageView02.invalidate();
+    }
+
+    private void moveImageUp() {
+        imageView01.setImageResource(R.drawable.beach);
+        imageView02.setImageResource(0);
+
+        imageView01.invalidate();
+        imageView02.invalidate();
+    }
+
+}
+
+```
+
+
+
+> P169 Text 입력화면 만들고 글자의 수 표시하기
+
+```java
+package org.techtown.mission04;
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.UnsupportedEncodingException;
+
+public class MainActivity extends AppCompatActivity {
+    EditText inputMessage;
+    TextView inputCount;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        inputMessage = findViewById(R.id.inputMessage);
+        inputCount = findViewById(R.id.inputCount);
+
+
+        Button sendButton = findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String message = inputMessage.getText().toString();
+                Toast.makeText(getApplicationContext(), "전송할 메시지\n\n" + message, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        Button closeButton = findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        TextWatcher watcher = new TextWatcher() {
+            public void onTextChanged(CharSequence str, int start, int before, int count) {
+                byte[] bytes = null;
+                try {
+                    bytes = str.toString().getBytes("KSC5601");
+                    int strCount = bytes.length;
+                    inputCount.setText(strCount + " / 80바이트");
+                } catch(UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            public void afterTextChanged(Editable strEditable) {
+                String str = strEditable.toString();
+                try {
+                    byte[] strBytes = str.getBytes("KSC5601");
+                    if(strBytes.length > 80) {
+                        strEditable.delete(strEditable.length()-2, strEditable.length()-1);
+                    }
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        inputMessage.addTextChangedListener(watcher);
+    }
+
+}
+
+```
+
