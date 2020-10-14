@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-### 토스트, 스낵바 그리고 대화상자 사용하기 P217~
+### 토스트, 스낵바 그리고 대화상자  (alert dialog) 사용하기 P217~
 
 > 직접 토스트 화면을 만들어서 사용할 수 있다. **clickb2 중요! 많이 사용함**
 
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
 > // 스낵바 activity_main -> Containers -> AppBarLayout 옆 다운로드로 lib 받은 뒤 사용가능
 > ```
 
-> AlertDialog 는 android app 에서 import 해야한다  MainActivity에서만 사용 가능 clickb4
+> AlertDialog 는 android app 에서 import 해야한다  MainActivity에서만 사용 가능(Toast 도) clickb4
 >
 > 프로그래스 바 p227~  btprogress  버튼 5/6/7/8
 
@@ -272,7 +272,7 @@ tv.setText("INPUT TEXT");
 
 
 
-### 토스트바, 스낵바, 대화상자, 프로그래스 다이어로그 생성 P217
+### 토스트바, 스낵바, 대화상자, 프로그래스 다이어로그, 스핀 프로그래스 다이어로그 생성 P217
 
 
 
@@ -393,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // 뒤로가기 눌렀을 때 Dialog 생성 내가 만든 화면을 띄우기 넣기
+        // 뒤로가기 눌렀을 때 Alert Dialog (대화상자) 생성 내가 만든 화면을 띄우기 넣기
     @Override
     public void onBackPressed() {
         // super.onBackPressed();  이게 있으면 아래 코드로 넘어가지 않는다.

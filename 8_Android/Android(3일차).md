@@ -191,6 +191,10 @@ public class ThirdActivity extends AppCompatActivity {
 
 
 
+![KakaoTalk_20201014_175612859_06](Android(3%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201014_175612859_06.jpg)
+
+
+
 ### 액티비티 수명주기 , 데이터 임시 저장 P275
 
 > 세로 -> 가로로 돌리면 App 이 완전히 죽었다가 다시 켜지는 형식이다.
@@ -277,6 +281,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+![KakaoTalk_20201014_175612859_05](Android(3%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201014_175612859_05.jpg)
+
+![KakaoTalk_20201014_175612859_04](Android(3%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201014_175612859_04.jpg)
+
+
+
 ### 프래그먼트 , 메뉴 넣기(ActionBar 관리하기) P287~
 
 > app -> java 에 fragment 를 먼저 코딩해야 한다.
@@ -345,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.mymenu,menu);
         return true;
     }
-    // menu 항복별 함수 지정하기
+    // menu 항목별 함수 지정하기
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.m1){
@@ -450,7 +460,11 @@ public class Fragment2 extends Fragment {
 }
 ```
 
+![KakaoTalk_20201014_175612859_03](Android(3%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201014_175612859_03.jpg)
 
+![KakaoTalk_20201014_175612859_03](Android(3%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201014_175612859_03-1602665966075.jpg)
+
+![KakaoTalk_20201014_175612859_01](Android(3%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201014_175612859_01.jpg)
 
 ### 상단탭 만들기 P323
 
@@ -628,4 +642,18 @@ public class Fragment2 extends Fragment {
     }
 }
 ```
+
+
+
+
+
+###  바로가기 메뉴 만들기 P342
+
+>  Navigation Drawer Activity 로 new project 생성
+>
+> naver 와 같은 바로가기 메뉴 Android 에서 기본 틀을 제공해준다.
+
+
+
+### 
 
