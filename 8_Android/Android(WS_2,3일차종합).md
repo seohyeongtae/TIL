@@ -2,15 +2,13 @@
 
 ### 2일차, 3일차 교육 내용 활용
 
-![KakaoTalk_20201014_175612859](C:%5CUsers%5Cseo%5CDesktop%5C1%5CKakaoTalk_20201014_175612859.jpg)
+![KakaoTalk_20201014_175612859](Android(WS_2,3%EC%9D%BC%EC%B0%A8%EC%A2%85%ED%95%A9)/KakaoTalk_20201014_175612859.jpg)
 
 > Progress 는 Spin Style 사용 
 >
 > AlertDialog 는 별도 View 만들지 않고 사용
 
-![KakaoTalk_20201014_180418664](C:%5CUsers%5Cseo%5CDesktop%5C1%5CKakaoTalk_20201014_180418664.jpg)
-
-
+![KakaoTalk_20201014_180418664](Android(WS_2,3%EC%9D%BC%EC%B0%A8%EC%A2%85%ED%95%A9)/KakaoTalk_20201014_180418664.jpg)
 
 ### MainActivity.java
 
