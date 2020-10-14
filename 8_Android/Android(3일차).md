@@ -277,9 +277,355 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-### 프래그먼트 P287~
+### 프래그먼트 , 메뉴 넣기(ActionBar 관리하기) P287~
 
 > app -> java 에 fragment 를 먼저 코딩해야 한다.
 >
 > 프래그먼트는 MainActivity의 코드를 간소화 하기 위해 
+
+
+
+> 교재는 P312~
+>
+> ActionVar 는 androidx.appcompat 에서 import (메뉴 넣기) 
+>
+> Menu 넣기 위해서는 res에 menu 디렉토리를 만들어야한다 .(type도 메뉴로 지정)
+>
+> menu.xml 에서 icon을 그림으로 넣을 수 있다.
+>
+> showAsAction 을 always를 보여주면 action bar 에 항상 표시가 된다.
+
+
+
+> MainActivity
+
+```java
+package com.example.p287;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class MainActivity extends AppCompatActivity {
+    Fragment1 fragment1;
+    Fragment2 fragment2;
+    Fragment3 fragment3;
+
+    //Menu bar 넣기
+    ActionBar actionBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        fragment1 = new Fragment1();
+        // fragment1 = (Fragment1) getSupportFragmentManager().findFragmentById(R.id.fragment);
+        fragment2 = new Fragment2();
+        fragment3 = new Fragment3();
+
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("Fragment");
+        actionBar.setLogo(R.drawable.d3);
+        //Title 을 보이게 할 경우
+        // actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+
+        // Logo 를 보이게 할 경우
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_USE_LOGO);
+        // actionBar.hide();
+    }
+    // menu.xml 불러오기
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu,menu);
+        return true;
+    }
+    // menu 항복별 함수 지정하기
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.m1){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment1).commit();
+        }else if(item.getItemId() == R.id.m2){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment2).commit();
+        }else if(item.getItemId() == R.id.m3){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment3).commit();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Fragment xml 각각 불러오기
+    public void ckbt(View v){
+        if(v.getId() == R.id.button){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment1).commit();
+
+        }else if(v.getId() == R.id.button2){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment2).commit();
+
+        }else if(v.getId() == R.id.button3){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,fragment3).commit();
+
+        }
+    }
+}
+```
+
+
+
+> Fragment1.java
+
+```java
+package com.example.p287;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class Fragment1 extends Fragment {
+    TextView textView;
+    EditText editText;
+    ImageView imageView;
+
+    public Fragment1(){
+
+    }
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ViewGroup viewGroup = null;
+        // Fragment 는 직접 viewGroup을 만들어서 findView를 써야 한다.
+        viewGroup = (ViewGroup)inflater.inflate(R.layout.fragment_1,container,false);
+        textView = viewGroup.findViewById(R.id.textView);
+        editText = viewGroup.findViewById(R.id.editText);
+        imageView = viewGroup.findViewById(R.id.imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = editText.getText().toString();
+                textView.setText(str);
+            }
+        });
+        return viewGroup;
+    }
+  
+}
+
+```
+
+> Fragment2.java , Fragment3.java  아무 함수 안넣었음
+
+```java
+package com.example.p287;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class Fragment2 extends Fragment {
+    public Fragment2(){
+
+    }
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_2,container,false);
+    }
+}
+```
+
+
+
+### 상단탭 만들기 P323
+
+> new project를 Tabbed Activity로 생성 앱을 실행하면 자동으로 tab1,2 가 생긴다.
+
+
+
+
+
+### 하단탭 만들기, Fragment에서 Toast 사용하기(MainActivity Resouse 받기) P331
+
+> menu와 동일하게 res -> android directory menu 만들기
+>
+> menu item -> icon 넣고,  
+>
+> showasaction : ifRoom/withText , 
+>
+> enabled : true  (첫번째만)
+>
+> activity_main.xlml 에 컨테이너,FrameLayout, - weight 1
+>
+> bottomNavigationView 받은뒤 탑재 - weight 12
+>
+> bottomNavigationView 우측 menu에 만든 bottom_menu.xml 입력
+
+
+
+>  MainActivity
+
+```java
+package com.example.p331;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+public class MainActivity extends AppCompatActivity {
+
+    BottomNavigationView bottomNavigationView;
+    ActionBar actionBar;
+
+    Fragment1 fragment1;
+    Fragment2 fragment2;
+    Fragment3 fragment3;
+
+    FragmentManager fragmentManager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        // fragment1 에서 Toast 를 사용하기 위해 MainActicity를 던져줌
+        fragment1 = new Fragment1(this);
+        fragment2 = new Fragment2();
+        fragment3 = new Fragment3();
+
+        // 최초의 화면 만들기 framelayout에 fragment1 을 넣겠다
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.framelayout,fragment1).commit();
+
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.tab1){
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.framelayout,fragment1).commit();
+                    Toast.makeText(MainActivity.this, "tab1", Toast.LENGTH_SHORT).show();
+                }else if(item.getItemId() == R.id.tab2){
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.framelayout,fragment2).commit();
+                    Toast.makeText(MainActivity.this, "tab2", Toast.LENGTH_SHORT).show();
+                }else if(item.getItemId() == R.id.tab3){
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.framelayout,fragment3).commit();
+                    Toast.makeText(MainActivity.this, "tab3", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        }); // end function
+    } //end onCreat
+
+
+}
+```
+
+
+
+> fragment1
+
+```java
+package com.example.p331;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+public class Fragment1 extends Fragment {
+
+    Button button;
+
+    // Toast 는 MainActivity에서만 사용가능하기 때문에 메인에서 던져 정보를 받을 준비
+    MainActivity m;
+    public Fragment1(MainActivity m) {
+        this.m = m;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        ViewGroup viewGroup = null;
+        // Fragment 는 직접 viewGroup을 만들어서 findView를 써야 한다.
+        viewGroup = (ViewGroup)inflater.inflate(R.layout.fragment_1,container,false);
+        button = viewGroup.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(m, "Fragment1...", Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        return viewGroup;
+    }
+
+}
+```
+
+
+
+> fragment2, 3  아무 함수 없음
+
+```java
+package com.example.p331;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class Fragment2 extends Fragment {
+
+    public Fragment2() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_2, container, false);
+    }
+}
+```
 
