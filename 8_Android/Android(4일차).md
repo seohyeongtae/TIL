@@ -189,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
 } // Class end
 ```
 
+![KakaoTalk_20201015_182037623](Android(4%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201015_182037623.jpg)
+
 
 
 ## 선택 위젯 만들기  P394~
