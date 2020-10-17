@@ -1,0 +1,10 @@
+sqld 기출문제
+https://blog.naver.com/bubi0219/222079627766
+
+데이터 모델링의 이해
+http://www.dbguide.net/db.db?cmd=view&boardUid=148404&boardConfigUid=9&categoryUid=216&boardIdx=132&boardStep=1
+
+
+
+ADsP 기출문제
+http://www.dataedu.kr/%ec%a7%88%eb%ac%b8%ed%95%98%ea%b8%b0/
