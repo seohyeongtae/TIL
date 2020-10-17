@@ -4,7 +4,7 @@
 >
 >web project lib 은 web-inf 밑 lib에다가 넣기 
 >
->java 내부에서 test ex(hive 데이터 test)의 경우 Properties 로
+>java 내부에서 test ex(hive 데이터 test)의 경우 Properties 에다가 넣기
 
 Web Dynamic Project -> 
 
@@ -16,7 +16,7 @@ Spring nature Add ->
 
 config   spring.xml(필요한부분만 ) <context:component-scan base-package="hive" /> 변경 -> 
 
-Controlle / index 구성 -자세한 사항은 이클립스 참고 Spring  Hive
+Controller / index 구성 -자세한 사항은 이클립스 참고 Spring  Hive
 
 
 
@@ -57,7 +57,7 @@ Controlle / index 구성 -자세한 사항은 이클립스 참고 Spring  Hive
 ### Spring 설계
 
 INT STRING FLOAT 잘 구분해서 get 하기
-지바내부에서 잘 돌아가는지 확인해보고 차트에 대입하기 
+자바내부에서 잘 돌아가는지 확인해보고 차트에 대입하기 
 
 * Hive 데이터 TEST 예시
 
