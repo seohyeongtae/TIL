@@ -9,7 +9,14 @@
 
 ## [Linux](./4_linux)
 
-## [Hadoop](./5_hadoop)
+## [Hadoop/Hive](./5_hadoop&Hive)
+
+## [SQL](./6_SQL)
+
+## [R](./7_R)
+
+## [Android](./8_Android)
+
 
 ## [Git](./git수업)
 
