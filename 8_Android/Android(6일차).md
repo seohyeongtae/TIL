@@ -338,17 +338,19 @@ public class SecondActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = null;
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.movie,container,true);
-            TextView textView1 = view.findViewById(R.id.textView);
-            TextView textView2 = view.findViewById(R.id.textView2);
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = null;
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.movie,container,true);
+                TextView textView1 = view.findViewById(R.id.textView);
+                TextView textView2 = view.findViewById(R.id.textView2);
+                ImageView imageView = view.findViewById(R.id.imageView);
 
-            textView1.setText(list.get(position).getMovieNm());
-            textView2.setText(list.get(position).getAudiAcc()+"명");
+                textView1.setText(list.get(position).getMovieNm());
+                textView2.setText(list.get(position).getAudiAcc()+"명");
+                imageView.setImageResource(R.drawable.d2);
 
-            return view;
+                return view;
         } //getView end
     } // MovieAdapter end
 
@@ -451,5 +453,125 @@ public class Movie {
 	}
 	
 %>
+```
+
+
+
+
+
+### Android Date 처리 (Calender 만들고 date처리)
+
+> MainActivty 내부에 들어가는 함수
+
+```java
+long d = calendarView.getDate();
+
+SimpleDateFormat timeStampFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss",
+
+Locale.KOREA);
+
+String date = timeStampFormat.format(new Timestamp(d));
+
+textView.setText(date);
+```
+
+
+
+> cal.xml
+
+```java
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+    
+android:id="@+id/dlayout"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content">
+
+<CalendarView
+android:id="@+id/calendarView"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+```
+
+
+
+> MainAcitvity
+
+```java
+package com.example.p533;
+
+
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity {
+    TextView textView;
+
+    @Override
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        textView = findViewById(R.id.textView);
+    } // onCreate end
+
+    public void ckbt(View v){
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(MainActivity.this);
+
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View dview = layoutInflater.inflate(R.layout.cal,
+                (ViewGroup) findViewById(R.id.dlayout) );
+
+        final CalendarView calendarView = dview.findViewById(R.id.calendarView);
+
+        builder.setView(dview);
+        builder.setTitle("Hi");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                long d = calendarView.getDate();
+                SimpleDateFormat timeStampFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss",
+                        Locale.KOREA);
+                String date = timeStampFormat.format(new Timestamp(d));
+                textView.setText(date);
+            }
+
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
+    } //ckbt end
+}
+
 ```
 
