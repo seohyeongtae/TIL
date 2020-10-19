@@ -41,11 +41,16 @@
 * 리싸이클러뷰 만들기
 * Workshop 위주
 
-### [5일차](./Android(4일차))
+### [5일차](./Android(5일차))
 
 * 앱 화면에 웹브라우저 넣기
 * 시크바 사용하기 (시크바에 따라 화면 밝기 조정)
 * **Thread 와 Handler 이해 및 구현하기**
 * Random 숫자 handler, Thread 이용하여 출력하기 (시속, Rpm)
 * AsyncTask 사용하기
-* **서버와 데이터 주고 받기** (JSON 데이터 받기)
+* **서버와 데이터 주고 받기** (JSON 데이터 받기) / JSon 다루기 (교재520p)
+* Java 에서 데이터와 이미지 파일도 받아와 ImageView 에 넣기
+
+### [6일차](./Android(6일차))
+* API JSON 데이터 받아서 처리하기 (5일차 WS 활용)
+* **JSON Object, Array 처리방법에 대한 코드가 있다 중요**
