@@ -48,4 +48,4 @@
 * **Thread 와 Handler 이해 및 구현하기**
 * Random 숫자 handler, Thread 이용하여 출력하기 (시속, Rpm)
 * AsyncTask 사용하기
-* **서버와 데이터 주고 받기** 
+* **서버와 데이터 주고 받기** (JSON 데이터 받기)
