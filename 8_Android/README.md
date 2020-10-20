@@ -56,3 +56,15 @@
 * **JSON Object, Array 처리방법에 대한 코드가 있다 중요**
 * Android Date 처리 (코드) (Calender 만들고 date 처리)
 
+### [7일차](./Android(7일차))
+
+* SharedPreferences 앱안에 데이터 저장
+* (교재)P567 앨범과 연락처 조회하기 
+* (교재)P579 뷰에 그래프, 그림그리기
+* (교재)P623 멀티미디어 다루기 (카메라,오디오,유튜브 영상 등)
+* 위치기반 서비스와 앱 위젯 사용하기 P667 - GPS로 나의 위치 확인하기
+* 현재 위치의 지도 보여주기 P674 google Map API 사용하기 (스튜디오 googleMaps 양식사용)
+* 직접 google maps fragment 만들기 (empty 양식 사용) P675 
+
+
+
