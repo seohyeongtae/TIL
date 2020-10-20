@@ -515,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(gmap != null){
-            gmap.setMyLocationEnabled(true);
+            gmap.setMyLocationEnabled(true);  // 다시시작했을때
         }
     }
     @SuppressLint("MissingPermission")
@@ -526,8 +526,6 @@ public class MainActivity extends AppCompatActivity {
             gmap.setMyLocationEnabled(false);
         }
     }
-
-
 } // class end
 ```
 
