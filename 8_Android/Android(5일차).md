@@ -1279,4 +1279,8 @@ public class SecondActivity extends AppCompatActivity {
 
 
 
+> Android Studio 구성
+>
+> drawable 이미지는 없어도 된다. Java에서 이미지를 받아올 경우
+
 ![KakaoTalk_20201019_163120847](Android(5%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201019_163120847.jpg)

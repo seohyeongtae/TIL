@@ -198,6 +198,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -205,6 +207,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -213,6 +216,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class SecondActivity extends AppCompatActivity {
@@ -233,13 +239,13 @@ public class SecondActivity extends AppCompatActivity {
         getData();
     } // onCreate end
 
-    private void getData(){
+    private void getData() {
         String url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=430156241533f1d058c603178cc3ca0e&targetDt=20201001";
         MovieAsync movieAsync = new MovieAsync();
         movieAsync.execute(url);
     } //getData end
 
-    class MovieAsync extends AsyncTask<String ,Void,String>{
+    class MovieAsync extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -266,7 +272,7 @@ public class SecondActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(s);
                 JSONObject boxOfficeResult = jsonObject.getJSONObject("boxOfficeResult");
                 JSONArray dailyBoxOfficeList = boxOfficeResult.getJSONArray("dailyBoxOfficeList");
-                for(int i =0; i < dailyBoxOfficeList.length(); i++){
+                for (int i = 0; i < dailyBoxOfficeList.length(); i++) {
                     JSONObject jo = dailyBoxOfficeList.getJSONObject(i);
 //                    String rnum = jo.getString("rnum");
                     String rank = jo.getString("rank");
@@ -280,7 +286,7 @@ public class SecondActivity extends AppCompatActivity {
 //                    String salesInten = jo.getString("salesInten");
 //                    String salesChange = jo.getString("salesChange");
 //                    String salesAcc = jo.getString("salesAcc");
-//                    String audiCnt = jo.getString("audiCnt");
+                    String audiCnt = jo.getString("audiCnt");
 //                    String audiInten = jo.getString("audiInten");
 //                    String audiChange = jo.getString("audiChange");
                     String audiAcc = jo.getString("audiAcc");
@@ -288,7 +294,7 @@ public class SecondActivity extends AppCompatActivity {
 //                    String showCnt = jo.getString("showCnt");
 
 
-                    Movie movie = new Movie(rank,movieNm,audiAcc);
+                    Movie movie = new Movie(rank, movieNm, audiCnt, audiAcc);
                     list.add(movie);
                 }
             } catch (JSONException e) {
@@ -304,7 +310,8 @@ public class SecondActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this);
                     builder.setTitle("Rank");
-                    builder.setMessage(list.get(position).getRank());
+                    builder.setMessage("일별 랭킹 : " + list.get(position).getRank()
+                            + "\n 총관객수 : " + list.get(position).getAudiAcc());
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -320,7 +327,7 @@ public class SecondActivity extends AppCompatActivity {
     } // MovieAsync end
 
     // Adapter를 이용하여 Listview Setting
-    class MovieAdapter extends BaseAdapter{
+    class MovieAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -338,23 +345,59 @@ public class SecondActivity extends AppCompatActivity {
         }
 
         @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = null;
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.movie,container,true);
-                TextView textView1 = view.findViewById(R.id.textView);
-                TextView textView2 = view.findViewById(R.id.textView2);
-                ImageView imageView = view.findViewById(R.id.imageView);
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = null;
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.movie, container, true);
+            TextView textView1 = view.findViewById(R.id.textView);
+            TextView textView2 = view.findViewById(R.id.textView2);
 
-                textView1.setText(list.get(position).getMovieNm());
-                textView2.setText(list.get(position).getAudiAcc()+"명");
-                imageView.setImageResource(R.drawable.d2);
 
-                return view;
+            textView1.setText(list.get(position).getMovieNm());
+            textView2.setText("일별 관객수 : " + list.get(position).getAudiCnt() + "명");
+
+
+            // Java 로부터 이미지 받아 총 관객수별 등급 이미지로 나타내기
+            final ImageView imageView = view.findViewById(R.id.imageView);
+            String img = null;
+            if (Integer.parseInt(list.get(position).getAudiAcc()) >= 1000000) {
+                img = "up.jpg";
+            } else if (Integer.parseInt(list.get(position).getAudiAcc()) >= 100000) {
+                img = "middle.jpg";
+            } else {
+                img = "down.jpg";
+            }
+
+            final String iurl = "http://192.168.0.24/androidP533/img/" + img;
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    URL httpurl = null;
+                    InputStream is = null;
+                    try {
+                        httpurl = new URL(iurl);
+                        is = httpurl.openStream();
+                        final Bitmap bm = BitmapFactory.decodeStream(is);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setImageBitmap(bm);
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+            return view;
         } //getView end
     } // MovieAdapter end
 
-} // class end
+
+ } // class end
+
 ```
 
 
@@ -391,9 +434,10 @@ public class Movie {
 
     }
 
-    public Movie(String rank, String movieNm, String audiAcc) {
+    public Movie(String rank, String movieNm, String audiCnt, String audiAcc) {
         this.rank = rank;
         this.movieNm = movieNm;
+        this.audiCnt = audiCnt;
         this.audiAcc = audiAcc;
     }
 
