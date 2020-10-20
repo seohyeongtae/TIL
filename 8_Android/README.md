@@ -65,6 +65,7 @@
 * 위치기반 서비스와 앱 위젯 사용하기 P667 - GPS로 나의 위치 확인하기
 * 현재 위치의 지도 보여주기 P674 google Map API 사용하기 (스튜디오 googleMaps 양식사용)
 * 직접 google maps fragment 만들기 (empty 양식 사용) P675 
+* 나의 실시간 위치를 나타내는 네비게이션 만들기 P676
 
 
 

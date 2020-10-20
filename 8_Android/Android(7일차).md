@@ -329,7 +329,6 @@ package com.example.p675;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 
@@ -383,5 +382,152 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+```
+
+
+
+### 나의 실시간 위치를 나타내는 네비게이션 만들기 P676
+
+> 기본적인 구성은 위 P675 와 비슷하다. 현재 내 위치정보 가져오는 것은 P667
+>
+> 내 위치 변화에 따라 Marker 찍기
+>
+> 추가로 gmap.setMyLocationEnabled(true); 를 사용하기 위해 아래 퍼미션 추가
+
+```
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+```
+
+
+
+> MainActivity
+
+```java
+package com.example.p676;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class MainActivity extends AppCompatActivity {
+
+    SupportMapFragment supportMapFragment;
+    GoogleMap gmap;
+
+    TextView textView;
+    LocationManager locationManager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+
+        String [] permission = {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+        // permission 권한 물어보기
+        ActivityCompat.requestPermissions(this,permission,101);
+
+        supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+
+            // gmap 이 만들어지는 곳
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                gmap = googleMap;
+
+                // 권한 부여가 안되어있을 시 앱 종료
+                if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
+                        || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED ){
+                    return;
+                }
+
+                // gmap.setMyLocationEnabled(true); 사용하려면
+                // 퍼미션을 추가해야 한다. Manifest.permission.ACCESS_COARSE_LOCATION
+                // 파란색으로 내위치 표시 마커 대신 사용 가능
+                gmap.setMyLocationEnabled(true);
+
+                LatLng latLng = new LatLng(37.400991, 126.920311);
+                gmap.addMarker(
+                        new MarkerOptions().position(latLng).title("안양").snippet("집가야지")
+                );
+                gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+            }
+        });
+
+        // Location
+        textView = findViewById(R.id.textView);
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        // 앱이 켜지자마자 위치정보 지속적으로 받기 MyLocation 클래스 이용
+        MyLocation myLocation = new MyLocation();
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1,
+                0,  // 조금만 이동해도 데이터를 받겠다
+                myLocation
+        );
+    } // onCreate end
+
+    // 내 위치에 따라 포인터 변경
+    class  MyLocation implements LocationListener {
+
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            textView.setText(lat+" "+lon);
+
+            LatLng latLng = new LatLng(lat, lon);
+
+            // 위에 gmap.setMyLocationEnabled(true); 을 마커대신 사용함
+//            gmap.addMarker(
+//                    new MarkerOptions().position(latLng).title("나는누구").snippet("여긴어디")
+//            );
+            gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+        }
+    }
+
+    // 백그라운드에서 계속 동작하기 때문에 MissingPerMission 은 이미 위에서 검사를 했기 때문에 생략하겠다는 뜻
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(gmap != null){
+            gmap.setMyLocationEnabled(true);
+        }
+    }
+    @SuppressLint("MissingPermission")
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(gmap != null){
+            gmap.setMyLocationEnabled(false);
+        }
+    }
+
+
+} // class end
 ```
 
