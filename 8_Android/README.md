@@ -67,5 +67,9 @@
 * 직접 google maps fragment 만들기 (empty 양식 사용) P675 
 * 나의 실시간 위치를 나타내는 네비게이션 만들기 P676
 
+### [8일차](./Android(8일차))
 
+* Fragment 에 google maps 뿌리기 P287_map
+* 푸시 서비스와 센서 및 단말 기능 사용하기 (SMS, 푸시 메시지 등) P701
+* 푸시 서비스 사용하기 (푸시메시지) (FCM 푸시 메시지) P711
 
