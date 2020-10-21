@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
 ### 위치기반 서비스와 앱 위젯 사용하기 P667 - GPS로 나의 위치 확인하기
 
+![KakaoTalk_20201021_173900021_02](Android(7%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201021_173900021_02-1603269751616.jpg)
+
+
+
 >  Mainfest  에 권한 부여해야 한다.
 >
 > <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>

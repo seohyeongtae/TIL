@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements Fragment1.View1Ma
         return true;
     }
 
+    // action bar 메뉴 클릭시 fragment 이동
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.m1){
@@ -294,15 +295,16 @@ public class MainActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= 26){
             if(manager.getNotificationChannel("ch2") == null){
                 manager.createNotificationChannel(new NotificationChannel("ch2","chname2",NotificationManager.IMPORTANCE_DEFAULT));
-                builder = new NotificationCompat.Builder(this,"ch2");
             }
+            
+              builder = new NotificationCompat.Builder(this,"ch2");
         }else{
             builder = new NotificationCompat.Builder(this);
         }
+        // 어플 재실행 Intent와 Pending 사용
         Intent intent = new Intent(this, MainActivity.class);
-        
-        // new Intent[]{intent} 는 intent 로 원래 써야함.
-        PendingIntent pendingIntent = PendingIntent.getActivities(this,101, new Intent[]{intent}, PendingIntent.FLAG_UPDATE_CURRENT);
+       
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,101, Intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setAutoCancel(true);
         builder.setContentIntent(pendingIntent);
 
@@ -321,24 +323,31 @@ public class MainActivity extends AppCompatActivity {
 
 ### 푸시 서비스 사용하기 (푸시메시지) (FCM 푸시 메시지) P711
 
+### 푸시 메시지가 어플 안으로 들어오면 그 데이터를 받아서 앱 내부에서 진동, 알람 띄우기
+
 > FCM(Firebase Cloud Messaging) 구글의 푸시 서비스 - 구글 클라우드 서버를 사용
 >
 > https://console.firebase.google.com/
 >
-> firbase 세팅 순서 따라 파일 수정
+> firbase 세팅 순서 따라 파일 수정 (build.gradle 2가지 모두 수정, google json  파일 app폴더에 복사 등)
 >
 > Manifest  <uses-permission android:name="android.permission.INTERNET"/> 추가
 >
 > new - service 생성 MyFService.java ( MainActivity 밑에서 푸시 메세지를 받는 역할)
+>
+> 자바 이클립스 servelet 생성 / json lib 추가
 
 
 
 > build.gradle 에 firebase.google 의 설명과는 다르게 추가했다.
 
 ```java
+	apply plugin: 'com.google.gms.google-services'	
+
+
 	implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-analytics'  // 없어도 된다.
 ```
 
 
@@ -380,3 +389,259 @@ public class MainActivity extends AppCompatActivity {
 </manifest>
 ```
 
+
+
+> MainActivity
+
+```java
+package com.example.p711;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView tx;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tx = findViewById(R.id.tx);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("car").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                String msg = "FCM Complete...";
+                if(!task.isSuccessful()){
+                    msg = "FCM Fail...";
+                }
+                Log.d("[TAG]:",msg);
+            }
+        });
+
+        // data 받을 준비
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        lbm.registerReceiver(receiver,new IntentFilter("notification"));
+
+    } // onCreate end
+
+    // MyFService에서 보낸 data 받기
+    public BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent != null){
+                String title = intent.getStringExtra("title");
+                String control = intent.getStringExtra("control");
+                String data = intent.getStringExtra("data");
+                tx.setText(control+" "+data);
+                Toast.makeText(MainActivity.this, title+ " "+ control+" "+data, Toast.LENGTH_SHORT).show();
+                notification(title,control,data);
+            }
+        }
+    };
+
+    // data 가 들어오면 어플 내부에서 진동 , 상단 알람창 띄움 , 알람 클릭하면 어플 재실행
+    public void notification(String title, String control, String data){
+        NotificationManager manager;
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        if(data != null) {
+            // 진동
+            if (Build.VERSION.SDK_INT >= 26) {
+                vibrator.vibrate(VibrationEffect.createOneShot(1000, 10));
+            } else {
+                vibrator.vibrate(1000);
+            }
+
+
+            // 알람
+            manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder = null;
+            if (Build.VERSION.SDK_INT >= 26) {
+                if(manager.getNotificationChannel("ch1") == null) {
+                    manager.createNotificationChannel(new NotificationChannel("ch1", "chname1", NotificationManager.IMPORTANCE_DEFAULT));
+                }
+
+                builder = new NotificationCompat.Builder(this, "ch1");
+            } else {                                                                                            
+                builder = new NotificationCompat.Builder(this);
+            }
+            // 알람 클릭시 어플 재실행 Pending 사용
+            Intent intent = new Intent(this,MainActivity.class);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setAutoCancel(true);
+            builder.setContentIntent(pendingIntent);
+
+            builder.setContentTitle(title);
+            builder.setContentText(control + data);
+            builder.setSmallIcon(R.drawable.d2);
+            Notification noti = builder.build();
+            manager.notify(1, noti);
+        }
+    } // notification end
+
+
+} // class end
+```
+
+
+
+> MyFService.java
+
+```java
+package com.example.p711;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+public class MyFService extends FirebaseMessagingService {
+
+    public MyFService() {
+    }
+
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        String title = remoteMessage.getNotification().getTitle();
+        String control = remoteMessage.getData().get("control");
+        String data = remoteMessage.getData().get("data");
+        Log.d("[TAG]:",title+" "+control+" "+data);
+
+        // 받은 data를 MainActivity로 notification 이라는 이름으로 보내기
+        Intent intent = new Intent("notification");
+        intent.putExtra("title",title);
+        intent.putExtra("control",control);
+        intent.putExtra("data",data);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+    }
+}
+
+```
+
+
+
+> 이클립스 src에 servlet 생성 / json lib 추가
+>
+> 구글 클라우드에 메시지를 전송한 뒤 앱으로 전송
+
+```java
+package ftest;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONObject;
+
+@WebServlet({ "/Ftest", "/ftest" })
+public class Ftest extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+    public Ftest() {
+        super();
+    }
+
+
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			URL url = null;
+			try {
+				url = new URL("https://fcm.googleapis.com/fcm/send");
+			} catch (MalformedURLException e) {
+				System.out.println("Error while creating Firebase URL | MalformedURLException");
+				e.printStackTrace();
+			}
+			HttpURLConnection conn = null;
+			try {
+				conn = (HttpURLConnection) url.openConnection();
+			} catch (IOException e) {
+				System.out.println("Error while createing connection with Firebase URL | IOException");
+				e.printStackTrace();
+			}
+			conn.setUseCaches(false);
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+
+			// set my firebase server key https://console.firebase.google.com/ 설정 클라우드 메시징에 키값이 있다.
+			conn.setRequestProperty("Authorization", "key="
+					+ "AAAAW_wGDZs:APA91bHA7IHCWbj6P42H3hLnk-IzYkPpWSYY60XCSvx4fdNgE1uEpiMF9VxuqN_HmzmGQFzOezECXVQxCdRC-EK1fQgm3T_uZamJn0x3NEsFXDquqDhCD61_UNyh4MCuVoO9xFUguBbt");
+
+			// create notification message into JSON format /topics/  옆에는 Android 양식에 맞게 수정
+			JSONObject message = new JSONObject();
+			message.put("to", "/topics/car");
+			message.put("priority", "high");
+			
+			// 앱이 꺼져있는 상태에 알림가는 내용 (데이터안감)
+			JSONObject notification = new JSONObject();
+			notification.put("title", "title1");
+			notification.put("body", "body1");
+			message.put("notification", notification);
+			
+			// 앱이 켜져있는 상태에 데이터가 전송됨 (알림 안감)
+			JSONObject data = new JSONObject();
+			data.put("control", "control1");
+			data.put("data", 100);
+			message.put("data", data);
+
+
+			try {
+				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+				out.write(message.toString());
+				out.flush();
+				conn.getInputStream();
+				System.out.println("OK...............");
+
+			} catch (IOException e) {
+				System.out.println("Error while writing outputstream to firebase sending to ManageApp | IOException");
+				e.printStackTrace();
+			}	
+				
+	}
+
+}
+
+```
+
+![KakaoTalk_20201021_173900021_01](Android(8%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201021_173900021_01.jpg)
+
+![KakaoTalk_20201021_173900021](Android(8%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201021_173900021.jpg)

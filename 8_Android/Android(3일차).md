@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.mymenu,menu);
         return true;
     }
-    // menu 항목별 함수 지정하기
+    // Actionbar menu 항목별 함수 지정하기
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.m1){
