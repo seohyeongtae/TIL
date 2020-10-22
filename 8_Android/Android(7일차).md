@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
 > empty 가 아닌 google map activity 로 새로 만들었다.
 >
-> console.cloud.google.com  들어가서 API 받기
+> **console.cloud.google.com**  들어가서 API 받기
 
 **안드로이드 스튜디오 내부에 SHA-1 값이 자동을 나오지만 아래 찾는 방법도 참고해놓자**
 
@@ -222,6 +222,8 @@ C:\Program Files\Java\jdk1.8.0_251\bin>
 
 * Gradle Scripts -> build.gradle(module:app) 에 implementation 'com.google.android.gms:play-services-maps:17.0.0' 를 추가해야 한다. - 이후 sync now
 
+* build.gradle(project) ->  classpath 'com.google.gms:google-services:4.3.4' 추가하기
+
 * AndroidMainfest  안에 activity 위에 아래 코드를 추가해야 한다. @string/google_maps_key에 API 키 값 넣기
 
   ```
@@ -230,7 +232,7 @@ C:\Program Files\Java\jdk1.8.0_251\bin>
       android:value="@string/google_maps_key" />
   ```
 
-> build.gradle(Module:app)
+> build.gradle(Module:app) 
 
 ```java
 (생략)...

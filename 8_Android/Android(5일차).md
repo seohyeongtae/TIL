@@ -580,6 +580,8 @@ public class MainActivity extends AppCompatActivity {
 
 **프로그레스바를 활용하여 데이터가 받는 중 표시**
 
+**IP 주소는 무조건 192 형식으로 써야한다.**
+
 **Intent 를 사용 하여 화면전환(SecondActivity) - 3일차 P251 에서 사용  activity 만들면 layout 도 자동으로 생김**
 
 > 이클립스 - web   login.jsp
@@ -726,6 +728,7 @@ public class MainActivity extends AppCompatActivity {
     public void ckbt(View v){
         String id = tx_id.getText().toString();
         String pwd = tx_pwd.getText().toString();
+		// IP 주소는 무조건 192 형식으로 써야한다.
         String url ="http://192.168.1.107:8000/android/login.jsp";
         url += "?id="+id+"&pwd="+pwd;
         httpAsync = new HttpAsync();

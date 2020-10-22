@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
 >
 > 자바 이클립스 servelet 생성 / json lib 추가
 
-
+> build.gradle(project)  classpath 'com.google.gms:google-services:4.3.4' 추가
 
 > build.gradle 에 firebase.google 의 설명과는 다르게 추가했다.
 
