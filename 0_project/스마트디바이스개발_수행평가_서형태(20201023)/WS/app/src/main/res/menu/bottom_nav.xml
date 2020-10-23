@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navbt1"
+        android:enabled="true"
+        android:icon="@drawable/check"
+        android:title="상영순위"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/navbt2"
+        android:icon="@drawable/location"
+        android:enabled="true"
+        android:title="영화관위치"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/navbt3"
+        android:icon="@drawable/event"
+        android:enabled="true"
+        android:title="이벤트"
+        app:showAsAction="ifRoom"
+        />
+</menu>

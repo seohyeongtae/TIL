@@ -654,6 +654,3 @@ public class Fragment2 extends Fragment {
 > naver 와 같은 바로가기 메뉴 Android 에서 기본 틀을 제공해준다.
 
 
-
-### 
-

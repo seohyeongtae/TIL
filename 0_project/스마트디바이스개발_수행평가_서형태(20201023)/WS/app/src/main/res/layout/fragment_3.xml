@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragment3" >
+
+    <TextView
+        android:id="@+id/eventtextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="금일의 Event"
+        android:textColor="#1D475A"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/eventtextView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="매일 매일 진행되는 이벤트!!"
+        android:textSize="30sp" />
+
+    <WebView
+        android:id="@+id/eventWeb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/eventimageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_x="15dp"
+            android:layout_y="-36dp"
+            tools:src="@tools:sample/avatars" />
+    </WebView>
+</LinearLayout>
