@@ -74,3 +74,17 @@
 * 푸시 서비스 사용하기 (푸시메시지) (FCM 푸시 메시지) P711
 * 푸시 메시지가 어플 안으로 들어오면 그 데이터를 받아서 앱 내부에서 진동, 알람 띄우기
 
+
+
+### [수행평가 - Android(스마트디바이스개발)](./Android(스마트디바이스개발))
+
+*  BroadCast (진동,알람)
+*  Fragment (SecondActivity)
+*  FCM
+*  Dialog, Progress bar
+*  Calendar View (Calender Data 다루기)
+*  Web View
+*  List View
+*  Bottom Nav
+*  Open API Json Data
+*  Google Map
