@@ -593,7 +593,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(dview);
         builder.setTitle("Hi");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
+	// 현재 날짜 밖에 안나옴... WS Fragment1 참고하길
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 long d = calendarView.getDate();
