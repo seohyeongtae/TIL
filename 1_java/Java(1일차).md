@@ -322,13 +322,7 @@ public class Test4 {
 
 ### 쓰레드의 상태 P527
 
-​					 사진넣기
-
-
-
-
-
-
+![2](Java(1일차)/2.jpg)
 
 ### join() 과 yield P535  Test5.java
 
@@ -627,7 +621,7 @@ public class Test {
 >
 > 그래서 입력과 출력을 동시에 수행하려면 입력을 위한 입력스트림과 출력을 위한 출력스트림 모두 2개의 스트림이 필요하다.
 
-
+![1](Java(1일차)/1.jpg)
 
 > InputStream / OutputStream (한글이 깨진다 byte 단위로 읽어들이기 때문에)
 
