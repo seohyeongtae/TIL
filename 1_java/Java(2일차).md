@@ -12,17 +12,27 @@
 
 클라이언트는 서비스를 사용하는 컴퓨터 (service user)
 
+![KakaoTalk_20201027_151617400_05](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400_05.jpg)
+
+![KakaoTalk_20201027_151617400_04](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400_04.jpg)
+
+![KakaoTalk_20201027_151617400_03](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400_03.jpg)
+
 
 
 ### InetAddress 클래스 P680
 
-
+![KakaoTalk_20201027_151617400_06](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400_06.jpg)
 
 
 
 ### URLConnection 클래스 P685 day02/test.java  test2.java
 
 ### Json 데이터, 파일 받기 (xxx.jsp 에서, Http 에서)
+
+![KakaoTalk_20201027_151617400_02](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400_02.jpg)
+
+![KakaoTalk_20201027_151617400_01](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400_01.jpg)
 
 > spring 에 있는 users.jsp 에서 Json 데이터 불러오기
 >
@@ -221,7 +231,7 @@ public class Test3 {
 
 > Server에 login.jsp 를 만들고 id 값이 "qqq" 이고 pwd 값이 '111' 일경우에는 1을, 그외는  0을 내보낸다.
 >
-> Client는 login 정보를 보내고 그 값을 출력한다.
+> Client는 서버에 login 정보를 보내고 반환 값을 출력한다.
 
 
 
@@ -266,8 +276,8 @@ public class Testws {
 		URL url = null;
 		HttpURLConnection con = null;
 		
-		InputStream is = null;
-		InputStreamReader isr = null;
+	//	InputStream is = null;
+	//	InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
 			String id = "qqq";
@@ -277,13 +287,17 @@ public class Testws {
 			con.setRequestMethod("POST");
 			con.getInputStream();
 			
-			is = con.getInputStream();
-			isr = new InputStreamReader(is);
-			br = new BufferedReader(isr);
+		//	is = con.getInputStream();
+		//	isr = new InputStreamReader(is);
+			// br = new BufferedReader(isr);
+			// 위 아래 둘다 가능
+			br = new BufferedReader(
+					new InputStreamReader(con.getInputStream()) 
+					);
 			
 			String str = "";
 			while((str = br.readLine()) != null) {
-				System.out.println(str);
+				System.out.println(str.trim());
 			}
 			
 		} catch (Exception e) {
@@ -293,12 +307,193 @@ public class Testws {
 				try {
 					br.close();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			con.disconnect();
 		}
 	}
+
+}
+
+```
+
+
+
+### 소캣 프로그래밍 , TCP/IP 프로토콜(TCP와 UDP) P690  com.tcpip 패키지
+
+> 소캣(socket)이란 프로세스 간의 통신에 사용되는 양쪽 끝단(endpoint)을 의미한다. 서로 멀리 떨어진 두 사람이 통신하기 위해서 전화기가 필요한 것처럼, 프로세스간의 통신을 위해서는 그 무언가가 필요하고 그것이 바로 소켓이다.
+
+> server 는 도중에 중지가 되면 안되고 client 는 연결이 안되었을 경우 지속적으로 server 에 연결을 해야 한다. 또한 server와 client 는 Thread로 구성하여 파일을 보내고 받는 중에도 다른 일을 할 수 있게 해야 한다.
+>
+> ( Thread 는 미작성)
+
+![KakaoTalk_20201027_151617400](Java(2%EC%9D%BC%EC%B0%A8)/KakaoTalk_20201027_151617400.jpg)
+
+> Server.java
+
+```java
+package com.tcpip;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+	int port = 9999;
+	ServerSocket serverSocket;
+	Socket socket;
+	
+	InputStreamReader ir;
+	BufferedReader br;
+	
+	public Server() {
+		
+	}
+	public void startServer() throws IOException {
+		serverSocket = new ServerSocket(port);
+		// Server 는 꺼지면 안되기 때문에 while 무한 루프를 돌려야 한다.
+		try {
+			while(true) {
+				// socket 은 서버, 클라이언트와의 연결 해주는 역할
+				System.out.println("Ready Server..");
+				socket = serverSocket.accept();
+				System.out.println("Connected..");
+				
+				// client 에 데이터를 받는다 .
+				ir = new InputStreamReader(socket.getInputStream());
+				br = new BufferedReader(ir);
+				String msg = "";
+				msg = br.readLine();
+				System.out.println(msg);
+				} // while end
+			// Exception 처리 따로 꼭 해주어야 한다. Reader 에서 발생할 수 있기 때문에 --------------------------
+		} catch(Exception e) {
+			throw e;
+		} finally {
+			if(br != null) {
+				br.close();
+			}
+			if(socket != null) {
+				socket.close();
+			}
+		}
+	} // startServer end
+	
+	public static void main(String[] args) {
+		Server server = null;
+		server = new Server();
+		try {
+			server.startServer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("End Server");
+	}
+
+}
+```
+
+
+
+> Client.java
+
+```java
+package com.tcpip;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class Client {
+
+	int port;
+	String ip;
+
+	Socket socket;
+
+	OutputStreamWriter ow;
+	BufferedWriter bw;
+
+	public Client(String ip, int port) {
+		this.ip = ip;
+		this.port = port;
+	}
+
+	public void connectServer() {
+		try {
+			System.out.println("Start Client");
+			socket = new Socket(ip, port);
+			System.out.println("Connected...");
+		} catch (Exception e) {
+			// 연결이 되지 않았을 경우 계속 재시도
+			while (true) {
+				try {
+					Thread.sleep(2000);
+					socket = new Socket(ip, port);
+					System.out.println("Connected...");
+					break;
+				} catch (Exception e1) {
+					System.out.println("Re Try...");
+				}
+			} // while end
+		}
+	} // connectServer end
+
+	// server 에 데이터 보내기
+	public void request(String msg) throws IOException {
+		// try catch 로 close를 하지 않으면 Server 에서 에러가 뜬다.
+		try {
+			ow = new OutputStreamWriter(socket.getOutputStream());
+			bw = new BufferedWriter(ow);
+			bw.write(msg);
+		} catch (Exception e) {
+			throw e;
+		}
+	} // request end
+
+	public void close() throws IOException {
+		if (bw != null) {
+			bw.close();
+		}
+		if (socket != null) {
+			socket.close();
+		}
+	} // close end
+
+	public static void main(String[] args) {
+		Client client = null;
+		client = new Client("192.168.1.107", 9999);
+		client.connectServer();
+				
+		Scanner sc = new Scanner(System.in);
+		while(true) {
+			System.out.println("Input msg");
+			String msg = sc.nextLine();
+			if(msg.equals("q")) {
+				try {
+					client.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			try {
+				client.request(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} // while end
+		
+		System.out.println("End Client");
+	}
+
 }
 ```
 
