@@ -297,6 +297,9 @@ public class Testws {
 			
 			String str = "";
 			while((str = br.readLine()) != null) {
+                if(str.equals("")){
+                    continue;
+                }
 				System.out.println(str.trim());
 			}
 			
