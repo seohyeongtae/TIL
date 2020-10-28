@@ -332,7 +332,7 @@ public class Server {
 					}
 					System.out.println(mo.getId()+mo.getMsg());
 				} catch (Exception e) {
-					// client q를 누르지 않고 가 강제로 종료했을 때  error 가 난다 이것은 해결할 수 없다.
+					// client q를 누르지 않고 가 강제로 종료했을 때  NullPointerException 이 난다 ---------------------------------------
 					if(mo.getId() != null) {
 					System.out.println(mo.getId()+" 님이 나갔습니다.");
 					}
