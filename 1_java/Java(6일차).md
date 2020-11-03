@@ -422,15 +422,15 @@ Linux Bridged 설정 (가상의 IP 가 아니라 고유의 IP를 가지게 하�
 
 Bridged 밑에 설정은 컴퓨터 Network 연결 장치에 따라 변경
 
-![브릿지_1](Java(6%EC%9D%BC%EC%B0%A8)/%EB%B8%8C%EB%A6%BF%EC%A7%80_1.jpg)
+![브릿지_1](Java(6일차)/브릿지_1.jpg)
 
-![브릿지_1](Java(6%EC%9D%BC%EC%B0%A8)/%EB%B8%8C%EB%A6%BF%EC%A7%80_1-1604306758452.jpg)
+![2](Java(6일차)/2.jpg)
 
-![브릿지_1](Java(6%EC%9D%BC%EC%B0%A8)/%EB%B8%8C%EB%A6%BF%EC%A7%80_1-1604306766714.jpg)
+![3](Java(6일차)/3.jpg)
 
-![브릿지_1](Java(6%EC%9D%BC%EC%B0%A8)/%EB%B8%8C%EB%A6%BF%EC%A7%80_1-1604306772223.jpg)
+![4](Java(6일차)/4.jpg)
 
-![브릿지_5](Java(6%EC%9D%BC%EC%B0%A8)/%EB%B8%8C%EB%A6%BF%EC%A7%80_5.jpg)
+![5](Java(6일차)/5.jpg)
 
 
 

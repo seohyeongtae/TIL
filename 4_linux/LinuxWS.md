@@ -10,7 +10,7 @@ hostname: dbserver, ip: 192.168.111.111
 
 \- systemctl stop firewall
 
-\- systemctl disable3 firewall
+\- systemctl disable firewall
 
 \4. webserver
 
