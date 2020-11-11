@@ -18,11 +18,11 @@
    - 시스템 구성도
    - 실행 결과 화면
 
-![Android](Android(%EC%8A%A4%EB%A7%88%ED%8A%B8%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EA%B0%9C%EB%B0%9C)/Android.PNG)
+![Android](Android(스마트디바이스개발)/Android.PNG)
 
-![Eclipse](Android(%EC%8A%A4%EB%A7%88%ED%8A%B8%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EA%B0%9C%EB%B0%9C)/Eclipse.PNG)
+![Eclipse](Android(스마트디바이스개발)/Eclipse.PNG)
 
-![시스템구성도2](Android(%EC%8A%A4%EB%A7%88%ED%8A%B8%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EA%B0%9C%EB%B0%9C)/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%84%B1%EB%8F%842.PNG)
+![시스템구성도2](Android(스마트디바이스개발)/시스템구성도2.PNG)
 
 
 
