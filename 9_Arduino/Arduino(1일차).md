@@ -1,5 +1,7 @@
 ## 아두이노 1일차
 
+> 온라인교재 참고하기
+
 Arduino 툴 -> 보드 Leonardo로 바꾸기(Latte Panda에 맞춰서)
 
 포트는 Com3
@@ -58,3 +60,6 @@ void loop() {
 }
 ```
 
+
+
+Serial.available
