@@ -58,7 +58,7 @@ $ git add .  			# 현재 디렉토리의 모든 파일 및 폴더
 $ git add a.txt 		# 특정 파일
 $ git add md-images/	# 특정 폴더
 $ git status
-# mastrt 브랜치에 있다.
+# master 브랜치에 있다.
 On branch master
 
 No commits yet
@@ -141,7 +141,7 @@ $ git commit -m '스프링코드'
 
 ```bash
 $ git remote add origin https://github.com/seohyeongtae/git-test.git
-      remote add ofigin {URL}
+      remote add origin {URL}
 ```
 
 * 깃아, 원격(remote)저장소로 추가해줘(add) origin 이라는 이름으로 URL을
