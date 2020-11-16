@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.MenuDao">
+	
+
+	
+	<insert id="insert" parameterType="menu">
+		INSERT INTO MENU VALUES (#{id},#{name},#{price},null,#{category},#{img1},null,null)
+	</insert>
+	
+	<!--  UPDATE는 이름하고 가격만 바꾸는 걸로??? 상의 후 수정 -->
+	<update id="update" parameterType="menu">
+		UPDATE MENU SET NAME=#{name},PRICE=#{price},IMG1=#{img1} WHERE ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM MENU WHERE ID=#{k}
+	</delete>
+		
+	<select id="select" parameterType="String" resultType="menu">
+		SELECT * FROM MENU WHERE ID =#{k}
+	</select>
+	
+	<select id="selectall"  resultType="menu">
+		SELECT * FROM MENU
+	</select>
+		
+	<select id="getmenulist" parameterType="String"  resultType="menu">
+		SELECT * FROM MENU WHERE CATEGORY = #{k}
+	</select>	
+		
+
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

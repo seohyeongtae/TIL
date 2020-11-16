@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SalesDao">
+
+	<insert id="insert" parameterType="sales">
+		INSERT INTO SALES VALUES (TO_CHAR(SALES_SEQ.NEXTVAL),#{menu_id},#{tab_id},#{receipt_id},#{qt},#{s_service},#{s_price})
+			<selectKey keyProperty="id" resultType="String" order="AFTER">
+			SELECT SALES_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<!--  주문 대기 목록 에서 삭제  SERVICE 숫자를 조정하면 목록에서 사라지기 때문에 delete 명칭 사용-->
+	<delete id="delete" parameterType="sales">
+		UPDATE SALES SET S_SERVICE=2 WHERE ID=#{id}
+	</delete>
+	
+	<select id="select" parameterType="String" 
+	resultType="sales">
+		SELECT * FROM SALES WHERE ID = #{k}
+	</select>
+	
+	<select id="selectall" resultType="sales">
+		<![CDATA[
+		SELECT * FROM SALES WHERE 1=1 AND S_SERVICE = 1 ORDER BY 1
+		]]>
+	</select>
+	
+	
+		<select id="getsalesid" parameterType="String" resultType="String" >
+		<![CDATA[SELECT SALES_SEQ.nextval, SALES_SEQ.CURRVAL FROM DUAL]]>
+	</select>
+	
+		
+	<select id="search" resultType="sales">
+			SELECT * FROM SALES WHERE TAB_ID =#{obj} AND S_SERVICE = 1 ORDER BY 1
+	</select>
+	
+	<select id="searchreceipt" resultType="sales">
+			SELECT * FROM SALES WHERE RECEIPT_ID =#{k} AND S_SERVICE = 1 ORDER BY 1
+	</select>
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

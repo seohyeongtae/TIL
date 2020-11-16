@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ReceiptDao">
+
+	<insert id="insert" parameterType="receipt">
+		INSERT INTO RECEIPT VALUES (TO_CHAR(RECEIPT_SEQ.NEXTVAL),#{tab_id},TO_CHAR(SYSDATE,'YY/MM/DD'),#{payment},#{total})
+			<selectKey keyProperty="id" resultType="String" order="AFTER">
+			SELECT RECEIPT_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="receipt">
+		UPDATE RECEIPT SET TAB_ID=#{tab_id},TO_CHAR(SYSDATE,'YY/MM/DD'),PAYMENT=#{payment},TOTAL=#{total} WHERE ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM RECEIPT WHERE ID=#{k}
+	</delete>
+		
+	<select id="select" parameterType="String" 
+	resultType="receipt">
+		SELECT * FROM RECEIPT WHERE ID =#{k}
+	</select>
+	
+	<select id="selectall" resultType="receipt">
+		SELECT * FROM RECEIPT
+	</select>
+		
+	<select id="getreceiptid" parameterType="String" resultType="String" >
+		<![CDATA[SELECT RECEIPT_SEQ.nextval, RECEIPT_SEQ.CURRVAL FROM DUAL]]>
+	</select>
+	
+	<select id="getdaytotal" parameterType="String" resultType="Integer" >
+		<![CDATA[SELECT SUM(TOTAL) FROM RECEIPT WHERE REGDATE LIKE '%/'||#{k}||'/%' GROUP BY REGDATE ORDER BY REGDATE]]>
+	</select>
+	<select id="gettodaytotal" parameterType="String" resultType="Integer" >
+		<![CDATA[SELECT SUM(TOTAL) FROM RECEIPT WHERE REGDATE LIKE #{k}]]>
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
