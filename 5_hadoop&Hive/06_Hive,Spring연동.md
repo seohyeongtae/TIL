@@ -10,7 +10,7 @@ Web Dynamic Project ->
 
 Maven -> pom.xml -> 
 
-Spring nature Add -> 
+Spring nature Add -> web.xml 수정
 
 오라클/하이브 드라이버 web-inf lib 에 복사 -> 
 
