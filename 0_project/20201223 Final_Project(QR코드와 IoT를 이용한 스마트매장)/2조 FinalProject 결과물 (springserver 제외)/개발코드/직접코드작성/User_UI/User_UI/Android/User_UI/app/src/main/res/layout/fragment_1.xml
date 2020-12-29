@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragment1">
+
+    <Button
+        android:id="@+id/infobt"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="회원정보"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/orderbt"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="주문하기"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/cartbt"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="주문현황"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/productbt"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="제품안내"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/fcmtx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="오늘의 추천상품!"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/itemimage"
+        android:layout_width="match_parent"
+        android:layout_height="321dp"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/itemtx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="30sp" />
+
+</LinearLayout>

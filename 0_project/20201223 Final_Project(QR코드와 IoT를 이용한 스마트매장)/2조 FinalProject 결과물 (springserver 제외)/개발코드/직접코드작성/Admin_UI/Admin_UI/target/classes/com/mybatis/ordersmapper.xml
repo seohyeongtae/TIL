@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrdersDao">
+		
+	<insert id="insert" parameterType="orders">
+	</insert>
+	
+	<update id="update" parameterType="orders">
+	
+	</update>
+	
+	<delete id="delete" parameterType="orders">
+	
+	</delete>
+	
+	<select id="select" parameterType="String" resultType="orders">
+	
+	</select>
+	
+	<select id="selectall" resultType="orders">
+	
+	</select>
+	
+	<select id="gettotallist" parameterType="String" resultType="orders">
+	 	SELECT TO_CHAR(ORDERDATE,'MM/DD') AS ORDERDATE, SUM(TOTALPRICE) AS TOTALPRICE FROM ORDERS WHERE ORDERID LIKE #{k} GROUP BY TO_CHAR(ORDERDATE,'MM/DD') ORDER BY 1
+	</select>
+	
+
+
+</mapper>

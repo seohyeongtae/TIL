@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/totalprice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="제품안내"
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:entries="@array/카테고리" />
+
+        <EditText
+            android:id="@+id/searchtx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:hint="검색어를 입력해주세요"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/menulist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:background="#FFFAC5" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="자판기 위치 안내"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/bt1"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="과자 자판기"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="음료수 자판기"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="생필품 자판기"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/bt4"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:text="신선식품 자판기"
+        android:textSize="18sp" />
+
+    <!--    <LinearLayout-->
+<!--        android:id="@+id/container2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_weight="2"-->
+<!--        android:orientation="vertical">-->
+
+<!--        <ListView-->
+<!--            android:id="@+id/choicelist"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="2"-->
+<!--            android:background="#FFEB3B">-->
+
+<!--        </ListView>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/paybt"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="길안내" />-->
+
+<!--    </LinearLayout>-->
+
+</LinearLayout>

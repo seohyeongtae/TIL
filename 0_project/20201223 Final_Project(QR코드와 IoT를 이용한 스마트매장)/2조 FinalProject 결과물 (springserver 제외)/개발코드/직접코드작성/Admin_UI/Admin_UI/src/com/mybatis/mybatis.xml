@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.vo.Orderlist" alias="orderlist"/>
+		<typeAlias type="com.vo.Orders" alias="orders"/>
+		<typeAlias type="com.vo.Iot" alias="iot"/>
+		<typeAlias type="com.vo.Interest" alias="interest"/>
+
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/mybatis/orderlistmapper.xml"/>
+		<mapper resource="com/mybatis/ordersmapper.xml"/>
+		<mapper resource="com/mybatis/iotmapper.xml"/>
+		<mapper resource="com/mybatis/interestmapper.xml"/>    
+ 
+	</mappers>
+</configuration>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="카테고리">
+        <item>ALL</item>
+        <item>과자</item>
+        <item>음료수</item>
+        <item>생필품</item>
+        <item>신선식품</item>
+    </string-array>
+</resources>
