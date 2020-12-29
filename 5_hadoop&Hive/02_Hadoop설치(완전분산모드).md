@@ -38,7 +38,7 @@
 
 
 
-4. **SSH 를 이요한 파일 전송 및 Jdk 원격설치**
+4. **SSH 를 이용한 파일 전송 및 Jdk 원격설치**
 
    - scp  /etc/hosts  root@secondserver:/etc/hosts  (hosts 설정한 뒤 복사전송)
 
