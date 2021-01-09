@@ -293,7 +293,7 @@ public class StringTokenizerEx {
 }
 ```
 
-### N 찍기
+### N 찍기 (2741번)
 
 ```java
 import java.io.BufferedReader;
@@ -320,6 +320,169 @@ public class Main {
 		}
 		bw.flush();
 		
+	}
+
+}
+```
+
+### A+B -7 (11021)번
+
+```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		
+		int a = Integer.parseInt(br.readLine());
+		
+		for (int i = 1; i <=a; i++) {
+			st = new StringTokenizer(br.readLine());
+			int b = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+			int sum = b+c;
+			bw.write("Case #"+i+": "+sum+"\n");
+			
+		}
+		bw.flush();
+		
+	}
+
+}
+
+```
+
+### 별 찍기 -1 (2438번)
+
+```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class Main {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int a = Integer.parseInt(br.readLine());
+		int b = 0;
+		for (int i = 1; i <=a; i++) {
+			b++;
+			for(int j =0; j<b;j++ ) {
+				bw.write("*");	
+			}
+			bw.write("\n");
+		}
+		bw.flush();
+		
+	}
+
+}
+```
+
+### 별찍기 -2 (2439번)
+
+```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class Main {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int a = Integer.parseInt(br.readLine());
+		int b = 0;
+		for (int i = 1; i <=a; i++) {
+			b++;
+			for(int k =0; k <a-b;k++) {
+				bw.write(" ");
+			}
+			
+			for(int j =0; j<b;j++ ) {
+				bw.write("*");	
+			}
+			bw.write("\n");
+		}
+		bw.flush();
+		
+	}
+
+}
+```
+
+###  X보다 작은 수 (10871번) - Scanner/BurrferedReader   2개 정답
+
+```java
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N,X,a;
+		N=sc.nextInt();
+		X=sc.nextInt();
+		for(int i=0;i<N;i++) {
+			a=sc.nextInt();
+			if(a<X) {
+				System.out.print(a+" ");
+			}
+		}
+		
+	}
+
+}
+```
+
+```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		
+		st = new StringTokenizer(br.readLine());
+		int b = Integer.parseInt(st.nextToken());
+		int c = Integer.parseInt(st.nextToken());
+		
+		st = new StringTokenizer(br.readLine());
+		
+		for (int i = 0; i <b; i++) {
+			int a = Integer.parseInt(st.nextToken());
+				if(a<c) {
+					bw.write(a+" ");
+			}
+			
+		}
+		bw.flush();
 	}
 
 }
