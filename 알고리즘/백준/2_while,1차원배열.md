@@ -109,3 +109,5 @@ public class Main{
 }
 ```
 
+### 1차원 배열
+
