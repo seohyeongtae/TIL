@@ -469,3 +469,54 @@ public class Main {
 }
 ```
 
+### 평균은 넘겠지 (4344번) String.format 사용 (반올림 Math.round 도 있다)
+
+> System.out.printf("%.3f",(double)count/q*100);
+>         	System.out.println("%");
+
+로 써도된다.
+
+```java
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main{
+    public static void main(String[] args) throws NumberFormatException, IOException {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	
+    	int a = Integer.parseInt(br.readLine());
+    	
+    	for(int i=0; i <a; i++) {
+
+        	StringTokenizer st = new StringTokenizer(br.readLine());
+        	int q = Integer.parseInt(st.nextToken());
+        	int grade[] = new int[q];
+        	int sum = 0;
+        	double count =0;
+        	double avg = 0;
+        	
+        	for(int j =0; j <q; j++) {
+        		grade[j] = Integer.parseInt(st.nextToken());
+        		sum += grade[j];
+        	}
+        	avg = sum/q;
+        	
+        	for(int j =0; j <q; j++) {
+        		if(grade[j] > avg) {
+        		count ++;	
+        		}
+        	
+        	}
+        	
+        	double result = count/q*100;
+        	System.out.println(String.format("%.3f", result)+"%");
+        	// System.out.printf("%.3f",(double)count/q*100);
+        	// System.out.println("%");
+    	}
+    	    
+    }
+}
+```
+
