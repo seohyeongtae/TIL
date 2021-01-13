@@ -109,5 +109,52 @@ public class Main{
 }
 ```
 
-### 1차원 배열
+
+
+## 1차원 배열
+
+### 최소,최대 (10818번)
+
+```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+
+public class Main{
+    public static void main(String[] args) throws IOException {
+    	BufferedReader br2 = new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(br2.readLine());
+        int[] num = new int[n];
+        
+        int max = -1000000;
+        int min = 1000000;
+        
+    	
+    	StringTokenizer st = new StringTokenizer(br2.readLine());
+      
+    	for(int i =0; i < n; i++) {
+        	num[i] = Integer.parseInt(st.nextToken());
+        	min = num[i];
+        	if(max < num[i]) {
+        		max = num[i];
+        	}
+        	if(min > num[i]) {
+        		min = num[i];
+        	}
+        }
+	        	
+    	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));  
+    	bw.write(min+" "+max);
+    	bw.flush();
+    	
+    }
+}
+
+```
 
