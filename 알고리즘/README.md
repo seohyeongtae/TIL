@@ -13,3 +13,11 @@
 
 * 배열사용
 * substring사용
+* arraylist / hashmap
+* String.format / Math.round
+
+### 3. 함수, 문자열
+
+* stringbuilder / boloean 선언
+* ASCII 코드
+* toUpperCase (대문자)
