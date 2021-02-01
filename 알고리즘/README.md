@@ -29,11 +29,37 @@
 
 ### 4. 기본수학 1
 
+* split
 
+* 2차원 배열 사용
+
+* BigInteager 사용
+
+* 더하기 add /  빼기 subtract / 곱하기 multiply / 나누기 divide  
+
+  ​	ex) 
+
+  	BigInteger a = new BigInteger(st.nextToken());
+  		BigInteger b = new BigInteger(st.nextToken());
+  		BigInteger sum = a.add(b);
 
 ### 5. 기본수학 2
 
+* 에라토스테네스의 체 (제곱근 이용 Math.sqrt()) -> 소수 찾기
 
+* 삼항연산자 사용
+
+* Math.pow(a,2)  a의 2제곱 / Math.PI (원주율) / Math.abs (절대값 구하기)
+
+* DecimalFormat 
+
+  		DecimalFormat df  = new DecimalFormat("#.######");
+  		
+  		System.out.println(df.format(a));
+  		System.out.println(df.format(b)+".000000");
+
+* 두 원사이의 거리를 통해 (피타고라스의 정리) 겹치는 점 찾기
+* Integer.valueOf(st.nextToken());
 
 ### 6. 재귀, 브루트 포스
 
