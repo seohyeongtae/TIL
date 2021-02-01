@@ -25,3 +25,15 @@
 * stringbuilder / boloean 선언
 * ASCII 코드
 * toUpperCase (대문자)
+* String  - contains 사용
+
+### 4. 기본수학 1
+
+
+
+### 5. 기본수학 2
+
+
+
+### 6. 재귀, 브루트 포스
+
