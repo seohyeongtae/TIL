@@ -54,12 +54,17 @@
 * DecimalFormat 
 
   		DecimalFormat df  = new DecimalFormat("#.######");
-  		
-  		System.out.println(df.format(a));
-  		System.out.println(df.format(b)+".000000");
+    		
+    		System.out.println(df.format(a));
+    		System.out.println(df.format(b)+".000000");
 
 * 두 원사이의 거리를 통해 (피타고라스의 정리) 겹치는 점 찾기
 * Integer.valueOf(st.nextToken());
 
 ### 6. 재귀, 브루트 포스
 
+- 팩토리얼
+- 이중배열 사용
+- 하노이 탑 이동 순서
+- 분해합
+- 영화감독 숌
