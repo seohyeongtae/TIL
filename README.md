@@ -17,6 +17,8 @@
 
 ## [Android](./8_Android)
 
+## [Arduino](./9_Arduino)
+## [C](./10_C)
 
 ## [Git](./git수업)
 
