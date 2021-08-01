@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.MenuDao">
+	
+
+	
+	<insert id="insert" parameterType="menu">
+		INSERT INTO MENU VALUES (#{id},#{name},#{price},#{tsales},#{category},{img1})
+	</insert>
+	
+	<!--  UPDATE는 이름하고 가격만 바꾸는 걸로??? 상의 후 수정 -->
+	<update id="update" parameterType="menu">
+		UPDATE MENU SET NAME=#{name},PRICE=#{price} WHERE ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM MENU WHERE ID=#{k}
+	</delete>
+		
+	<select id="select" parameterType="String" 
+	resultType="menu">
+		SELECT * FROM MENU WHERE ID =#{k}
+	</select>
+	
+	<select id="selectall" resultType="menu">
+		SELECT * FROM MENU
+	</select>
+		
+	<!-- <update id="setcnt" parameterType="String">
+		UPDATE USERS SET CNT=CNT+1 WHERE ID=#{k}
+	</update>   -->
+	
+<!-- 		
+	<select id="search" parameterType="java.util.HashMap" 
+	resultType="user">
+	<![CDATA[ SELECT * FROM USERS WHERE NAME like '%'|| #{obj} ||'%'
+		]]> 
+	</select>   -->
+	
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

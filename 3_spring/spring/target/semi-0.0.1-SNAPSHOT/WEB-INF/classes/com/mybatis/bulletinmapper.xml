@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.BulletinDao">
+	
+
+	<!--  TAB_ID는 자동입력이 되도록?? 아니면 직접 입력하도록?? -->
+	<insert id="insert" parameterType="bulletin">
+		INSERT INTO BULLETIN VALUES (BULLETIN_SEQ.NEXTVAL,#{tab_id},#{title},#{content},#{author},SYSDATE,#{comment_id})
+	</insert>
+	
+	<!-- 날짜도 갱신?? 작성자 같은경우 뺄수도 있는데 컨스트럭터를 수정해야함. -->
+	<update id="update" parameterType="bulletin">
+		UPDATE BULLETIN SET TITLE=#{title},CONTENT=#{content},AUTHOR=#{author} WHERE ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM BULLETIN WHERE ID=#{k}
+	</delete>
+		
+	<select id="select" parameterType="Integer" 
+	resultType="bulletin">
+		SELECT * FROM BULLETIN WHERE ID =#{k}
+	</select>
+	
+	<select id="selectall" resultType="bulletin">
+		SELECT * FROM BULLETIN
+	</select>
+		
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

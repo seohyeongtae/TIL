@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.vo.Bulletin" alias="bulletin"/>
+	    <typeAlias type="com.vo.Menu" alias="menu"/>
+	    <typeAlias type="com.vo.Receipt" alias="receipt"/>
+	    <typeAlias type="com.vo.Sales" alias="sales"/>
+	    <typeAlias type="com.vo.Tab" alias="tab"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/mybatis/bulletinmapper.xml"/>            <!-- Sql 이 들어간다. -->
+		<mapper resource="com/mybatis/menumapper.xml"/>            <!-- Sql 이 들어간다. -->
+		<mapper resource="com/mybatis/receiptmapper.xml"/> 
+		<mapper resource="com/mybatis/salesmapper.xml"/> 
+		<mapper resource="com/mybatis/tabmapper.xml"/> 
+	</mappers>
+</configuration>
+
+
+
+
+
+

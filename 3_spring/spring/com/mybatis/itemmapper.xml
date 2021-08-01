@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.ItemMapper">
+	
+	<select id="select" parameterType="Integer" 
+	resultType="item">
+		SELECT * FROM ITEMS WHERE ID=#{obj}
+	</select>
+	<select id="selectall" resultType="item">
+		SELECT * FROM ITEMS
+	</select>
+	<insert id="insert" parameterType="item">
+		INSERT INTO ITEMS VALUES (PSEQ.NEXTVAL,#{name},#{price},SYSDATE)
+	</insert>
+	<update id="update" parameterType="item">
+		UPDATE ITEMS SET NAME=#{name},PRICE=#{price} WHERE ID=#{id}
+	</update>
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM ITEMS WHERE ID=#{obj}
+	</delete>
+	
+	<select id="search" resultType="item">
+		<![CDATA[ SELECT * FROM ITEMS WHERE PRICE BETWEEN 10000 AND 30000 ]]>
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+

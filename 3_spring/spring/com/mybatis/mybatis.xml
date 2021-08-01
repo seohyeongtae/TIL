@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.vo.Bulletin" alias="bull"/>
+		<typeAlias type="com.vo.Tab" alias="tab"/>
+		<typeAlias type="com.vo.Menu" alias="menu"/>
+	    <typeAlias type="com.vo.Receipt" alias="receipt"/>
+	    <typeAlias type="com.vo.Sales" alias="sales"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/mybatis/bullmapper.xml"/>
+		<mapper resource="com/mybatis/receiptmapper.xml"/> 
+		<mapper resource="com/mybatis/salesmapper.xml"/> 
+		<mapper resource="com/mybatis/tabmapper.xml"/> 
+		<mapper resource="com/mybatis/menumapper.xml"/> 
+	</mappers>
+</configuration>
+
+
+
+
+
+

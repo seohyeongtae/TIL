@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SalesDao">
+	
+
+	
+	<insert id="insert" parameterType="sales">
+		INSERT INTO SALES VALUES (#{id},#{menu_id},#{receipt_id},#{qt},#{service},#{s_price})
+	</insert>
+	
+	<update id="update" parameterType="sales">
+		UPDATE SALES SET QT=#{qt},SERVICE=#{service},S_PRICE=#{s_price} WHERE ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM SALES WHERE ID=#{k}
+	</delete>
+		
+	<select id="select" parameterType="String" 
+	resultType="sales">
+		SELECT * FROM SALES WHERE ID =#{k}
+	</select>
+	
+	<select id="selectall" resultType="sales">
+		SELECT * FROM SALES
+	</select>
+		
+	<!-- <update id="setcnt" parameterType="String">
+		UPDATE USERS SET CNT=CNT+1 WHERE ID=#{k}
+	</update>   -->
+	
+<!-- 		
+	<select id="search" parameterType="java.util.HashMap" 
+	resultType="user">
+	<![CDATA[ SELECT * FROM USERS WHERE NAME like '%'|| #{obj} ||'%'
+		]]> 
+	</select>   -->
+	
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.BulletinDao">
+		
+	<insert id="insert" parameterType="bull">
+		INSERT INTO BULLETIN VALUES (BULLETIN_SEQ.NEXTVAL,#{tab_id},#{title},#{content},#{author},SYSDATE,#{comment_id})
+		<selectKey keyProperty="id" resultType="Integer" order="AFTER">
+			SELECT BULLETIN_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="bull">
+		UPDATE BULLETIN SET PRICE=#{price},NAME=#{name},IMG=#{img} WHERE ID=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		DELETE BULLETIN CONTENT WHERE ID=#{k}
+	</delete>
+	
+	<select id="select" parameterType="Integer" resultType="bull">
+		SELECT * FROM BULLETIN WHERE ID=#{k}	
+	</select>
+	
+	<select id="selectall" resultType="bull">
+		SELECT * FROM BULLETIN ORDER BY REGDATE DESC
+	</select>
+	
+	<!-- <select id="search" parameterType="Integer" resultType="Integer">
+		<![CDATA[SELECT COUNT(*) FROM BULLETIN]]>
+	</select> -->
+	
+	<select id="selectpage" parameterType="com.common.Pagination" resultType="bull">
+		<![CDATA[SELECT ID,TAB_ID,TITLE,CONTENT,AUTHOR,REGDATE,COMMENT_ID 
+		FROM ( SELECT ROW_NUMBER() OVER (ORDER BY REGDATE DESC) AS NUM, A.*
+			FROM BULLETIN A
+		 	ORDER BY REGDATE DESC)
+		WHERE NUM BETWEEN #{startList} AND (#{startList}+#{listSize}) ]]>
+	</select>
+	
+	<select id="getcnt" resultType="Integer">
+		SELECT COUNT(*) AS NUM FROM BULLETIN
+	</select>
+	
+</mapper>

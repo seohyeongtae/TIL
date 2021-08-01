@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.vo.ShopVo" alias="shop"/>
+	    <typeAlias type="com.vo.UserVo" alias="user"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/mybatis/shopmapper.xml"/>            <!-- Sql 이 들어간다. -->
+		<mapper resource="com/mybatis/usermapper.xml"/>            <!-- Sql 이 들어간다. -->
+		
+	</mappers>
+</configuration>
+
+
+
+
+
+
