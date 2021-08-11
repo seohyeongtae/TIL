@@ -72,12 +72,12 @@
 ### 7. 정렬
 
 * 선택정렬
-
 * Arrays.sort()
 * Counting Sort 정렬 알고리즘
 * 통계학
 * 람다식 사용 
 * 단어 사전순 정렬 compareTo()
+* map / hashmap 개념
 
 ### 8. 백트레킹
 
