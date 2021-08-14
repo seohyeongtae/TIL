@@ -82,3 +82,5 @@
 ### 8. 백트레킹
 
 * https://st-lab.tistory.com/114 (백트레킹이란)
+* DFS (깊이우선탐색)
+* [마스킹기법](https://blog.daum.net/swrush/590)
