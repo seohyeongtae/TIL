@@ -98,3 +98,11 @@
 * 반대로 생각하기(전깃줄 2565번) -> 겹치는 부분을 생각하는 것이 아니라 설치 가능한 최대한의 전기줄 (LIS)를 구한 뒤 현재 설치 된 전깃줄 수를 빼자. 
 * LCS (최장 공통 부분 수열)
 * 배낭 문제 (Knapsack) 냅색 알고리즘 
+
+### 10. 그리디 알고리즘
+
+* 그리디 알고리즘 : 매 번의 선택에서 가장 좋아보이는 선택을 하여 적절한 답을 찾아간다.
+* [활동 선택 문제](https://en.wikipedia.org/wiki/Activity_selection_problem)
+* 정렬을 위한 [Comparable 과 Comparator](https://st-lab.tistory.com/243)
+* [Generic 에 대한 이해](https://st-lab.tistory.com/153)
+
