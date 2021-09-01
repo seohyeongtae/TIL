@@ -106,3 +106,12 @@
 * 정렬을 위한 [Comparable 과 Comparator](https://st-lab.tistory.com/243)
 * [Generic 에 대한 이해](https://st-lab.tistory.com/153)
 
+### 11. 정수론 및 조합론
+
+* 유클리드 호제법 [링크1](https://terms.naver.com/entry.naver?docId=2073670&cid=47324&categoryId=47324) [링크2](https://blog.naver.com/galaxyenergy/222264614390) [링크3](https://blog.naver.com/gdpresent/222452479379)
+
+  * 두 정수 *a*, *b*의 최대공약수를 *G*(*a*, *b*)라고 하자.
+
+    정수 *a*, *b*, *q* *r* (*b* ≠ 0)에 대하여 *a* = *bq* + *r*,이면 *G*(*a*, *b*) = *G*(*b*, *r*)가 성립한다.
+
+  * 최대공약수, 최소공배수 구하기
