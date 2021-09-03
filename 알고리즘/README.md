@@ -129,3 +129,9 @@
   
 * [페르마의 소정리](https://ko.wikipedia.org/wiki/%ED%8E%98%EB%A5%B4%EB%A7%88%EC%9D%98_%EC%86%8C%EC%A0%95%EB%A6%AC)
 
+* Hashmap 관련 사용 함수들 (프로그래머스 - 해시 참고)
+
+  * Entry
+  * Iterator
+  * Collections.sort
+
