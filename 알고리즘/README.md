@@ -135,3 +135,4 @@
   * Iterator
   * Collections.sort
 
+* 이항계수, 조합도 팩토리얼로 구성되어 있다.
