@@ -136,3 +136,9 @@
   * Collections.sort
 
 * 이항계수, 조합도 팩토리얼로 구성되어 있다.
+
+### 12. 스택
+
+* [자바 컬렉션 프레임워크 (Collection)](https://st-lab.tistory.com/142?category=856997)
+* [리스트 인터페이스](https://st-lab.tistory.com/146)
+
