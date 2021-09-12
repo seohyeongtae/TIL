@@ -144,3 +144,6 @@
 
 ### 13. 큐, 덱
 
+* ​	st = new StringTokenizer(in.next(), "[],");  
+
+  *StringTokenizer 를 split 처럼 잘 활용하자.
