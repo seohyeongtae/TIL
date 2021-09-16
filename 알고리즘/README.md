@@ -147,3 +147,6 @@
 * ​	st = new StringTokenizer(in.next(), "[],");  
 
   *StringTokenizer 를 split 처럼 잘 활용하자.
+
+### 14. 분할 정복
+
