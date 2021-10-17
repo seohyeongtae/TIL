@@ -160,3 +160,31 @@ class Solution {
 }
 ```
 
+### 124나라의 숫자
+
+```java
+class Solution {
+    public String solution(int n) {
+        int bit = 0;
+        int carry = 0;
+        String a = "";
+
+        while(n >= 1)
+        {
+            bit = (n % 3);   
+            if(bit == 0)
+            {
+                bit = 4;
+                carry++;  
+            }
+
+          a = Integer.toString(bit) + a;
+          n = (n/3)-carry;
+          carry = 0;
+        } // while end
+
+        return a;
+    }
+}
+```
+
