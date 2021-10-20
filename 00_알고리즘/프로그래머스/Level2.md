@@ -188,3 +188,78 @@ class Solution {
 }
 ```
 
+### 카카오 프렌즈 컬러링북
+
+```java
+import java.util.*;
+
+class Solution {
+    static boolean visited[][];
+    static int x;
+    static int y;
+    
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
+        visited = new boolean[m][n];        
+        x = m;
+        y = n;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (visited[i][j] == false && picture[i][j] != 0)
+                {
+                    numberOfArea++;
+                    maxSizeOfOneArea = Math.max(dfs(i, j , picture, 1, picture[i][j]), maxSizeOfOneArea);
+                   // System.out.println(maxSizeOfOneArea);
+                }
+            }
+        }
+        int[] answer = new int[2];
+        answer[0] = numberOfArea;
+        answer[1] = maxSizeOfOneArea;
+        return answer;
+    } // solution end
+    
+    private int dfs(int m, int n, int[][] picture, int maxsize, int color)
+    {
+        if (visited[m][n] == false && color != 0)
+        {
+           // System.out.println("color =.  "+color);
+            visited[m][n] = true;
+            if (m < x - 1)
+            {
+                if (color == picture[m+1][n] && visited[m+1][n] == false)
+                {
+                    maxsize = dfs(m+1, n, picture, maxsize+1, picture[m+1][n]);
+                }
+            }
+            if (n < y - 1)
+            {
+                if (color == picture[m][n+1] && visited[m][n+1] == false)
+                {
+                    maxsize = dfs(m, n+1, picture, maxsize+1, picture[m][n+1]);
+                }
+            }
+            if (m > 0)
+            {
+                if (color == picture[m-1][n] && visited[m-1][n] == false)
+                {
+                    maxsize = dfs(m-1, n, picture, maxsize+1, picture[m-1][n]);
+                }
+            }
+            if (n > 0)
+            {
+                if (color == picture[m][n-1] && visited[m][n-1] == false)
+                {
+                    maxsize = dfs(m, n-1, picture, maxsize+1, picture[m][n-1]);
+                }
+            }
+        }
+        return maxsize;
+    } // dfs end
+    
+}
+```
+
