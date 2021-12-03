@@ -1,5 +1,90 @@
 ## 2021_KAKAO_BLIND_RECRUITMENT
 
+### 신규 아이디 추천 (1번)
+
+```java
+class Solution {
+    public String solution(String new_id) {
+        String answer = "";
+        new_id = new_id.toLowerCase();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < new_id.length(); i++)
+        {
+            char t = new_id.charAt(i);
+            if ((t >= 'a' && t <= 'z') || (t >= '0' && t <= '9') 
+                || t == '-' || t == '_' || t == '.')
+                sb.append(t);
+        }
+        new_id = sb.toString();
+        sb = new StringBuilder();
+        for (int i = 0; i < new_id.length(); i++)
+        {
+            if (new_id.charAt(i) == '.')
+            {
+                int temp = i;
+                while(new_id.charAt(i) == '.' && i < new_id.length() - 1)
+                    i++;
+                if (temp != 0 && i < new_id.length() && new_id.charAt(i) != '.')
+                    sb.append('.');
+            }
+            sb.append(new_id.charAt(i));
+        }
+        new_id = sb.toString();
+        if (new_id.length() > 15)
+           new_id = new_id.substring(0, 15);
+        if (new_id.charAt(new_id.length() - 1) == '.')
+            new_id = new_id.substring(0, new_id.length() - 1);
+        if (new_id.length() == 0)
+            answer = "aaa";
+        else if (new_id.length() < 3)
+        {
+            sb = new StringBuilder();
+            for (int i = 0; i < new_id.length(); i++)
+                sb.append(new_id.charAt(i));
+            while (sb.length() < 3)
+                sb.append(new_id.charAt(new_id.length() - 1));
+            answer = sb.toString();
+        }
+        else
+            answer = new_id;
+        
+        //System.out.println(new_id);
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드 replaceAll 및 정규식 사용
+
+```java
+class Solution {
+    public String solution(String new_id) {
+        String answer = "";
+        String temp = new_id.toLowerCase();
+
+        temp = temp.replaceAll("[^-_.a-z0-9]","");
+        System.out.println(temp);
+        temp = temp.replaceAll("[.]{2,}",".");
+        temp = temp.replaceAll("^[.]|[.]$","");
+        System.out.println(temp.length());
+        if(temp.equals(""))
+            temp+="a";
+        if(temp.length() >=16){
+            temp = temp.substring(0,15);
+            temp=temp.replaceAll("^[.]|[.]$","");
+        }
+        if(temp.length()<=2)
+            while(temp.length()<3)
+                temp+=temp.charAt(temp.length()-1);
+
+        answer=temp;
+        return answer;
+    }
+}
+```
+
+
+
 ### 순위 검색(3번)
 
 > 효율성에서 실패한다. 
