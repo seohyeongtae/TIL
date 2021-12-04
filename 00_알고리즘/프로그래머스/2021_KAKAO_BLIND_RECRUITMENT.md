@@ -83,9 +83,150 @@ class Solution {
 }
 ```
 
+### 메뉴 리뉴얼 (2번)
+
+```java
+import java.util.*;
+class Solution {
+    static HashMap<String, Integer> hs;
+    static boolean[] visit;
+    int max;
+
+    public String[] solution(String[] orders, int[] course) {
+        HashSet<String> arr = new HashSet<String>();
+
+        for (int i = 0; i < orders.length; i++)
+             orders[i] = convert_order(orders[i]);
+
+        for (int i = 0; i < course.length; i++)
+        {
+            hs = new HashMap<String, Integer>(); 
+            max = 0;
+            for (int j = 0; j < orders.length; j++)
+            {
+                visit = new boolean[orders[j].length()];
+                if (course[i] <= orders[j].length())
+                    make_hs(course[i], orders[j], "", 0);
+            }
+            // System.out.println(hs.keySet());
+            // System.out.println(hs.values());
+            // System.out.println(max);
+            if (max > 1)
+            {
+                for (String v : hs.keySet())
+                {
+                    if ((int) hs.get(v) == max)
+                        arr.add(v);
+                }
+            }
+        } // for end
+
+        String[] answer = {};
+        if (arr.size() > 0)
+        {
+            answer = new String[arr.size()];
+            int a = 0;
+            for (String v : arr)
+            {
+                answer[a] = v;
+                a++;
+            }
+            Arrays.sort(answer);
+        }
+
+        return answer;
+    } // solution end
+
+    private String convert_order(String orders)
+    {
+        String convert = "";
+        char[] temp = new char[orders.length()];
+
+        for (int i = 0; i < orders.length(); i++)
+            temp[i] = orders.charAt(i);
+        Arrays.sort(temp);
+        for (int i = 0; i < orders.length(); i++)
+            convert += temp[i];
+        return convert;
+    } // convert_order end
+
+    private void make_hs(int course, String orders, String temp, int depth)
+    {
+        if (temp.length() == course)
+        {
+            hs.put(temp, (int) hs.getOrDefault(temp, 0) + 1);
+            max = Math.max(max, (int) hs.get(temp));
+            return;
+        }
+
+        for (int i = depth; i < orders.length(); i++)
+        {
+            if (visit[i] == false)
+            {
+                visit[i] = true;
+                temp = temp + orders.charAt(i);
+                make_hs(course, orders, temp, i + 1);
+                visit[i] = false;
+                temp = temp.substring(0, temp.length() - 1);
+            }
+        }
+        return;
+    } // make_hs end
+
+}
+```
+
+> 다른 사람 코드
+
+```java
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Arrays;
+class Solution {
+       static HashMap<String,Integer> map;
+    static int m;
+    public String[] solution(String[] orders, int[] course) {
+       PriorityQueue<String> pq = new PriorityQueue<>();
+        for (int i=0;i<course.length;i++){
+            map = new HashMap<>();
+            m=0;
+            for (int j=0;j<orders.length;j++) {
+                find(0, "", course[i], 0, orders[j]);
+            }
+            for (String s : map.keySet()){
+                if (map.get(s)==m&&m>1){
+                    pq.offer(s);
+                }
+            }
+        }
+        String  ans[] = new String[pq.size()];
+        int k=0;
+        while (!pq.isEmpty()){
+            ans[k++] = pq.poll();
+        }
+        return ans;
+    }
+    static void find(int cnt,String str,int targetNum,int idx,String word){
+        if (cnt==targetNum){
+            char[] c = str.toCharArray();
+            Arrays.sort(c);
+            String temps="";
+            for (int i=0;i<c.length;i++)temps+=c[i];
+            map.put(temps,map.getOrDefault(temps,0)+1);
+            m = Math.max(m,map.get(temps));
+            return;
+        }
+        for (int i=idx;i<word.length();i++){
+            char now =word.charAt(i);
+            find(cnt+1,str+now,targetNum,i+1,word);
+        }
+    }
+}
+```
 
 
-### 순위 검색(3번)
+
+### 순위 검색 (3번)
 
 > 효율성에서 실패한다. 
 >
