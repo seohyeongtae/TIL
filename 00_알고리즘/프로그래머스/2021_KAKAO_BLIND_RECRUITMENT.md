@@ -530,3 +530,124 @@ class Solution {
 }
 ```
 
+### 합승 택시 요금 (4번)
+
+> 플로이드 와샬 알고리즘 이후 최단 금액 탐색
+
+```java
+class Solution {
+    public int solution(int n, int s, int a, int b, int[][] fares) {
+        int answer = 2147483647;
+        int max = 100000000; // 너무 작게하거나 크게해도 문제가 생긴다.
+        int[][] arr = new int[n][n];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (i == j)
+                    arr[i][j] = 0;
+                else
+                    arr[i][j] = max;
+            }
+        }
+        for (int i = 0; i < fares.length; i++)
+        {
+            int temp1 = fares[i][0];
+            int temp2 = fares[i][1];
+            int price = fares[i][2];
+            arr[temp1 - 1][temp2 - 1] = price;
+            arr[temp2 - 1][temp1 - 1] = price;
+        }
+        for (int i = 0; i < n; i++) // 거쳐가는 노드
+        {
+            for (int j = 0; j < n; j++) // 출발 노드
+            {
+                for (int k = 0; k < n; k++) // 도착 노드
+                {
+                    if (arr[j][i] + arr[i][k] < arr[j][k])
+                        arr[j][k] = arr[j][i] + arr[i][k];
+                }
+            }
+        }
+        
+        for (int i = 0; i < n; i++) // 최소비용 탐색
+            answer = Math.min((arr[s - 1][i] + arr[i][a - 1] + arr[i][b - 1]), answer);
+        
+        // for (int i = 0; i < n; i++)
+        // {
+        //     for (int j = 0; j < n; j++)
+        //         System.out.print(arr[i][j] + " ");
+        //     System.out.println();
+        // }
+        
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+>
+> dijkstra(다이크스트라)  알고리즘 사용
+>
+> https://blog.naver.com/merongvvvv/222065831713
+
+```java
+import java.util.*;
+
+class Solution {
+    ArrayList<ArrayList<Edge>> graph;
+    class Edge implements Comparable<Edge>{
+        int next;
+        int cost;
+        Edge(int next, int cost){
+            this.next = next;
+            this.cost = cost;
+        }
+        @Override
+        public int compareTo(Edge e){
+            return this.cost - e.cost;
+        }
+    }
+    int[] dijkstra(int start, int[] costs){
+        PriorityQueue<Edge> pq = new PriorityQueue<>(graph.get(start));
+        for(Edge e : graph.get(start)) costs[e.next] = e.cost;
+        costs[start] = 0;
+        while(!pq.isEmpty()){
+            Edge e = pq.poll();
+            if(costs[e.next] < e.cost) continue;
+            for(Edge ne : graph.get(e.next)){
+                if(costs[ne.next] > e.cost + ne.cost){
+                    costs[ne.next] = e.cost + ne.cost;
+                    pq.add(new Edge(ne.next, e.cost + ne.cost));
+                }
+            }
+        }
+        return costs;
+    }
+    public int solution(int n, int s, int a, int b, int[][] fares) {
+        int answer = Integer.MAX_VALUE;
+
+        graph = new ArrayList<>();
+        for(int i = 0 ; i < n ; i ++) graph.add(new ArrayList<>());
+        for(int[] i : fares){
+            graph.get(i[0] - 1).add(new Edge(i[1] - 1, i[2]));
+            graph.get(i[1] - 1).add(new Edge(i[0] - 1, i[2]));
+        }
+        int[] startA = new int[n];
+        int[] startB = new int[n];
+        int[] start = new int[n];
+
+        Arrays.fill(startA, 100000 * n);
+        Arrays.fill(startB, 100000 * n);
+        Arrays.fill(start, 100000 * n);
+
+        startA = dijkstra(a - 1, startA);
+        startB = dijkstra(b - 1, startB);
+        start = dijkstra(s - 1, start);
+
+        for(int i = 0 ; i < n ; i ++) answer = Math.min(answer, startA[i] + startB[i] + start[i]);
+        return answer;
+    }
+}
+```
+
