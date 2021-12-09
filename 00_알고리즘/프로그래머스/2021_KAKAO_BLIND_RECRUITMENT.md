@@ -590,6 +590,8 @@ class Solution {
 > dijkstra(다이크스트라)  알고리즘 사용
 >
 > https://blog.naver.com/merongvvvv/222065831713
+>
+> https://blog.naver.com/ndb796/221234424646
 
 ```java
 import java.util.*;
@@ -647,6 +649,204 @@ class Solution {
 
         for(int i = 0 ; i < n ; i ++) answer = Math.min(answer, startA[i] + startB[i] + start[i]);
         return answer;
+    }
+}
+```
+
+### 광고 삽입 (5번)
+
+```java
+import java.util.*;
+
+class Solution {
+    public String solution(String play_time, String adv_time, String[] logs) {
+        String answer = "";
+        int play_t = change_time(play_time);
+        int adv_t = change_time(adv_time);
+        int max = play_t - adv_t;
+        int len = logs.length;
+        
+        //Arrays.sort(logs);
+        
+        PriorityQueue<Integer> start = new PriorityQueue<>();
+        PriorityQueue<Integer> finish = new PriorityQueue<>();
+        for (int i = 0; i < len; i++)
+        {
+            String[] temp = logs[i].split("-");
+            int a = change_time(temp[0]);
+            int b = change_time(temp[1]);
+            start.add(a);
+            finish.add(b);
+        }
+
+        // 최대 시작 시간
+        int time = 0;
+        int viewer = 0;
+        int[] viewer_arr = new int[play_t + 1];
+        while (time <= play_t)
+        {
+            while (start.peek() != null && (int) start.peek() == time)
+            {
+                viewer++;
+                start.poll();
+            }
+            while (finish.peek() != null && (int) finish.peek() == time)
+            {
+                viewer--;
+                finish.poll();
+            }
+            viewer_arr[time] = viewer;
+            time++;
+        }
+
+        int result = 0;
+        long final_time_sum = 0;
+        long f = final_time_sum;
+        for (int i = 0; i < adv_t; i++)
+            final_time_sum += viewer_arr[i];
+        // System.out.println(change_string((int)final_time_sum));
+        int a = -1;
+
+        if (max > 0)
+        {
+            for (int i = adv_t - 1; i <= play_t; i++)
+            {
+                if (a >= 0)
+                    final_time_sum += (viewer_arr[i] - viewer_arr[a]);
+                else
+                    final_time_sum += viewer_arr[i];
+                if (f < final_time_sum)
+                {
+                    result = a + 1;
+                    f = final_time_sum;
+                    // System.out.println(final_time_sum);
+                }
+                a++;
+            }
+            // System.out.println(f);
+        }
+        answer = change_string((int)result);
+        return answer;
+    } // solution end
+    
+    private String change_string(int t)
+    {
+        String temp = "";
+        int time_h = t / 3600;
+        int time_m = (t - (time_h * 3600)) / 60;
+        int time_s = (t - (time_h * 3600) - (time_m * 60));
+
+        if (time_h < 10)
+        {
+            temp += "0";   
+            temp += (time_h % 10);
+        }
+        else
+        {
+            temp += (time_h / 10);
+            temp += (time_h % 10);
+        }
+        temp += ":";
+        
+        if (time_m < 10)
+        {
+            temp += "0";   
+            temp += (time_m % 10);
+        }
+        else
+        {
+            temp += (time_m / 10);
+            temp += (time_m % 10);
+        }
+        temp += ":";
+        
+        if (time_s < 10)
+        {
+            temp += "0";   
+            temp += (time_s % 10);
+        }
+        else
+        {
+            temp += (time_s / 10);
+            temp += (time_s % 10);
+        }
+        
+        return temp;
+    } // change_string end
+    
+    private int change_time (String t)
+    {
+        int time_h = 0;
+        int time_m = 0;
+        int time_s = 0;
+        String[] temp = t.split(":");
+        for (int i = 0; i < 2; i++)
+        {
+            time_h *= 10;
+            time_h += (temp[0].charAt(i) - '0') * 3600;
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            time_m *= 10;
+            time_m += (temp[1].charAt(i) - '0') * 60;
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            time_s *= 10;
+            time_s += (temp[2].charAt(i) - '0');
+        }
+        int time = time_h + time_m + time_s;
+        return time;
+    }
+    
+} // change_time end
+```
+
+> 다른사람 코드
+
+```java
+import java.util.Arrays;
+
+class Solution {
+    public String solution(String play_time, String adv_time, String[] logs) {
+        int playTime = parseTime(play_time);
+        int advTime = parseTime(adv_time);
+        long playNums[] = new long[playTime+10];
+
+        for(String log : logs){
+            String splitted[] = log.split("-");
+            playNums[parseTime(splitted[0])]++;
+            playNums[parseTime(splitted[1])]--;
+        }
+        for(int i = 0; i < playNums.length-1; i++)
+            playNums[i+1] += playNums[i];
+
+
+        int startTime = 0;
+        long timeSum = 0;
+        long max = timeSum;
+        long maxStartTime = 0;
+        while(startTime+advTime <= playTime){
+            if(max < timeSum){
+                max = timeSum;
+                maxStartTime = startTime;
+            }
+            timeSum -= playNums[startTime];
+            timeSum += playNums[startTime+advTime];
+            startTime++;
+        }
+        return String.format("%02d:%02d:%02d",
+                maxStartTime/3600,
+                (maxStartTime/60)%60,
+                maxStartTime%60);
+    }
+
+
+    int parseTime(String time){
+        String splitted[] = time.split(":");
+        return Integer.parseInt(splitted[0])*3600
+                + Integer.parseInt(splitted[1])*60
+                + Integer.parseInt(splitted[2]);
     }
 }
 ```
