@@ -1,4 +1,7 @@
 # TIL
+
+## [Notion](https://phase-bead-3c8.notion.site/42Cusur-03425abffdd84c5380ea4b0199eda038)
+
 ## [Project](./0_project)
 
 ## [JAVA](./1_java)
@@ -18,6 +21,7 @@
 ## [Android](./8_Android)
 
 ## [Arduino](./9_Arduino)
+
 ## [C](./10_C)
 
 ## [Git](./git수업)
