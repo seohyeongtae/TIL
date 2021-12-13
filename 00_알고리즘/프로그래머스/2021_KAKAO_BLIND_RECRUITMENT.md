@@ -1,5 +1,9 @@
 ## 2021_KAKAO_BLIND_RECRUITMENT
 
+> https://tech.kakao.com/2021/01/25/2021-kakao-recruitment-round-1/ 
+>
+> -> 문제 해설 및 풀이 링크
+
 ### 신규 아이디 추천 (1번)
 
 ```java
@@ -230,9 +234,6 @@ class Solution {
 
 > 효율성에서 실패한다. 
 >
-> https://tech.kakao.com/2021/01/25/2021-kakao-recruitment-round-1/ 
->
-> -> 문제 해설 및 풀이 링크
 
 ```java
 class Solution {
