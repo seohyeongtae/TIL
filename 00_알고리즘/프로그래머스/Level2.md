@@ -263,3 +263,145 @@ class Solution {
 }
 ```
 
+### 멀쩡한 사각형
+
+> 유클리드 호제법
+
+```java
+class Solution {
+    public long solution(int w, int h) {
+        long answer = 1;
+        int gcd = 0;
+        long W = w;
+        long H = h;
+        gcd = get_gcd(w, h);
+        answer = (W * H) - (W + H - gcd);
+        //answer = (w * h) - ((w / gcd) + (h / gcd) - 1) * gcd;
+        return answer;
+    }
+    // 유클리드 호제법 
+    private int get_gcd(int x, int y)
+    {
+        int a = Math.max(x, y);
+        int b = Math.min(x, y);
+        while (b != 0)
+        {
+            int temp = a;
+            a = b;
+            b = temp % b;
+        }
+        return a;
+    }
+}
+```
+
+### 짝지어 제거하기
+
+> 효율성 실패 코드
+>
+> 단순히 전부 제거 가능하지 체크만 하는 쪽으로 고려해 봐야 겠다. -> Stack 을 사용하라 !!
+
+```java
+class Solution
+{
+    public int solution(String s)
+    {
+        int answer = -1;
+        while (check_str(s))
+        {
+            int len = s.length();
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            while (i < len)
+            {
+                if (i == len - 1)
+                {
+                    sb.append(s.charAt(i));
+                    break;
+                }
+                else if (s.charAt(i) != s.charAt(i + 1))
+                {
+                    sb.append(s.charAt(i));
+                    i++;
+                }
+                else
+                    i += 2;
+            }
+            s = sb.toString();
+        }
+        if (s.length() == 0)
+            answer = 1;
+        else
+            answer = 0;
+        return answer;
+    }
+    
+    private boolean check_str(String s)
+    {
+        int len = s.length();
+        for (int i = 0; i < len - 1; i++)
+        {
+            if (s.charAt(i) == s.charAt(i + 1))
+                return (true);
+        }
+        return (false);
+    }
+}
+```
+
+> Stack 사용 통과 코드
+
+```java
+import java.util.*;
+class Solution
+{
+    public int solution(String s)
+    {
+        int answer = -1;
+        int len = s.length();
+        Stack st = new Stack();
+        st.push(s.charAt(0));
+        for (int i = 1; i < len; i++)
+        {
+            if (!st.empty() && (char)st.peek() == s.charAt(i))
+                st.pop();
+            else
+                st.push(s.charAt(i));
+        }
+        if (st.empty())
+            answer = 1;
+        else 
+            answer = 0;
+        return answer;
+    }
+}
+```
+
+> 비슷한 다른사람 코드
+
+```java
+import java.util.*;
+
+class Solution
+{
+    public int solution(String s)
+    {
+        int answer = 0;
+        Stack<Character> stack = new Stack<>();
+
+        for(char c : s.toCharArray()){
+            if(stack.size() == 0){
+                stack.push(c);
+            }
+            else if(stack.peek() == c){
+                stack.pop();
+            }
+            else{
+                stack.push(c);
+            }
+        }
+        return stack.size() > 0 ? 0 : 1;
+    }
+}
+```
+
