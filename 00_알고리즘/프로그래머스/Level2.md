@@ -405,3 +405,225 @@ class Solution
 }
 ```
 
+### [1차] 뉴스 클러스터링
+
+```java
+import java.util.*;
+class Solution {
+    public int solution(String str1, String str2) {
+        int answer = 0;
+        str1 = str1.toUpperCase();
+        str2 = str2.toUpperCase();
+        HashMap<String, Integer> arr1 = new HashMap<>();
+        HashMap<String, Integer> arr2 = new HashMap<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < str1.length() - 1; i++)
+        {
+            sb = new StringBuilder();
+            if ((str1.charAt(i) >= 'A' && str1.charAt(i) <= 'Z')
+               && (str1.charAt(i + 1) >= 'A' && str1.charAt(i + 1) <= 'Z'))
+            {
+                sb.append(str1.charAt(i)).append(str1.charAt(i + 1));
+                arr1.put(sb.toString(), arr1.getOrDefault(sb.toString(), 0) + 1);
+            }
+        }
+        for (int i = 0; i < str2.length() - 1; i++)
+        {
+            sb = new StringBuilder();
+            if ((str2.charAt(i) >= 'A' && str2.charAt(i) <= 'Z')
+               && (str2.charAt(i + 1) >= 'A' && str2.charAt(i + 1) <= 'Z'))
+            {
+                sb.append(str2.charAt(i)).append(str2.charAt(i + 1));
+                arr2.put(sb.toString(), arr2.getOrDefault(sb.toString(), 0) + 1);
+            }
+        }
+
+        int total_size = 0;
+        int common_size = 0;
+        for (String key : arr1.keySet())
+        {
+            if (arr2.containsKey(key))
+            {
+                total_size += Math.max(arr1.get(key), arr2.get(key));
+                common_size += Math.min(arr1.get(key), arr2.get(key));
+            }
+            else
+                total_size += arr1.get(key);
+        }
+        for (String key : arr2.keySet())
+        {
+            if (!arr1.containsKey(key))
+                total_size += arr2.get(key);
+        }
+        double result = 0;
+        if (total_size > 0)
+        {
+            result = (double)common_size / (double)total_size;
+            answer = (int)(result * 65536);
+        }
+        else
+            return 65536;
+        return answer;
+    } // solution end
+}
+```
+
+```java
+// 방법1
+Iterator<String> keys = map.keySet().iterator();
+while( keys.hasNext() ){
+    String key = keys.next();
+    System.out.println( String.format("키 : %s, 값 : %s", key, map.get(key)) );
+}
+
+// 방법2
+for( Map.Entry<String, String> elem : map.entrySet() ){
+    System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
+}
+
+// 방법3
+for( String key : map.keySet() ){
+    System.out.println( String.format("키 : %s, 값 : %s", key, map.get(key)) );
+}
+
+
+```
+
+> 다른 사람 코드
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+class Solution {
+    private static final Integer MULTIPLIER = Character.MAX_VALUE + 1;
+
+    public int solution(String str1, String str2) {
+        String word1 = str1.toLowerCase();
+        String word2 = str2.toLowerCase();
+
+        Map<String, Long> words1 = group(word1);
+        Map<String, Long> words2 = group(word2);
+
+        Integer intersection = getIntersection(words1, words2);
+        Integer union = getUnion(words1, words2);
+
+        if (intersection.equals(union) && union.equals(0)) {
+            return MULTIPLIER;
+        }
+
+        return (int) (intersection.doubleValue() / union.doubleValue() * MULTIPLIER);
+    }
+
+    private Map<String, Long> group(String word) {
+        return IntStream.range(0, word.length() - 1)
+                .mapToObj(index -> word.substring(index, index + 2))
+                .filter(text -> text.chars().allMatch(character -> Character.isAlphabetic((char) character)))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }
+
+    private Integer getIntersection(Map<String, Long> words1, Map<String, Long> words2) {
+        return words1.entrySet().stream()
+                .filter(entry -> words2.containsKey(entry.getKey()))
+                .map(entry -> Math.min(entry.getValue(), words2.get(entry.getKey())))
+                .mapToInt(Long::intValue)
+                .sum();
+    }
+
+    private Integer getUnion(Map<String, Long> words1, Map<String, Long> words2) {
+        Map<String, Long> copiedWords = new HashMap<>(words2);
+        words1.forEach((key, value) -> copiedWords.put(key, Math.max(value, words2.getOrDefault(key, 0L))));
+
+        return copiedWords.values().stream()
+                .mapToInt(Long::intValue)
+                .sum();
+
+    }
+}
+```
+
+### 거리두기 확인하기
+
+```java
+class Solution {
+    public int[] solution(String[][] places) {
+        int[] answer = new int[5];
+        for (int i = 0; i < places.length; i++)
+        {
+            char arr[][] = new char[5][5];
+            for (int j = 0; j < 5; j++)
+            {
+                for (int k = 0; k < 5; k++)
+                    arr[j][k] = places[i][j].charAt(k);
+            }
+            if (check_people(arr))
+                answer[i] = 1;
+            else
+                answer[i] = 0;
+        }
+        return answer;
+    } // solution end
+    
+    private boolean check_people(char[][] arr)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                if (arr[i][j] == 'P')
+                {
+                    if(!check_arr(arr, i, j))
+                        return false;
+                }
+            }
+        }
+        return true;
+    } // check_people end
+    
+    private boolean check_arr(char[][] arr, int y, int x)
+    {
+        for (int i = y; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                if ((i != y || j != x) && arr[i][j] == 'P')
+                {
+                    if (Math.abs((y - i)) + Math.abs((x - j)) == 1)
+                        return false;
+                    else if (Math.abs((y - i)) + Math.abs((x - j)) == 2)
+                    {
+                        if (!check_partiton(arr, y, x, i, j))
+                            return false;       
+                    }
+                }
+            }
+        }
+        return true;
+    } // check_arr end
+    private boolean check_partiton(char[][] arr, int y, int x, int y2, int x2)
+    {
+        if (y == y2)
+        {
+            int temp = Math.min(x, x2);
+            if (arr[y][temp + 1] == 'O')
+                return false;
+        }
+        else if (x == x2)
+        {
+            if (arr[y + 1][x] == 'O')
+                return false;
+        }
+        else
+        {
+            if (arr[y][x2] == 'O' || arr[y2][x] == 'O')
+                return false;
+        }
+        return true;
+    } // check_partiton end
+}
+```
+
