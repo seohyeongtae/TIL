@@ -1,5 +1,136 @@
 ## 알고리즘
 
+### 크루스칼 알고리즘
+
+```java
+import java.util.*;
+
+class Solution {
+    private int get_parent(int[] parent, int x)
+    {
+        if (parent[x] == x)
+            return x;
+        return parent[x] = get_parent(parent, parent[x]);
+    }
+    
+    private void union_parent(int[] parent, int a, int b)
+    {
+        a = get_parent(parent, a);
+        b = get_parent(parent, b);
+        if (a < b)
+            parent[b] = a;
+        else 
+            parent[a] = b;
+    }
+    
+    private boolean find_parent(int[] parent, int a, int b)
+    {
+        a = get_parent(parent, a);
+        b = get_parent(parent, b);
+        if (a == b)
+            return false;
+        return true;
+    }
+
+    public int solution(int n, int[][] costs) {
+        int answer = 0;
+        // 크루스칼 알고리즘
+        int[] parent = new int[n];
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
+        Arrays.sort(costs, new Comparator<int[]>(){
+            @Override
+            public int compare(int o1[], int o2[])
+            {
+                return Integer.compare(o1[2], o2[2]);
+            }
+        });
+        for (int i = 0; i < costs.length; i++)
+        {
+            if (find_parent(parent, costs[i][0], costs[i][1]))
+            {
+                union_parent(parent, costs[i][0], costs[i][1]);
+                answer += costs[i][2];
+            }
+        }
+            
+        
+        return answer;
+    }
+} // solution end
+```
+
+### 플로이드 와샬 알고리즘
+
+```java
+class Solution {
+    public int solution(int n, int s, int a, int b, int[][] fares) {
+        int answer = 2147483647;
+        int max = 100000000; // 너무 작게하거나 크게해도 문제가 생긴다.
+        int[][] arr = new int[n][n];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (i == j)
+                    arr[i][j] = 0;
+                else
+                    arr[i][j] = max;
+            }
+        }
+        for (int i = 0; i < fares.length; i++)
+        {
+            int temp1 = fares[i][0];
+            int temp2 = fares[i][1];
+            int price = fares[i][2];
+            arr[temp1 - 1][temp2 - 1] = price;
+            arr[temp2 - 1][temp1 - 1] = price;
+        }
+        for (int i = 0; i < n; i++) // 거쳐가는 노드
+        {
+            for (int j = 0; j < n; j++) // 출발 노드
+            {
+                for (int k = 0; k < n; k++) // 도착 노드
+                {
+                    if (arr[j][i] + arr[i][k] < arr[j][k])
+                        arr[j][k] = arr[j][i] + arr[i][k];
+                }
+            }
+        }
+        
+        for (int i = 0; i < n; i++) // 최소비용 탐색
+            answer = Math.min((arr[s - 1][i] + arr[i][a - 1] + arr[i][b - 1]), answer);
+
+        return answer;
+    }
+}
+```
+
+### dijkstar (다이크스트라) 알고리즘
+
+> https://blog.naver.com/ndb796/221234424646
+
+```java
+  int[] dijkstra(int start, int[] costs){
+        PriorityQueue<Edge> pq = new PriorityQueue<>(graph.get(start));
+        for(Edge e : graph.get(start)) costs[e.next] = e.cost;
+        costs[start] = 0;
+        while(!pq.isEmpty()){
+            Edge e = pq.poll();
+            if(costs[e.next] < e.cost) continue;
+            for(Edge ne : graph.get(e.next)){
+                if(costs[ne.next] > e.cost + ne.cost){
+                    costs[ne.next] = e.cost + ne.cost;
+                    pq.add(new Edge(ne.next, e.cost + ne.cost));
+                }
+            }
+        }
+        return costs;
+    }
+```
+
+
+
 ### 백준
 
 > https://st-lab.tistory.com/96  (각 문제별 자세한 설명을 해주심 -> 원리 부터 알고리즘 이해 까지)
