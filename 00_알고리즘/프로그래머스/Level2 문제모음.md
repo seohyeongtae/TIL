@@ -627,3 +627,206 @@ class Solution {
 }
 ```
 
+### 수식 최대화
+
+> 얕은 복사, 깊은 복사 제대로 숙지하기..
+>
+> ex) clone() 사용
+>
+> https://woovictory.github.io/2020/04/22/Java-Array-Copy/
+>
+> https://highcode.tistory.com/6 (정규표현식 설명)
+
+```java
+class Solution {
+    long result;
+    String num_arr[];
+    String index_arr[];
+    public long solution(String expression) {
+        long answer = 0;
+        result = 0;
+        // 숫자만 빼오기
+        String g_num_arr[] = expression.split("[^0-9$]");
+        // 숫자 제외 빼오기
+        String g_index_arr[] = expression.split("[\\d]+");
+   
+        String g_index[] = {"+","-","*"};
+        num_arr = g_num_arr.clone();
+        index_arr = g_index_arr.clone();
+        make_arr(g_index);
+   
+        String g_index1[] = {"+","*","-"};
+        num_arr = g_num_arr.clone();
+        index_arr = g_index_arr.clone();
+        make_arr(g_index1);
+        
+        String g_index2[] = {"*","+","-"};
+        num_arr = g_num_arr.clone();
+        index_arr = g_index_arr.clone();
+        make_arr(g_index2);
+        
+        String g_index3[] = {"*","-","+"};
+        num_arr = g_num_arr.clone();
+        index_arr = g_index_arr.clone();
+        make_arr(g_index3);
+
+        String g_index4[] = {"-","+","*"};
+        num_arr = g_num_arr.clone();
+        index_arr = g_index_arr.clone();
+        make_arr(g_index4);
+
+        String g_index5[] = {"-","*","+"};
+        num_arr = g_num_arr.clone();
+        index_arr = g_index_arr.clone();
+        make_arr(g_index5);
+        
+        answer = result;
+        return answer;
+    } // solution end
+    
+    private void make_arr(String[] g_index)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < index_arr.length; j++)
+            {
+                if (index_arr[j].equals(g_index[i]))
+                {
+                    let_cal(j);
+                    j = 0;
+                }
+            }
+        }
+        // System.out.println("rrre =  " + Math.abs(Long.parseLong(num_arr[0])));
+        result = Math.max(result, Math.abs(Long.parseLong(num_arr[0])));
+        return;
+    } // make_arr end
+    
+    private void let_cal(int i)
+    {
+        String temp_num_arr[] = new String[num_arr.length - 1];
+        String temp_index_arr[] = new String[index_arr.length - 1];
+        long temp = 0;
+        switch(index_arr[i])
+        {
+            case "+" :
+                temp = Long.parseLong(num_arr[i - 1]) + Long.parseLong(num_arr[i]);
+                break;
+            case "-" :
+                temp = Long.parseLong(num_arr[i - 1]) - Long.parseLong(num_arr[i]);
+                break;
+            case "*" :
+                temp = Long.parseLong(num_arr[i - 1]) * Long.parseLong(num_arr[i]);
+                break;
+        }
+        num_arr[i - 1] = temp + "";
+        // System.out.println("temp =  " + temp);
+        for (int j = 0, k = 0; j < num_arr.length - 1; j++, k++)
+        {
+            if (k == i)
+                k++;
+            temp_num_arr[j] = num_arr[k];
+        }
+        num_arr = temp_num_arr;
+        
+        for (int j = 0, k = 0; j < index_arr.length - 1; j++, k++)
+        {
+            if (k == i)
+                k++;
+            temp_index_arr[j] = index_arr[k];
+        }
+        index_arr = temp_index_arr;
+        return;
+    }
+}
+```
+
+> 다른사람 코드
+
+```java
+import java.util.*;
+
+class Solution {
+
+    public long cal(long a, long b, char op){
+        if(op == '+')
+            return a + b;
+        else if(op == '-')
+            return a - b;
+        else
+            return a * b;
+    }
+
+    public void calc(ArrayList<Long> numbers, ArrayList<Character> ops, char op){
+        for(int i = 0; i < ops.size(); i++){
+            if(ops.get(i) == op){
+                long num1 = numbers.get(i);
+                long num2 = numbers.get(i + 1);
+                long result = cal(num1, num2, op);
+                numbers.remove(i);
+                numbers.remove(i);
+                numbers.add(i, result);
+                ops.remove(i);
+                i--;
+            }
+        }
+    }
+
+    public long operation(ArrayList<Long> nums, ArrayList<Character> opers, char op1, char op2, char op3){
+        ArrayList<Long> numbers = new ArrayList<>();
+        ArrayList<Character> ops = new ArrayList<>();
+
+        for(int i = 0; i < nums.size(); i++){
+            numbers.add(nums.get(i));
+        }
+
+        for(int i = 0; i < opers.size(); i++){
+            ops.add(opers.get(i));
+        }
+
+        calc(numbers, ops, op1);
+        calc(numbers, ops, op2);
+        calc(numbers, ops, op3);
+
+        return numbers.get(0);
+    }
+
+    public long solution(String expression) {
+        long answer = 0;
+        ArrayList<Long> numbers = new ArrayList<>();    
+        ArrayList<Character> operators = new ArrayList<>();
+
+        String num = "";
+
+        for(int i = 0; i < expression.length(); i++){
+            if(expression.charAt(i) == '-' || expression.charAt(i) == '+' || expression.charAt(i) == '*'){
+                operators.add(expression.charAt(i));
+                numbers.add(Long.parseLong(num));
+                num = "";
+            }
+
+            else{
+                num += expression.charAt(i);
+            }
+        }
+        numbers.add(Long.parseLong(num));
+
+        long[] result = new long[6];
+
+        result[0] = operation(numbers, operators, '+', '-', '*');
+        result[1] = operation(numbers, operators, '+', '*', '-');
+        result[2] = operation(numbers, operators, '-', '+', '*');
+        result[3] = operation(numbers, operators, '-', '*', '+');
+        result[4] = operation(numbers, operators, '*', '-', '+');
+        result[5] = operation(numbers, operators, '*', '+', '-');
+
+        for(int i = 0; i < 6; i++){
+            if(answer < Math.abs(result[i]))
+                answer = Math.abs(result[i]);
+        }
+
+        return answer;
+    }
+}
+```
+
