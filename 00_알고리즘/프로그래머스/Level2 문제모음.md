@@ -830,3 +830,63 @@ class Solution {
 }
 ```
 
+### 튜플
+
+```java
+import java.util.*;
+import java.util.Map.Entry;
+class Solution {
+    public int[] solution(String s) {
+        String arr[] = s.split("[^0-9$]");
+        int cnt = 0;
+        HashMap<String, Integer> hs = new HashMap();
+        for (int i = 0; i < arr.length; i++)
+        {
+            if (!arr[i].equals(""))
+            {
+                if (!hs.containsKey(arr[i]))
+                    cnt++;
+                hs.put(arr[i], hs.getOrDefault(arr[i], 1) + 1);
+            }
+        }
+        List<Entry<String, Integer>> entrylist = new ArrayList<Entry<String, Integer>>(hs.entrySet());
+        Collections.sort(entrylist, new Comparator<Entry<String, Integer>>()
+        {
+            public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2)
+            {
+              return o2.getValue().compareTo(o1.getValue());  
+            }
+        });
+        int[] answer = new int[cnt];
+        int i = 0;
+        for (Entry<String, Integer> entry : entrylist)
+        {
+            answer[i] = Integer.parseInt(entry.getKey());
+            i++;
+        }
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+
+```java
+import java.util.*;
+class Solution {
+    public int[] solution(String s) {
+        Set<String> set = new HashSet<>();
+        String[] arr = s.replaceAll("[{]", " ").replaceAll("[}]", " ").trim().split(" , ");
+        Arrays.sort(arr, (a, b)->{return a.length() - b.length();});
+        int[] answer = new int[arr.length];
+        int idx = 0;
+        for(String s1 : arr) {
+            for(String s2 : s1.split(",")) {
+                if(set.add(s2)) answer[idx++] = Integer.parseInt(s2);
+            }
+        }
+        return answer;
+    }
+}
+```
+
