@@ -890,3 +890,109 @@ class Solution {
 }
 ```
 
+### 게임 맵 최단거리
+
+> 효율성 실패 (dfs 사용 - 깊이 우선탐색)
+
+```java
+class Solution {
+    int n;
+    int m;
+    boolean visit[][];
+    int result = 210000000;
+    public int solution(int[][] maps) {
+        int answer = -1;
+        n = maps.length;
+        m = maps[0].length;
+        visit = new boolean[n][m];
+        visit[0][0] = true;
+        Math.max(answer,find_map(maps,0,0,1));
+        if (result == 210000000)
+            answer = -1;
+        else
+            answer = result;
+        return answer;
+    } // solution end
+    
+    private int find_map(int[][] maps, int x, int y, int cnt)
+    {
+        if (x == n - 1 && y == m - 1)
+        {
+            result = Math.min(result, cnt);
+            return cnt;
+        }
+            
+        if (x + 1 < n && maps[x + 1][y] == 1 && visit[x + 1][y] == false)
+        {
+            visit[x + 1][y] = true;
+            find_map(maps, x + 1, y, cnt + 1);
+            visit[x + 1][y] = false;
+        }
+        if (y + 1 < m && maps[x][y + 1] == 1 && visit[x][y + 1] == false)
+        {
+            visit[x][y + 1] = true;
+            find_map(maps, x, y + 1, cnt + 1);
+            visit[x][y + 1] = false;
+        }
+        if (x - 1 >= 0 && maps[x - 1][y] == 1 && visit[x - 1][y] == false)
+        {
+            visit[x - 1][y] = true;
+            find_map(maps, x - 1, y, cnt + 1); 
+            visit[x - 1][y] = false;
+        }
+        if (y - 1 >= 0 && maps[x][y - 1] == 1 && visit[x][y - 1] == false)
+        {
+            visit[x][y - 1] = true;
+            find_map(maps, x, y - 1, cnt + 1);
+            visit[x][y - 1] = false;
+        }
+        return -1;
+    }
+}
+```
+
+> queue 를 이용한 bfs (넓이 우선탐색) 통과코드 / 동적계획법
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+class Solution {
+    public int solution(int[][] maps) {
+        int m = maps.length, n = maps[0].length;
+
+        int[][] visited = new int[m][n];
+        visited[0][0] = 1;
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {0, 0});
+
+        while (!queue.isEmpty()) {
+            int[] q = queue.poll();
+
+            if(q[0] == m-1 && q[1] == n-1) {
+                return visited[m-1][n-1];
+            }
+
+            if(q[0]+1 < m && maps[q[0]+1][q[1]] == 1 && visited[q[0]+1][q[1]] == 0) {
+                queue.add(new int[] {q[0]+1, q[1]});
+                visited[q[0]+1][q[1]] += visited[q[0]][q[1]] + 1;
+            }
+            if(q[0] > 0 && maps[q[0]-1][q[1]] == 1 && visited[q[0]-1][q[1]] == 0) {
+                queue.add(new int[] {q[0]-1, q[1]});
+                visited[q[0]-1][q[1]] += visited[q[0]][q[1]] + 1;
+            }
+            if(q[1]+1 < n && maps[q[0]][q[1]+1] == 1 && visited[q[0]][q[1]+1] == 0) {
+                queue.add(new int[] {q[0], q[1]+1});
+                visited[q[0]][q[1]+1] += visited[q[0]][q[1]] + 1;
+            }
+            if(q[1] > 0 && maps[q[0]][q[1]-1] == 1 && visited[q[0]][q[1]-1] == 0) {
+                queue.add(new int[] {q[0], q[1]-1});
+                visited[q[0]][q[1]-1] += visited[q[0]][q[1]] + 1;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+
