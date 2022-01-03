@@ -996,3 +996,54 @@ class Solution {
 }
 ```
 
+### 예상 대진표
+
+```java
+class Solution
+{
+    public int solution(int n, int a, int b)
+    {
+        int answer = 0;
+        int cnt = 1;
+        while (a / 2 + a % 2 != b / 2 + b % 2)
+        {
+            cnt++;
+            a = a / 2 + a % 2;
+            b = b / 2 + b % 2;
+        }
+        answer = cnt;
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+
+```java
+class Solution
+{
+    public int solution(int n, int a, int b)
+    {
+        int round = 0;
+        while(a != b)
+        {
+            a = a/2 + a%2;
+            b = b/2 + b%2;
+            round++;
+        }
+        return round;
+    }
+}
+
+// 두번째
+
+
+class Solution
+{
+    public int solution(int n, int a, int b)
+    {
+        return Integer.toBinaryString((a-1)^(b-1)).length();
+    }
+}
+```
+
