@@ -1047,3 +1047,62 @@ class Solution
 }
 ```
 
+### 괄호 회전하기
+
+> HashMap 말고 Stack 을 사용해야 한다.
+>
+> ([)]  이러한 경우의수를 제외하기 위해 
+
+```java
+import java.util.*;
+class Solution {
+    public int solution(String s) {
+        int answer = 0;
+        int len = s.length();
+        String change_s = s;
+        for (int i = 0; i < len; i++)
+        {
+            answer += check_s(change_s);
+            char temp = change_s.charAt(0);
+            change_s = change_s.substring(1, len);
+            change_s += temp;   
+        }
+        return answer;
+    } // solution end
+    
+    private int check_s(String s)
+    {
+        Stack<Character> st = new Stack<>();
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s.charAt(i) == '[' || s.charAt(i) == '{' || s.charAt(i) == '(')
+                st.push(s.charAt(i));
+            else if (s.charAt(i) == ']')
+            {
+                if (st.empty() || st.peek() != '[')
+                    return 0;
+                else
+                   st.pop();
+            }
+            else if (s.charAt(i) == '}')
+            {
+                if (st.empty() || st.peek() != '{')
+                    return 0;
+                else
+                   st.pop();
+            }
+            else if (s.charAt(i) == ')')
+            {
+                if (st.empty() || st.peek() != '(')
+                    return 0;
+                else
+                   st.pop();
+            }
+        }
+        if (!st.empty())
+            return 0;
+        return 1;
+    }
+}
+```
+
