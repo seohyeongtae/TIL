@@ -890,6 +890,36 @@ class Solution {
 }
 ```
 
+> 스킬 체크 시 다시 푼 코드
+
+```java
+import java.util.*;
+class Solution {
+    public int[] solution(String s) {
+        HashMap<String, Integer> hm = new HashMap<>();
+        for (int i = 0; i < s.length(); i++)
+        {
+            String temp = "";
+            while (s.charAt(i) >= '0' && s.charAt(i) <= '9')
+            {
+                temp += s.substring(i, i + 1);
+                i++;
+            }
+            if (temp.length() >= 1)
+                hm.put(temp, hm.getOrDefault(temp, 0) + 1);
+        }
+        int final_len = hm.size();
+        int[] answer = new int[final_len];
+        int[] temp_result = new int[final_len + 1];
+        for (String d : hm.keySet())
+            temp_result[hm.get(d)] = Integer.parseInt(d);
+        for (int i = final_len, j = 0; i > 0; i--, j++)
+            answer[j] = temp_result[i];
+        return answer;
+    }
+}
+```
+
 ### 게임 맵 최단거리
 
 > 효율성 실패 (dfs 사용 - 깊이 우선탐색)
@@ -1102,6 +1132,95 @@ class Solution {
         if (!st.empty())
             return 0;
         return 1;
+    }
+}
+```
+
+### 배달
+
+> 플로이드 와샬 알고리즘 사용
+
+```java
+class Solution {
+    public int solution(int N, int[][] road, int K) {
+        int answer = 1;
+        int arr[][] = new int[N + 1][N + 1];
+        int len = road.length;
+        for (int i = 0; i < N + 1; i++)
+        {
+            for (int j = 0; j < N + 1; j++)
+                arr[i][j] = 5000001;
+        }
+        for (int i = 0; i < len; i++)
+        {
+            if (arr[road[i][0]][road[i][1]] > road[i][2])
+                arr[road[i][0]][road[i][1]] = road[i][2];
+            if (arr[road[i][1]][road[i][0]] > arr[road[i][0]][road[i][1]])
+                arr[road[i][1]][road[i][0]] = arr[road[i][0]][road[i][1]];
+        }
+        
+        for (int i = 0; i <  N + 1; i++) // 거쳐가는 경로
+        {
+            for (int j = 0; j <  N + 1; j++)
+            {
+                for (int k = 0; k <  N + 1; k++)
+                {
+                    if (arr[j][k] > arr[j][i] + arr[i][k])
+                    {
+                        arr[j][k] = arr[j][i] + arr[i][k];
+                    }
+                }
+            }
+        }
+        for (int i = 2; i < N + 1; i++)
+        {
+            if (arr[1][i] <= K)
+                answer++;
+        }
+        return answer;
+    }
+}
+```
+
+> 다음 부터는 Math.min 을 사용하자 (다른사람 코드)
+
+```java
+class Solution {
+    public int solution(int N, int[][] road, int K) {
+        int answer = 0;
+        int[][] map = new int[N+1][N+1];
+
+        for(int i = 1; i <= N; i++) {
+            for(int j = 1; j <= N; j++) {
+                map[i][j] = 200000001;
+            }
+        }
+
+        for(int i = 1; i <= N; i++) {
+            map[i][i] = 0;
+        }
+
+        for(int i = 0; i < road.length; i++) {
+            map[road[i][0]][road[i][1]] = Math.min(map[road[i][0]][road[i][1]], road[i][2]);
+            map[road[i][1]][road[i][0]] = Math.min(map[road[i][1]][road[i][0]], road[i][2]);
+        }
+
+        for(int k = 1; k <= N; k++) {
+            for(int i = 1; i <= N; i++) {
+                for(int j = 1; j <= N; j++) {
+                    if(map[i][j] > map[i][k] + map[k][j]) {
+                        map[i][j] = map[i][k] + map[k][j];
+                    }
+                }
+            }
+        }
+
+        for(int i = 1; i <= N; i++) {
+            if(map[1][i] <= K)
+                answer++;
+        }
+
+        return answer;
     }
 }
 ```
