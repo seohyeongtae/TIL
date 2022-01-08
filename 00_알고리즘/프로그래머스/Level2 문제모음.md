@@ -1225,3 +1225,69 @@ class Solution {
 }
 ```
 
+### 피로도
+
+```java
+class Solution {
+    boolean visit[];
+    int result;
+    int g_k;
+    public int solution(int k, int[][] dungeons) {
+        int answer = -1;
+        result = 0;
+        g_k = k;
+        visit = new boolean[dungeons.length];
+        find(dungeons, dungeons.length, 0);
+        answer = result;
+        return answer;
+    } // solution end
+    
+    private void find(int[][] dun, int len, int r)
+    {
+        for (int i = 0; i < len; i++)
+        {
+            if (visit[i] == false)
+            {
+                visit[i] = true;
+                if (g_k >= dun[i][0])
+                {
+                    g_k -= dun[i][1];
+                    find(dun, len, r + 1);
+                    g_k += dun[i][1];
+                }
+                visit[i] = false;
+            }
+        }
+        result = Math.max(result, r);
+        return;
+    } // find end
+}
+```
+
+> 다른 사람 코드
+
+```java
+class Solution {
+    public static boolean check[];
+    public static int ans = 0;
+
+    public int solution(int k, int[][] dungeons) {
+        check = new boolean[dungeons.length];
+
+        dfs(k, dungeons, 0);
+
+        return ans;
+    }
+    public static void dfs(int tired, int[][] dungeons, int cnt){
+        for(int i=0; i<dungeons.length; i++){
+            if(!check[i] && dungeons[i][0]<=tired){
+                check[i] = true;
+                dfs(tired-dungeons[i][1], dungeons, cnt+1);
+                check[i] = false;
+            }
+        }
+        ans = Math.max(ans, cnt);
+    }
+}
+```
+
