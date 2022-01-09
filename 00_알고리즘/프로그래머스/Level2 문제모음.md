@@ -1161,9 +1161,9 @@ class Solution {
         
         for (int i = 0; i <  N + 1; i++) // 거쳐가는 경로
         {
-            for (int j = 0; j <  N + 1; j++)
+            for (int j = 0; j <  N + 1; j++) // 출발 경로
             {
-                for (int k = 0; k <  N + 1; k++)
+                for (int k = 0; k <  N + 1; k++) // 도착 경로
                 {
                     if (arr[j][k] > arr[j][i] + arr[i][k])
                     {
@@ -1288,6 +1288,87 @@ class Solution {
         }
         ans = Math.max(ans, cnt);
     }
+}
+```
+
+### 프렌즈 4블록
+
+```java
+class Solution {
+    static int cnt = 0;
+    static boolean visit[][];
+    public int solution(int m, int n, String[] board) {
+        int answer = 0;
+        char[][] c_board = new char[m][n];
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+                c_board[i][j] = board[i].charAt(j);
+        }
+        visit = new boolean[m][n];
+        while (check_board(m, n, c_board))
+        {
+            c_board = delete_board(m, n, c_board);
+            visit = new boolean[m][n];
+        }
+        answer = cnt;
+        return answer;
+    } // solution end
+    private char[][] delete_board(int m, int n, char[][] board)
+    {
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (visit[i][j] == true)
+                {
+                    board[i][j] = '1';
+                    cnt++;
+                }
+            }
+        }
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = m - 1; j >= 0; j--)
+            {
+                if (board[j][i] == '1')
+                {
+                    int temp = j;
+                    while (j >= 0 && board[j][i] == '1')
+                        j--;
+                    if (j >= 0)
+                    {
+                        board[temp][i] = board[j][i];
+                        board[j][i] = '1';
+                        j = temp;
+                    }
+                }
+            }
+        }
+        return board;
+    } // delete board end
+    
+    private boolean check_board(int m, int n, char[][] board)
+    {
+        boolean re = false;
+        for (int i = 0; i < m - 1; i++)
+        {
+            for (int j = 0; j < n - 1; j++)
+            {
+                char a = board[i][j];
+                if (a != '1' && a == board[i][j + 1] && a == board[i + 1][j + 1] &&
+                    a == board[i + 1][j])
+                {
+                    visit[i][j] = true;
+                    visit[i][j + 1] = true;
+                    visit[i + 1][j] = true;
+                    visit[i + 1][j + 1] = true;
+                    re = true;
+                }
+            }
+        }
+        return re;
+    }  // check_board end
 }
 ```
 
