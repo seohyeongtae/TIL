@@ -1372,3 +1372,126 @@ class Solution {
 }
 ```
 
+### 2개 이하로 다른 비트
+
+> 부호 확인 잘하자 -> cnt 를 long으로 선언안하고 int 로 선언해서 시간 뺏겼다.
+
+```java
+class Solution {
+    public long[] solution(long[] numbers) {
+        long[] answer = new long[numbers.length];
+        for (int i = 0; i < numbers.length; i++)
+        {
+            long cnt = 1;
+            long temp_num = numbers[i];
+            while (temp_num > 0)
+            {
+                long temp = temp_num % 2;
+                temp_num = temp_num / 2;
+                if (temp == 0)
+                {
+                    answer[i] = numbers[i] + cnt;
+                    if (cnt != 1)
+                        answer[i] -= cnt / 2;
+                    break;
+                }
+                cnt *= 2;
+            }
+            if (answer[i] == 0)
+                answer[i] = numbers[i] + cnt - (cnt / 2) ;
+        }
+        return answer;
+    }
+}
+```
+
+### 삼각 달팽이
+
+> https://blog.naver.com/gkfla1017/222418312339
+>
+> 참고 풀이 링크 (정답 링크)
+
+```java
+class Solution {
+    public int[] solution(int n) {
+        int[] answer = new int[n*(n+1)/2];
+        int[][] mat= new int[n][n];
+        
+        int x=-1, y=0, idx=1;
+        for(int i=0; i<n; i++){
+            for(int j=i; j<n; j++){
+                if(i%3==0){ //아래로
+                    x++;
+                }else if(i%3==1){//오른쪽으로
+                    y++;
+                }else{//대각선으로
+                    x--;
+                    y--;
+                }
+                mat[x][y]= idx++;
+            }
+        }
+        
+        idx=0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(mat[i][j]==0) break;
+                answer[idx++]= mat[i][j];
+            }
+        }
+        return answer;
+    }
+}
+
+```
+
+> 비슷한 다른 사람 코드
+
+```java
+class Solution {
+    public int[] solution(int n) {
+        int[][] li = new int[n][n];
+        int x=0,y=0;
+        int step = n;
+        int value=1;
+        while(step >0){
+            /*아래로 이동 */
+            for(int i=step;i>0;i--){
+                li[x++][y] = value++;
+            }
+            x--; // 행 복귀 
+            y++; // 로테이션
+            step--; // 스텝 업데이트
+
+            /* 오른쪽 이동 */
+            for(int i=step;i>0;i--){
+                li[x][y++] = value++;
+            }
+            y--; // 열 복귀
+            x--; // 로테이션
+            y--; // 로테이션
+            step--;
+
+            /* 북서쪽 이동 */
+            for(int i=step;i>0;i--){
+                li[x--][y--] = value++;
+            }
+            x++; // 행 복귀
+            y++; // 열 복귀
+            x++; // 로테이션
+            step--;
+        }
+
+        int[] answer = new int[n*(n+1)/2];
+        int size=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(li[i][j]==0) break;
+                answer[size++] = li[i][j];
+            }
+        }
+        return answer;
+    }
+}
+```
+
