@@ -1495,3 +1495,59 @@ class Solution {
 }
 ```
 
+### 교점에 별 만들기
+
+> 형변환 주의하기!! // HashSet 활용 방법 
+>
+> for 문 활용하기 (Long 값을 이용해서 따로 len을 계산하거나 int 로 형변환을 안해도 된다.)
+
+```java
+import java.util.*;
+class Solution {
+    public String[] solution(int[][] line) {
+        long max_x = Long.MIN_VALUE;
+        long min_x = Long.MAX_VALUE;
+        long max_y = Long.MIN_VALUE;
+        long min_y = Long.MAX_VALUE;
+        HashSet<String> hs = new HashSet<>();
+        for (int i = 0; i < line.length - 1; i++)
+        {
+            for (int j = i + 1; j < line.length; j++)
+            {
+                long x1 = ((long)line[i][1] * line[j][2] - line[i][2] * line[j][1]); // BF - ED
+                long x2 = ((long)line[i][0] * line[j][1] - line[i][1] * line[j][0]); // AD - BC
+                long y1 = ((long)line[i][2] * line[j][0] - line[i][0] * line[j][2]); // EC - AF
+                if (x2 != 0 && x1 % x2 == 0 && y1 % x2 == 0)
+                {
+                    long x = x1 / x2;
+                    max_x = Math.max(x, max_x);
+                    min_x = Math.min(x, min_x);
+                    long y = y1 / x2;
+                    max_y = Math.max(y, max_y);
+                    min_y = Math.min(y, min_y);
+                    hs.add(x + "," + y);
+                }
+            }
+        } // for end
+        int len = 1;
+        if (max_y != min_y)
+            len = (int)(max_y - min_y) + 1;
+        String[] answer = new String[len];
+        int k = len - 1;
+        for (long i = min_y; i <= max_y; i++)
+        {
+            answer[k] = "";
+            for (long j = min_x; j <= max_x; j++)
+            {
+                if (hs.contains(j+","+i))
+                    answer[k] += "*";
+                else
+                    answer[k] += ".";
+            }
+            k--;
+        }
+        return answer;
+    }
+}
+```
+
