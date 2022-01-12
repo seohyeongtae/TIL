@@ -1551,3 +1551,125 @@ class Solution {
 }
 ```
 
+### 영어 끝말잇기
+
+```java
+import java.util.*;
+class Solution {
+    public int[] solution(int n, String[] words) {
+        int[] answer = {0, 0};
+        int cnt = 1;
+        HashSet<String> hs = new HashSet<>();
+        hs.add(words[0]);
+        for (int i = 1; i < words.length; i++)
+        {
+            if (i % n == 0)
+                cnt++;
+            if (words[i - 1].charAt(words[i - 1].length() - 1) != words[i].charAt(0) ||
+               hs.contains(words[i]))
+            {
+                answer[0] = (i % n) + 1;
+                answer[1] = cnt;
+                break;
+            }
+            hs.add(words[i]);
+        }
+        return answer;
+    }
+}
+```
+
+### 전력망을 둘로 나누기
+
+> int 는 Arrays.sort 사용 불가능 -> Integer만 가능
+>
+> 크루스칼 알고리즘 응용해봤다.
+
+```java
+import java.util.*;
+class Solution {
+    public int solution(int n, int[][] wires) {
+        int answer = Integer.MAX_VALUE;
+        int[] arr = new int[n + 1];
+        int len = wires.length;
+        for (int i = 0; i < len; i++)
+        {
+            for (int k = 0; k <= n; k++)
+                 arr[k] = k;
+            for (int j = 0; j < len; j++)
+            {
+                if (i != j)
+                {
+                    if (arr[wires[j][0]] <= arr[wires[j][1]])
+                    {
+                        //arr[wires[j][0]] = arr[wires[j][0]];
+                        int t = arr[wires[j][1]];
+                        arr[wires[j][1]] = arr[wires[j][0]];
+                        for (int l = 1; l <= n; l++)
+                        {
+                            if (arr[l] == t)
+                                arr[l] = arr[wires[j][0]];
+                        }
+                    }
+                    else
+                    {
+                        int t = arr[wires[j][0]];
+                        arr[wires[j][0]] = arr[wires[j][1]];
+                        for (int l = 1; l <= n; l++)
+                        {
+                            if (arr[l] == t)
+                                arr[l] = arr[wires[j][1]];
+                        }
+                        //arr[wires[j][1]] = arr[wires[j][1]];
+                    }
+                }
+            }
+            Integer[] t_arr = new Integer[n + 1];
+            for (int k = 0; k <= n; k++)
+                t_arr[k] = 0;
+            for (int k = 1; k <= n; k++)
+                t_arr[arr[k]] += 1;
+            Arrays.sort(t_arr, (o1, o2) -> o2 - o1);
+            // System.out.println(t_arr[0] +"  "+ t_arr[1]);
+            answer = Math.min(Math.abs(t_arr[0] - t_arr[1]), answer);
+        }// big for end
+        
+        return answer;
+    }
+}
+```
+
+> 다른사람 코드
+>
+> 자기 자식의 개수만 가지고 구하는 방법
+
+```java
+class Solution {
+    int N, min;
+    int[][] map;
+    int[] vst;
+    int dfs(int n){
+        vst[n] = 1;
+        int child = 1;
+        for(int i = 1; i <= N; i++) {
+            if(vst[i] == 0 && map[n][i] == 1) {
+                child += dfs(i);
+            }
+        }
+        min = Math.min(min, Math.abs(child - (N - child)));
+        return child;
+    }
+    public int solution(int n, int[][] wires) {
+        N = n;
+        min = n;
+        map = new int[n+1][n+1];
+        vst = new int[n+1];
+        for(int[] wire : wires) {
+            int a = wire[0], b = wire[1];
+            map[a][b] = map[b][a] = 1;
+        }
+        dfs(1);
+        return min;
+    }
+}
+```
