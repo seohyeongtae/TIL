@@ -1673,3 +1673,89 @@ class Solution {
     }
 }
 ```
+
+### [1차] 캐시
+
+> cacheSize 가 0인 경우도 예외 처리해주어야 한다. 문제 잘 읽기!!
+
+```java
+import java.util.*;
+class Solution {
+    public int solution(int cacheSize, String[] cities) {
+        int answer = 0;
+        Queue<String> q = new LinkedList<>(); 
+     
+     // 아예 처음부터 예외처리해주어도 된다.
+     // if (cacheSize == 0)
+     //   return cities.length * 5;
+        
+        for (int i = 0; i < cities.length; i++)
+        {
+            cities[i] = cities[i].toUpperCase();
+            if (q.contains(cities[i]))
+            {
+                Queue<String> t = new LinkedList<>();
+                while (!q.isEmpty())
+                {
+                    if (!q.peek().equals(cities[i]))
+                        t.add(q.peek());
+                    q.poll();
+                }
+                t.add(cities[i]);
+                q = t;
+                answer += 1;
+            }
+            else if (q.size() < cacheSize && cacheSize != 0)
+            {
+                answer += 5;
+                q.add(cities[i]);
+            }
+            else
+            {
+                if (cacheSize != 0)
+                {
+                    q.poll();
+                    q.add(cities[i]);    
+                }
+                answer += 5;
+            }
+        }
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드 (queue 가 아닌 ArrayList 사용)
+
+```java
+import java.util.ArrayList;
+
+class Solution {
+    public static int solution(int cacheSize, String[] cities) {
+        int answer = 0;
+        ArrayList<String> list = new ArrayList<String>();
+
+        if (cacheSize == 0)
+            return cities.length * 5;
+
+        for (int i = 0; i < cities.length; i++) {
+            cities[i] = cities[i].toUpperCase();
+
+            if (list.contains(cities[i])) {
+                answer++;
+                list.remove(cities[i]);
+                list.add(cities[i]);
+            } else {
+                answer += 5;
+                if (list.size() == cacheSize) {
+                    list.remove(0);
+                    list.add(cities[i]);
+                }
+                else 
+                    list.add(cities[i]);
+            }
+        }
+        return answer;
+    }
+}
+```
