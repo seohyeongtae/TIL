@@ -1759,3 +1759,36 @@ class Solution {
     }
 }
 ```
+
+### 이진 변환 반복하기
+
+```java
+class Solution {
+    public int[] solution(String s) {
+        int zero_cnt = 0;
+        int change_cnt = 0;
+        while (!s.equals("1"))
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.length(); i++)
+            {
+                if (s.charAt(i) == '1')
+                    sb.append("1");
+                else
+                    zero_cnt++;
+            }
+            int num = sb.length();
+            String temp = "";
+            while (num > 0)
+            {
+                temp = (num % 2) + temp;
+                num = num / 2;
+            }
+            s = temp;
+            change_cnt++;
+        }
+        int[] answer = {change_cnt, zero_cnt};
+        return answer;
+    }
+}
+```
