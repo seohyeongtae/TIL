@@ -1792,3 +1792,110 @@ class Solution {
     }
 }
 ```
+
+### 모음 사전
+
+>경우의 수
+>
+>문자의 종류는 5개
+>문자열 길이는 1, 2, 3, 4, 5 다섯개
+>5 + 25 + 125 + 625 + 3125 = 3905
+>문자간의 거리 = 경우의 수 총합 / 문자열 길이의 경우의 수(1=5, 2= 25, 3= 125, 4=625, 5=3125)
+>
+>문자열 종류는 3개
+>문자열 길이는 1, 2, 3 세개
+>3 + 9 + 27 = 49
+>문자간의 거리 = 경우의 수 총합 / 문자열 길이의 경우의 수(1=3, 2= 9, 3= 27)
+>
+>문자열 종류는 2개
+>문자열의 길이는 1, 2 두개
+>2 + 4 = 6
+>문자간의 거리 = 경우의 수 총합 / 문자열 길이의 경우의 수(1=2, 2=4)
+>
+>------
+>
+>사전에 알파벳 모음 'A', 'E', 'I', 'O', 'U'만을 사용하여 만들 수 있는, 길이 5 이하의 모든 단어가 수록되어 있습니다. 사전에서 첫 번째 단어는 "A"이고, 그다음은 "AA"이며, 마지막 단어는 "UUUUU"입니다.
+>
+>위의 글을 조건으로 경우의 수를 계산한다면
+>
+>문자의 종류는 5개
+>문자열 길이는 1, 2, 3, 4, 5 다섯개
+>5 + 25 + 125 + 625 + 3125 = 3905
+>문자간의 거리 = 경우의 수 총합 / 문자열 길이의 경우의 수(1=5, 2= 25, 3= 125, 4=625, 5=3125)
+>
+>첫 번째 자리 경우 간격 781 (3905 / 5)
+>두 번째 자리 경우 간격 156 (3905 / 25)
+>세 번째 자리 경우 간격 31 (3905 / 125)
+>네 번째 자리 경우 간격 6 (3905 / 625)
+>다섯 번째 자리 간격 1 (3905 / 3125)
+>
+>예시 = AAAE
+>
+>간격 1 + 1 + 1 + 6 = 9
+>A는 +1 만 하면 되니까 넘어가고
+>E는 네 번째 자리로 간격은 6.
+>E는 순서로 1 번째이니까 6 * 1.
+>결과 : 9 + 1 = 10 (간격이 9이니 10번째가 찾는 문자가 된다)
+
+```java
+class Solution {
+    public int solution(String word) {
+        int answer = 0;
+        // 5 + 25 + 125 + 625 + 3125
+        int max = 3905;
+        for (int i = 0; i < word.length(); i++)
+        {
+            if (word.charAt(i) == 'A')
+            {
+                answer += 1;
+            }
+            else if (word.charAt(i) == 'E')
+            {
+                answer += (max / Math.pow(5, i + 1)) * 1 + 1;
+            }
+            else if (word.charAt(i) == 'I')
+            {
+                answer += (max / Math.pow(5, i + 1)) * 2 + 1;
+            }
+            else if (word.charAt(i) == 'O')
+            {
+                answer += (max / Math.pow(5, i + 1)) * 3 + 1;
+            }
+            else if (word.charAt(i) == 'U')
+            {
+                answer += (max / Math.pow(5, i + 1)) * 4 + 1;
+            }
+        }
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+
+```java
+class Solution {
+    public int solution(String word) {
+        int answer = 0, per = 3905;
+        for(String s : word.split("")) answer += "AEIOU".indexOf(s) * (per /= 5) + 1;
+        return answer;
+    }
+}
+
+
+
+
+import java.util.*;
+class Solution {
+    List<String> list = new ArrayList<>();
+    void dfs(String str, int len) {
+        if(len > 5) return;
+        list.add(str);
+        for(int i = 0; i < 5; i++) dfs(str + "AEIOU".charAt(i), len + 1);
+    }
+    public int solution(String word) {
+        dfs("", 0);
+        return list.indexOf(word);
+    }
+}
+```
