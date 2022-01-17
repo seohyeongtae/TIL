@@ -1899,3 +1899,79 @@ class Solution {
     }
 }
 ```
+
+### 점프와 순간 이동
+
+```java
+import java.util.*;
+
+public class Solution {
+    public int solution(int n) {
+        int ans = 0;
+        while (n != 0)
+        {
+            if (n % 2 == 0)
+                n /= 2;
+            else
+            {
+                n -= 1;
+                ans++;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+### n^2 배열 자르기
+
+```java
+class Solution {
+    public int[] solution(int n, long left, long right) {
+        long len = right - left;
+        int[] answer = new int[(int)len + 1];
+        long x = left % n + 1;  
+        long y = left / n + 1;  
+        long cnt = x; 
+        long num = y;
+        if (x > y)
+            num = x;
+        for (int i = 0; i <= right - left; i++)
+        {
+            if (num > n)
+            {
+                y += 1;
+                num = y;
+                cnt = 1;
+            }
+            answer[i] = (int)num;
+            cnt++;
+            if (cnt > y)
+                num += 1;
+        }
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+
+```java
+class Solution {
+    public int[] solution(int n, long left, long right) {
+        int[] answer = new int[(int) (right - left + 1)];
+        int index = 0;
+        for (long i = left; i <= right ; i++) {
+            int row = (int) (i / n + 1);
+            int col = (int) (i % n + 1);
+            if(row > col){
+                answer[index++] = row;
+            } else{
+                answer[index++] = col;
+            }
+        }
+
+        return answer;
+    }
+}
+```
