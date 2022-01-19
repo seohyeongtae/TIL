@@ -1975,3 +1975,64 @@ class Solution {
     }
 }
 ```
+
+### 스킬트리
+
+```java
+import java.util.*;
+class Solution {
+    public int solution(String skill, String[] skill_trees) {
+        int answer = 0;
+        int check = 0;
+        HashSet<Character> hs = new HashSet<Character>();
+        for (int i = 0; i < skill.length(); i++)
+            hs.add(skill.charAt(i));
+        for (int i = 0; i < skill_trees.length; i++)
+        {
+            int c = 0;
+            for (int j = 0; j < skill_trees[i].length(); j++)
+            {
+                if (check < skill.length() && 
+                    hs.contains(skill_trees[i].charAt(j)) && 
+                    skill_trees[i].charAt(j) != skill.charAt(check))
+                {
+                    c = 1;
+                    break;
+                }
+                if (check < skill.length() &&
+                    skill_trees[i].charAt(j) == skill.charAt(check))
+                    check++;    
+            }
+            if (c == 0)
+                answer++;   
+            check = 0;
+        }
+        return answer;
+    }
+}
+```
+
+> 정규식을 이용한 풀이
+>
+> http://www.nextree.co.kr/p4327/   (정규식 정리)
+
+```java
+import java.util.*;
+
+class Solution {
+    public int solution(String skill, String[] skill_trees) {
+        int answer = 0;
+        ArrayList<String> skillTrees = new ArrayList<String>(Arrays.asList(skill_trees));
+        //ArrayList<String> skillTrees = new ArrayList<String>();
+        Iterator<String> it = skillTrees.iterator();
+
+        while (it.hasNext()) {
+            if (skill.indexOf(it.next().replaceAll("[^" + skill + "]", "")) != 0) {
+                it.remove();
+            }
+        }
+        answer = skillTrees.size();
+        return answer;
+    }
+}
+```
