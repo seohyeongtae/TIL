@@ -2036,3 +2036,82 @@ class Solution {
     }
 }
 ```
+
+### 방문 길이
+
+```java
+import java.util.*;
+class Solution {
+    public int solution(String dirs) {
+        int answer = 0;
+        int x = 5;
+        int y = 5;
+        HashSet<String> hs = new HashSet<String>();
+        for (int i = 0; i < dirs.length(); i++)
+        {
+            String temp_x = x + "";
+            String temp_y = y + "";
+            if (dirs.charAt(i) == 'U' && y < 10)
+                y++;
+            else if (dirs.charAt(i) == 'D' && y > 0)
+                y--;
+            else if (dirs.charAt(i) == 'R' && x < 10)
+                x++;
+            else if (dirs.charAt(i) == 'L' && x > 0)
+                x--;
+            String temp_s = temp_y + temp_x;
+            String s = y + "" + x; 
+            if (!temp_s.equals(s))
+            {
+                String re = temp_s + s;
+                String re_t = s + temp_s;
+                if (!hs.contains(re) && !hs.contains(re_t))
+                {
+                    hs.add(re);
+                    answer++;
+                }
+            }
+        }
+        return answer;
+    }
+}
+```
+
+### 쿼드압축 후 개수 세기
+
+```java
+class Solution {
+    int zero;
+    int one;
+    public int[] solution(int[][] arr) {
+        zero = 0;
+        one = 0;
+        check_arr(arr, 0, 0, arr[0].length);
+        int[] answer = {zero, one};
+        return answer;
+    } // solution end
+    
+    private void check_arr(int[][] arr, int y, int x, int len)
+    {
+        int temp = arr[y][x];
+        for (int i = y; i < len + y; i++)
+        {
+            for (int j = x; j < len + x; j++)
+            {
+                if (arr[i][j] != temp)
+                {
+                    check_arr(arr, y + len / 2, x, len / 2);
+                    check_arr(arr, y, x + len / 2, len / 2);
+                    check_arr(arr, y + len / 2, x  + len / 2, len / 2);
+                    check_arr(arr, y, x, len / 2);
+                    return;
+                }
+            }
+        }
+        if (temp == 0)
+            zero++;
+        else
+            one++;
+    }
+}
+```
