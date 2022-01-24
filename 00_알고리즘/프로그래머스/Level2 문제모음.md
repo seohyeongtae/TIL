@@ -2115,3 +2115,71 @@ class Solution {
     }
 }
 ```
+
+### 올바른 괄호
+```java
+import java.util.*;
+class Solution {
+    boolean solution(String s) {
+        boolean answer = true;
+
+        Stack<Character> stack = new Stack<Character>();
+        int len = s.length();
+        if (len % 2 == 1)
+            return false;
+        for (int i = 0; i < len; i++)
+        {
+            if (s.charAt(i) == '(')
+                stack.add(s.charAt(i));
+            else if (!stack.empty() && stack.peek() == '(' && s.charAt(i) == ')')
+                stack.pop();
+            else
+            {
+                answer = false;
+                return answer;
+            }
+        }
+        if (!stack.empty())
+            answer = false;
+        return answer;
+    }
+}
+```
+> 다른 사람 코드
+```java
+class Solution {
+    boolean solution(String s) {
+        boolean answer = false;
+        int count = 0;
+        for(int i = 0; i<s.length();i++){
+            if(s.charAt(i) == '('){
+                count++;
+            }
+            if(s.charAt(i) == ')'){
+                count--;
+            }
+            if(count < 0){
+                break;
+            }
+        }
+        if(count == 0){
+            answer = true;
+        }
+
+        return answer;
+    }
+}
+```
+### 최댓값과 최솟값
+```java
+import java.util.*;
+class Solution {
+    public String solution(String s) {
+        String answer = "";
+        String[] arr = s.split(" ");
+        Arrays.sort(arr, (o1, o2) -> Integer.parseInt(o1) - Integer.parseInt(o2));
+        answer = answer + arr[0] + " " +  arr[arr.length - 1];
+        return answer;
+    }
+}
+```
