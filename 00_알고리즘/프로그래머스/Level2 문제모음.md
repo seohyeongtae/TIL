@@ -2183,3 +2183,131 @@ class Solution {
     }
 }
 ```
+
+### 방금그곡
+
+```java
+class Solution {
+    public String solution(String m, String[] musicinfos) {
+        String answer = "";
+        // play time   start   이름
+        Object[] result = new Object[3];
+        result[0] = "";
+        result[2] = "(None)";
+        for (int i = 0; i < musicinfos.length; i++)
+        {
+            String[] arr = musicinfos[i].split(",");
+            String[] t = arr[0].split(":");
+            int start = Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+            t = arr[1].split(":");
+            int end = Integer.parseInt(t[0]) * 60 + Integer.parseInt(t[1]);
+            int play_time = end - start;
+            int temp_time = 0;
+            String music = "";
+            int music_t = 0;
+            int len = arr[3].length();
+            while (temp_time != play_time)
+            {
+                music += String.valueOf(arr[3].charAt(music_t));
+                if (arr[3].charAt(music_t) != '#')
+                    temp_time++;
+                if (temp_time == play_time && music_t + 1 != len 
+                    && arr[3].charAt(music_t + 1) == '#')
+                    music += "#";
+                music_t++;
+                if (music_t == len)
+                    music_t = 0;
+            }
+            if (check_index(music, m))
+            {
+                if (result[0] == "")
+                {
+                    result[0] = play_time;
+                    result[1] = start;
+                    result[2] = arr[2];
+                }
+                else if ((int)result[0] < play_time)
+                {
+                    result[0] = play_time;
+                    result[1] = start;
+                    result[2] = arr[2];
+                }
+            }
+        }
+        answer = String.valueOf(result[2]);
+        return answer;
+    }
+    private boolean check_index(String music, String m)
+    {
+        int len = m.length();
+        for (int i = 0, j = 0; i < music.length(); i++)
+        {
+            int temp = i;
+            while (j < len && i < music.length() && music.charAt(i) == m.charAt(j))
+            {
+                if (j == len - 1)
+                {
+                    if (i < music.length() - 1 && music.charAt(i + 1) != '#')
+                        return true;
+                    else if (i == music.length() - 1)
+                        return true;
+                }
+                i++;
+                j++;
+            }
+            i = temp;
+            j = 0;
+        }
+        return false;
+    }
+}
+```
+
+> 다른 사람 코드
+>
+> replaceAll 로 # 처리를 하였다.
+
+```java
+class Solution {
+    public String solution(String m, String[] musicinfos) {
+        String answer = "(None)";
+        int time = 0;
+
+        m = edit(m);
+
+        for (int inx = 0; inx < musicinfos.length; inx++) {
+
+            String[] info = musicinfos[inx].split(",");
+
+            int start = (60 * Integer.parseInt(info[0].substring(0, 2)) + Integer.parseInt(info[0].substring(3)));
+            int end = (60 * Integer.parseInt(info[1].substring(0, 2)) + Integer.parseInt(info[1].substring(3)));
+            int t = end - start;
+
+            if (t > time) {
+                info[3] = edit(info[3]);
+                StringBuffer sb = new StringBuffer();
+                for (int jnx = 0; jnx < t; jnx++) {
+                    sb.append(info[3].charAt(jnx % (info[3].length())));
+                }
+                if (sb.toString().indexOf(m) >= 0) {
+                    answer = info[2];
+                    time = t;
+                }
+            }
+        }
+
+        return answer;
+    }
+
+    public String edit(String m) {
+
+        m = m.replaceAll("C#", "V");
+        m = m.replaceAll("D#", "W");
+        m = m.replaceAll("F#", "X");
+        m = m.replaceAll("G#", "Y");
+        m = m.replaceAll("A#", "Z");
+
+        return m;
+    }
+}
+```
