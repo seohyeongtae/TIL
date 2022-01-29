@@ -2385,3 +2385,153 @@ class Solution {
     }
 }
 ```
+
+### 파일명 정렬
+
+```java
+import java.util.*;
+class Solution {
+    public String[] solution(String[] files) {
+        
+        ArrayList<String[]> al = new ArrayList<String[]>();
+        for (int i = 0; i < files.length; i++)
+        {
+            int temp = make_int(files[i]);
+            String temp_str = make_str(files[i]);
+            String[] ob = new String[3];
+            ob[0] = files[i];
+            ob[1] = temp_str;
+            ob[2] = temp + "";
+            al.add(ob);
+        }
+        //al.sort((o1, o2) -> o1[1].compareToIgnoreCase(o2[1]));
+        Collections.sort(al, new Comparator<String[]>(){
+            @Override
+            public int compare(String[] o1, String[] o2)
+            {
+                if (o1[1].compareToIgnoreCase(o2[1]) == 0 && Integer.parseInt(o1[2]) == Integer.parseInt(o2[2]))
+                    return 0;
+                if (o1[1].compareToIgnoreCase(o2[1]) == 0)
+                {
+                    return Integer.parseInt(o1[2]) - Integer.parseInt(o2[2]);
+                }
+                else
+                    return o1[1].compareToIgnoreCase(o2[1]);
+            }
+        });
+        String[] answer = new String[al.size()];
+        for (int i = 0; i < al.size(); i++)
+            answer[i] = al.get(i)[0];
+            
+        return answer;
+    } // solution end
+    private String make_str(String files)
+    {
+        String t = "";
+        for (int i = 0; i < files.length(); i++)
+        {
+            while (i < files.length() && !(files.charAt(i) >= '0' && files.charAt(i) <= '9'))
+            {
+                t += files.charAt(i) + "";
+                i++;
+            }
+                break;
+        }
+        return t;
+    }
+    
+    private int make_int(String files)
+    {
+        int temp = 0;
+        String t = "";
+        for (int i = 0; i < files.length(); i++)
+        {
+            if (files.charAt(i) >= '0' && files.charAt(i) <= '9')
+            {
+                int a = 1;
+                while (a <= 5 && i < files.length() && files.charAt(i) >= '0' && files.charAt(i) <= '9')
+                {
+                    t += files.charAt(i) + "";
+                    i++;
+                    a++;
+                }
+                break;
+            }
+        }
+        temp = Integer.parseInt(t);
+        return temp;
+    }
+}
+```
+
+> 다른 사람 코드
+
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class Solution {
+  public String[] solution(String[] files) {
+        List<FileName> fileNameList = new ArrayList<>();
+        String head, number, tail;
+
+        for (int i = 0; i < files.length; i++) {
+            String s = files[i];
+            Pattern p = Pattern.compile("[0-9]+");
+            Matcher m = p.matcher(s);
+            if (m.find()){
+                number = m.group();
+                int numberStartIndex = s.indexOf(number);
+                head = s.substring(0, numberStartIndex);
+                int numberEndIndex = numberStartIndex + number.length() - 1;
+                if (numberEndIndex + 1 > s.length() - 1) {
+                    tail = "";
+                } else {
+                    tail = s.substring(numberEndIndex + 1);
+                }
+                fileNameList.add(new FileName(head, number, tail));
+            }
+        } 
+
+        fileNameList.sort(Comparator.comparing(FileName::getHead).thenComparing(Comparator.naturalOrder()));
+
+        String[] answer = new String[files.length];
+        for (int i = 0; i < files.length; i++) {
+            answer[i] = fileNameList.get(i).toString();
+        }
+        return answer;
+    }
+
+    public static class FileName implements Comparable<FileName> {
+        String head;
+        String number;
+        String tail;
+
+        public FileName(String head, String number, String tail) {
+            this.head = head;
+            this.number = number;
+            this.tail = tail;
+        }
+
+        public String getHead() {
+            return head.toUpperCase();
+        }
+
+        @Override
+        public String toString() {
+            return head + number + tail;
+        }
+
+        @Override
+        public int compareTo(FileName o) {
+            int mine = Integer.parseInt(this.number);
+            int yours = Integer.parseInt(o.number);
+            return mine - yours;
+        }
+    }
+}
+```
