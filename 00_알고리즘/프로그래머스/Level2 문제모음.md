@@ -2535,3 +2535,112 @@ class Solution {
     }
 }
 ```
+
+### n진수 게임
+
+```java
+class Solution {
+    String arr = "0123456789ABCDEF";
+    public String solution(int n, int t, int m, int p) {
+        String answer = "";
+        int cnt = 0;
+        int current = 1;
+        String num = "0";
+        int num_i = 1;
+        int i = 0;
+        while (cnt != t)
+        {
+            if (current == m + 1)
+                current = 1;
+            if (current == p)
+            {
+                cnt++;
+                answer += String.valueOf(num.charAt(i));
+            }
+            current++;
+            i++;
+            if (i == num.length())
+            {
+                i = 0;
+                num = set_str(num_i++, n);
+            }
+        }
+        return answer;
+    }
+    private String set_str(int num_i, int n)
+    {
+        String temp = "";
+        while (num_i > 0)
+        {
+            temp =  String.valueOf(arr.charAt(num_i % n)) + temp;
+            num_i /= n;
+        }
+        return temp;
+    }
+}
+```
+
+### 다음 큰 숫자
+
+> 1씩 늘려가며 비교를 해야 한다.
+
+```java
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        int count = binary(n);
+        int index = 1;
+        while (true) {
+            int number = n + index;
+            if (count == binary(number)) {
+                answer = number;
+                break;
+            }
+            index++;
+        }
+        return answer;
+    }
+
+    public int binary(int x) {
+        String str = Integer.toBinaryString(x);
+        int count = 0;
+        char[] strArr = str.toCharArray();
+        for (char val : strArr) {
+            if (val == '1') count++;
+        }
+        return count;
+    }
+}
+```
+
+> 다른 사람 코드
+>
+> Integer.bitCount 함수 사용
+
+```java
+import java.lang.Integer;
+
+class TryHelloWorld
+{
+    public int nextBigNumber(int n)
+    {
+      int a = Integer.bitCount(n);
+      int compare = n+1;
+
+      while(true) {
+        if(Integer.bitCount(compare)==a)
+          break;
+        compare++;
+      }
+
+      return compare;
+    }
+
+    public static void main(String[] args)
+    {
+        TryHelloWorld test = new TryHelloWorld();
+        int n = 78;
+        System.out.println(test.nextBigNumber(n));
+    }
+}
+```
