@@ -2696,3 +2696,79 @@ class Hopscotch {
 
 }
 ```
+
+### k진수에서 소수 개수 구하기
+
+```java
+class Solution {
+    public int solution(int n, int k) {
+        int answer = 0;
+        String f_str = Integer.toString(n, k);
+        for (int i = 0; i < f_str.length(); i++)
+        {
+            String temp = "";
+            while (i < f_str.length() && f_str.charAt(i) != '0')
+            {
+                temp += String.valueOf(f_str.charAt(i));
+                i++;
+            }
+            if (!temp.equals("1") && temp.length() > 0)
+            {
+                if (temp.equals("2") || temp.equals("3"))
+                    answer++;
+                else if (check_num(temp))
+                    answer++;
+            }
+        }
+        return answer;
+    } // solution end
+    
+    private boolean check_num(String temp)
+    {
+        Long t = Long.parseLong(temp);
+        for (int i = 2; i < Math.sqrt(t) + 1; i++)
+        {
+            if (t % i == 0)
+                return false;
+        }
+        return true;
+    }
+}
+```
+
+> 다른 사람 코드
+>
+> 정규식 활용
+
+```java
+import java.math.BigInteger;
+import java.util.*;
+
+class Solution {
+    public int solution(int n, int k) {
+        String s = Integer.toString(n, k);
+        return (int) Arrays.stream(s.split("0"))
+                .filter(p ->
+                        !p.isEmpty()
+                                && !p.equals("1")
+                                && isPrime(BigInteger.valueOf(Long.parseLong(p)))
+                                && (s.contains("0${p}0")
+                                || s.contains("${p}0")
+                                || s.contains("0${p}")
+                                || s.contains(p))
+                )
+                .count();
+    }
+
+    private boolean isPrime(BigInteger n) {
+        long l = 2;
+
+        while (l <= Math.sqrt(n.doubleValue())) {
+            if (n.remainder(BigInteger.valueOf(l)) == BigInteger.ZERO) return false;
+            l++;
+        }
+        return true;
+    }
+}
+
+```
