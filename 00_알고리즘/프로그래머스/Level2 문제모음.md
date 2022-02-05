@@ -2772,3 +2772,46 @@ class Solution {
 }
 
 ```
+
+### 숫자의 표현
+
+```java
+class Solution {
+    public int solution(int n) {
+        int answer = 1;
+        int index = 1;
+        while(index != n)
+        {
+            int temp = index;
+            int sum = 0;
+            while(sum < n)
+                sum += temp++;
+            if (sum == n)
+                answer++;
+            index++;
+        }
+        return answer;
+    }
+}
+```
+
+### 최솟값 만들기
+
+```java
+import java.util.*;
+class Solution
+{
+    public int solution(int []A, int []B)
+    {
+        int answer = 0;
+      //  Integer[] BB = Arrays.stream(B).boxed().toArray(Integer[]::new);
+        Arrays.sort(A);
+        // Arrays.sort(BB, Collections.reverseOrder());
+        Arrays.sort(B);
+        int len = A.length;
+        for (int i = 0; i < len; i++)
+            answer += A[i] * (int)B[len - i - 1];  
+        return answer;
+    }
+}
+```
