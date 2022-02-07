@@ -2815,3 +2815,50 @@ class Solution
     }
 }
 ```
+
+### 피보나치 수
+
+```java
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        Long[] fibo = new Long[n];
+        fibo[0] = 1L;
+        fibo[1] = 1L;
+        fibo[2] = 2L;
+        int cnt = 3;
+        if (n > 2)
+        {
+            while (cnt != n)
+            {
+                fibo[cnt] = (fibo[cnt - 1] + fibo[cnt - 2]) % 1234567;
+                cnt++;
+            }    
+        }
+        answer = fibo[cnt - 1].intValue();
+        return answer;
+    }
+}
+
+
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        long[] fibo = new long[n];
+        fibo[0] = 1;
+        fibo[1] = 1;
+        fibo[2] = 2;
+        int cnt = 3;
+        if (n > 2)
+        {
+            while (cnt != n)
+            {
+                fibo[cnt] = (fibo[cnt - 1] + fibo[cnt - 2]) % 1234567;
+                cnt++;
+            }    
+        }
+        answer = (int)fibo[cnt - 1];
+        return answer;
+    }
+}
+```
