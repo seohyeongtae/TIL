@@ -115,24 +115,24 @@
 
 **내용 및 목표**
 
-![구현목표](Readmeimg/구현목표.PNG)
+![구현목표](../Readmeimg/구현목표.PNG)
 
 **시스템 구성도**
 
-![시스템구성도](Readmeimg/시스템구성도.PNG)
+![시스템구성도](../Readmeimg/시스템구성도.PNG)
 
 **기술 스택**
 
-![기술스택](Readmeimg/기술스택.PNG)
+![기술스택](../Readmeimg/기술스택.PNG)
 
 
 
 **ERD**
 
-![erd](Readmeimg/erd.PNG)
+![erd](../Readmeimg/erd.PNG)
 
 
 
 **작동 흐름도**
 
-![작동흐름도](Readmeimg/작동흐름도.PNG)
+![작동흐름도](../Readmeimg/작동흐름도.PNG)
