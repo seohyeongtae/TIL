@@ -2862,3 +2862,46 @@ class Solution {
     }
 }
 ```
+
+### JadenCase 문자열 만들기
+
+```java
+class Solution {
+    public String solution(String s) {
+        String answer = "";
+        s = s.toLowerCase();
+        
+        if (s.charAt(0) >= 'a' && s.charAt(0) <= 'z')
+            answer += String.valueOf((char)(s.charAt(0) - 32));
+        else 
+            answer += String.valueOf(s.charAt(0));
+        for (int i = 1; i < s.length(); i++)
+        {
+            if (s.charAt(i - 1) == ' ' && s.charAt(i) >= 'a' && s.charAt(i) <= 'z')
+                answer += String.valueOf((char)(s.charAt(i) - 32));
+            else 
+                answer += String.valueOf(s.charAt(i));
+        }
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+
+```java
+class Solution {
+  public String solution(String s) {
+        String answer = "";
+        String[] sp = s.toLowerCase().split("");
+        boolean flag = true;
+
+        for(String ss : sp) {
+            answer += flag ? ss.toUpperCase() : ss;
+            flag = ss.equals(" ") ? true : false;
+        }
+
+        return answer;
+  }
+}
+```
