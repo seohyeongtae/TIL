@@ -194,3 +194,187 @@ public int solution(String[] lines) {
 }
 
 ```
+
+### 브라이언의 고민
+
+```java
+import java.util.*;
+class Solution {
+    int i;
+    StringBuilder sb;
+    HashSet<Character> hs;
+    
+    //AaAaA
+    private boolean check_sen_one (String sen, int t, char c)
+    {
+     // System.out.println("check_sen_one" + "  char  " + c + "  " + sen.charAt(t) + " i = " + t);
+        boolean check = true;
+        int j;
+        for (j = t; j < sen.length(); j++)
+        {
+            if (sen.charAt(j) == c && check == true)
+            {
+                check = false;
+                if (j + 1 == sen.length())
+                    return false;                
+                else
+                    sb.append(String.valueOf(sen.charAt(j + 1)));
+            }
+            else if (sen.charAt(j) >= 'A' && sen.charAt(j) <= 'Z' && check == false)
+                check = true;
+            else
+            {
+                sb.append(" ");
+                break;
+            }
+        }
+        i = j - 1;
+       //System.out.println("one   " + i + "  sb   "+ sb);
+        return true;
+    }
+    private boolean check_sen_two (String sen, int t, char c)
+    {
+       // System.out.println("check_sen_two" +  " char  " + c + "  i == " + t);
+        int j = t;
+        int k = i + 1;
+        int ch = 0;
+        boolean upper = false;
+        boolean check = true;
+        for (j = i + 1; j < sen.length(); j++)
+        {
+            if (sen.charAt(j) >= 'a' && sen.charAt(j) <= 'z' && sen.charAt(j) != c)
+            {
+                // System.out.println("two for  char  " + sen.charAt(j) + " j == " + j + " i == " + i);
+                if (hs.contains(sen.charAt(j)))
+                    return false;
+                else
+                    hs.add(sen.charAt(j));
+              // System.out.println("two for  char  " + sen.charAt(j));
+                if (ch == 0)
+                {
+                    sb.append(String.valueOf(sen.charAt(j - 1)));
+                    check = check_sen_one(sen, j, sen.charAt(j));
+                    j = i - 1;
+                    ch = 1;
+                }
+                upper = true;
+                continue;
+            }
+            if (sen.charAt(j) == c)
+                break;
+        }
+        i = j;
+        
+        if (upper == false)
+        {
+            if (k == j)
+                return false;
+            while (k < j && sen.charAt(k) != 'c')
+            {
+                if (sen.charAt(k) >= 'a' && sen.charAt(k) <= 'z')
+                    return false;
+                sb.append(String.valueOf(sen.charAt(k)));
+                k++;
+            }
+            sb.append(" ");
+            i = k;
+        }
+       // System.out.println("two finish i   " + i);
+        return check;
+    }
+    //check_false(sentence.charAt(i), i + 1 , sentence))
+    private boolean check_false(char a, int t, String sen)
+    {
+        for (int i = t; i < sen.length(); i++)
+        {
+            if (sen.charAt(i) == a)
+                return false;
+        }
+        return true;
+    }
+    private boolean no_lower(String sentence)
+    {
+        for (int t = 0; t < sentence.length(); t++)
+        {
+            if (sentence.charAt(t) >= 'a' && sentence.charAt(t) <= 'z' )
+                return false;       
+        }
+        return true;
+    }
+    // check_char(sentence, sentence.charAt(i)
+    private boolean check_char(String sentence, char c)
+    {
+        int cnt = 0;
+       // System.out.println("check char   " + c);
+        for (int t = 0; t < sentence.length(); t++)
+        {
+            if (sentence.charAt(t) == c)
+                cnt++;
+            if (cnt > 2)
+                return false;
+        }
+        if (cnt == 2)
+        {
+           // System.out.println("do two ==  ");
+            return true;
+        }
+            
+        return false;
+    }
+    public String solution(String sentence) {
+        String answer = "invalid";
+        boolean upper = false;
+        sb = new StringBuilder();
+        hs = new HashSet<Character>();
+        i = 0;
+        if (no_lower(sentence))
+            return sentence;
+        while (i < sentence.length())
+        {
+            //System.out.println(i);
+            //AaAaA
+            if (i - 1 >= 0 && i + 1 < sentence.length() && sentence.charAt(i) >= 'A' && sentence.charAt(i) <= 'Z'
+               && sentence.charAt(i - 1) >= 'A' && sentence.charAt(i - 1) <= 'Z' && upper == true 
+               && sentence.charAt(i + 1) >= 'a' && sentence.charAt(i + 1) <= 'z')
+            {
+                sb.append(String.valueOf(" " + sentence.charAt(i)));
+            }
+     
+            else if(sentence.charAt(i) >= 'a' && sentence.charAt(i) <= 'z' 
+               && !hs.contains(sentence.charAt(i)) && check_char(sentence, sentence.charAt(i)))
+            {
+                hs.add(sentence.charAt(i));
+                upper = false;
+                sb.append(" ");
+                if (!check_sen_two(sentence, i, sentence.charAt(i)))
+                    return answer;
+            }
+            else if(sentence.charAt(i) >= 'a' && sentence.charAt(i) <= 'z' 
+               && (hs.contains(sentence.charAt(i)) || upper == false))
+            {
+              // System.out.println("solution while   " + sentence.charAt(i) + " i == " + i);
+                return answer;
+            } 
+            else if(sentence.charAt(i) >= 'a' && sentence.charAt(i) <= 'z' 
+               && !hs.contains(sentence.charAt(i)) && upper == true && i + 2 < sentence.length()
+                   && ((sentence.charAt(i+2) == sentence.charAt(i)) 
+                       || check_false(sentence.charAt(i), i + 1 , sentence)) )
+            {
+                hs.add(sentence.charAt(i));
+                upper = false;
+                if (!check_sen_one(sentence, i, sentence.charAt(i)))
+                    return answer;
+            }
+            // aAAAAa   aAbAbAbAa
+            else if (sentence.charAt(i) >= 'A' && sentence.charAt(i) <= 'Z')
+            {
+                upper = true;
+                sb.append(String.valueOf(sentence.charAt(i)));
+            }
+            i++;
+        }
+        answer = sb.toString().trim().replaceAll("  ", " ");
+        return answer;
+    } // solution end
+}
+```
