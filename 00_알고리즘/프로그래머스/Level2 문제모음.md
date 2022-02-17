@@ -2905,3 +2905,134 @@ class Solution {
   }
 }
 ```
+
+### 프로그래머스 (중고나라)
+
+> visit 을 따로 복사해서 사용해야한다!!
+>
+> 만약 복사하지 않으면 boolean visit 값을 공유한다.
+
+```java
+package baekjoon;
+
+
+class Solution {
+    int des_x;
+    int des_y;
+    int result;
+    public int solution(int[][] board, int c) {
+        int answer = 0;
+        // 길 = 0 , 장애물 = 1, 로봇 위치 = 2, 로봇 도착 = 3
+        int robot_x = 0;
+        int robot_y = 0;
+        des_x = 0;
+        des_y = 0;
+        result = Integer.MAX_VALUE;
+        boolean[][] visit = new boolean[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++)
+        {
+            for (int j = 0; j < board[0].length; j++)
+            {
+                if (board[i][j] == 2)
+                {
+                    robot_x = j;
+                    robot_y = i;
+                }
+                else if (board[i][j] == 3)
+                {
+                    des_x = j;
+                    des_y = i;
+                }
+            }
+        } // for end
+        find_des(board, robot_x, robot_y, c, 0, visit);
+        answer = result;
+        return answer;
+    } // solution end
+
+    private void find_des(int[][] board, int robot_x, int robot_y, int c, int cnt, boolean[][] visit)
+    {
+    //    System.out.println(cnt);
+    	if (cnt > result)
+    		return;
+        if (board[robot_y][robot_x] == 1)
+        {
+           // System.out.println("cnt=  "+cnt);
+            cnt =  cnt + c;
+        }
+        if (board[robot_y][robot_x] == 3)
+        {
+          // System.out.println(robot_x + "  " + robot_y + "  " + cnt);
+           result = Math.min(cnt, result);
+           return;
+        }
+        if (visit[robot_y][robot_x] == false)
+        {
+            visit[robot_y][robot_x] = true;
+            boolean[][] v = new boolean[board.length][board[0].length];
+            for (int i = 0; i < board.length; i++)
+            {
+            	for (int j = 0; j < board[0].length; j++)
+            	{
+            		if (visit[i][j] == true)
+            			v[i][j] = true;
+            	}
+            }
+             System.out.println("check ==  " +robot_x + "  " + robot_y + "  " + cnt);
+            // 위로 이동
+            if (robot_y > 0)
+                find_des(board, robot_x, robot_y - 1, c, cnt + 1, v);
+            // 아래로 이동
+            if (robot_y < board.length - 1)
+                find_des(board, robot_x, robot_y + 1, c, cnt + 1, v);
+            // 좌로 이동
+            if (robot_x > 0)
+            {
+            	//System.out.println("left ======  " +robot_x + "  " + robot_y + "  " + cnt);
+//            	System.out.println("left ======  " + visit[robot_y][robot_x - 1]);
+                find_des(board, robot_x - 1, robot_y, c, cnt + 1, v);
+            }
+            // 우로 이동
+            if (robot_x < board[0].length - 1)
+            {
+//            	System.out.println("right ======  " +robot_x + "  " + robot_y + "  " + cnt);
+            	find_des(board, robot_x + 1, robot_y, c, cnt + 1, v);
+            }
+            return;
+        }
+
+        return;
+    }
+} // class end
+
+public class programmers {
+
+	public static void main(String[] args) {
+
+//		String[] id_list1 = {"muzi", "frodo", "apeach", "neo"}; //1  , 6
+//		String[] report1 = {"muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"}; //1  , 6
+//		int k1 = 2;
+//		
+//		String[] id_list2 = {"con", "ryan"}; //1  , 6
+//		String[] report2 = {"ryan con", "ryan con", "ryan con", "ryan con"}; //1  , 6
+//		int k2 = 3;
+		
+//		int n1 = 1102010102;
+//		int k1 = 3;
+//		
+//		int n2 = 11;
+//		int k2 = 2;
+		
+		
+		int [][] n3 = {{0,0,0,0,2,0,0,0,0,0},{0,0,1,1,1,1,1,0,0,0},{0,0,1,1,1,1,1,1,0,0},{0,0,1,1,1,1,1,0,1,0},{0,0,1,1,1,1,1,0,0,0},{0,0,0,0,3,0,0,0,1,0}};
+		int k3 = 2;
+		
+		Solution s = new Solution();
+		int answer = s.solution(n3, k3);
+		System.out.println("result = " + answer);
+	}
+
+}
+
+```
+
