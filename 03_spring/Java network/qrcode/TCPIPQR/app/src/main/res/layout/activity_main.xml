@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/tx_list"
+        android:layout_width="match_parent"
+        android:layout_height="117dp"
+        android:background="#E6C4C4"
+        android:hint="List" />
+
+    <EditText
+        android:id="@+id/et_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Input Ip"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Input Msg"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="clickBt"
+        android:text="Button" />
+
+    <TextView
+        android:id="@+id/tx_msg"
+        android:layout_width="match_parent"
+        android:layout_height="329dp"
+        android:background="#C9DEEF"
+        android:hint="Msg" />
+
+    <Button
+        android:id="@+id/qr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="ckqr"
+        android:text="QRScan" />
+</LinearLayout>
