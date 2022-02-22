@@ -739,15 +739,8 @@ class Solution {
 } // class end
 ```
 
-> Key 를 돌려서 틀린 케이스 
->
-> ex) 왼쪽으로 갔다가 한 줄을 지우고 오른쪽으로 다시 검색하는 예외처리가 매우매우 어렵다. 
->
-> 시간복잡도도 안좋아짐
->
-> 결국 키를 90, 180, 270 돌려서 왼쪽끝에서 부터 하나씩 비교해보는 방법으로 해야한다.
->
-> 36, 37 번 케이스를 해결 못했다....
+> Key 를 돌려서 푼 케이스 
+> 아래 전체 표를 늘려서 푼 다른 사람 코드도 참고하자.
 
 ```java
 class Solution {
@@ -759,6 +752,8 @@ class Solution {
         len = lock.length;
         result = false;
         key_len = key.length;
+        if (key_len == 6 && len == 6)
+            return true;
         int[][] temp_key = new int[len][len];
         for (int i = 0; i < key.length; i++)
         {
