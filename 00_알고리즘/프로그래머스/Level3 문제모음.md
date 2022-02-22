@@ -198,6 +198,7 @@ public int solution(String[] lines) {
 ### 브라이언의 고민
 
 ```java
+> 처음 틀린코드...
 import java.util.*;
 class Solution {
     int i;
@@ -379,8 +380,7 @@ class Solution {
 }
 ```
 
-
-### 브라이언의 고민
+> 다른사람 코드 참고
 
 ```java
 import java.util.*;
@@ -501,4 +501,494 @@ public class Solution {
     }
 }
 
+```
+
+### 자물쇠와 열쇠
+
+> key 를 회전시켜야하는데 lock을 회전시켜서 틀린 코드
+
+```java
+class Solution {
+    boolean result;
+    int len;
+    public boolean solution(int[][] key, int[][] lock) {
+        boolean answer = true;
+        len = lock.length;
+        result = false;
+        int c = 0;
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                if (lock[i][j] == 0)
+                    c = 1;
+            }
+        }
+        if (c == 0)
+            return true;
+        
+        // lock
+        // change up down left right
+        // check
+        check(lock, key);
+        change_up(lock, key);
+        change_down(lock, key);
+        
+        // 90 lock
+        int[][] arr_90 = change_arr(lock);
+        check(arr_90, key);
+        change_up(arr_90, key);
+        change_down(arr_90, key);
+        // 180 lock
+        int[][] arr_180 = change_arr(arr_90);
+        check(arr_180, key);
+        change_up(arr_180, key);
+        change_down(arr_180, key);
+        // 270 lock
+        int[][] arr_270 = change_arr(arr_180);
+        check(arr_270, key);
+        change_up(arr_270, key);
+        change_down(arr_270, key);
+        
+        answer = result;
+        return answer;
+    } //solution end
+    
+    private void check(int[][] lock, int[][] key)
+    {
+        int c = 0;
+        roop:for (int i = 0; i < key.length; i++)
+        {
+            for (int j = 0; j <  key.length; j++)
+            {
+                if (lock[i][j] == 0 && key[i][j] == 0)
+                {
+                    c = 1;
+                    break roop;
+                }
+            }
+        }
+        roop2:for (int i = 0; i < len; i++)
+        {
+            for (int j = key.length; j < len; j++)
+                if (lock[i][j] == 0)
+                {
+                    c = 1;
+                    break roop2;
+                }
+        }
+        roop3:for (int i = 0; i < len; i++)
+        {
+            for (int j = key.length; j < len; j++)
+                if (lock[j][i] == 0)
+                {
+                    c = 1;
+                    break roop3;
+                }
+        }
+        if (c == 0)
+            result = true;
+    } // check_end
+    
+    private void change_right(int[][] lock, int[][] key)
+    {
+        int arrtemp[][] = new int[len][len];
+        for (int i = 0; i < len; i++)
+        {
+            if (lock[i][len - 1] == 0)
+                return;
+        }
+        // System.out.println("right    ");
+        for (int i = len - 1; i > 0; i--)
+        {
+            for (int j = 0; j < len - 1; j++)
+            {
+                arrtemp[j][i] = lock[j][i - 1];
+            }
+        }
+        for (int i = 0; i < len; i++)
+        {
+            arrtemp[i][0] = 1;
+        }
+        check(arrtemp, key);
+        change_right(arrtemp, key);
+    } // change_right end
+    
+    private void change_left(int[][] lock, int[][] key)
+    {
+        int arrtemp[][] = new int[len][len];
+        for (int i = 0; i < len; i++)
+        {
+            if (lock[i][0] == 0)
+                return;
+        }
+        // System.out.println("left  " );
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                arrtemp[j][i] = lock[j][i + 1];
+            }
+        }
+        for (int i = 0; i < len; i++)
+        {
+            arrtemp[i][len - 1] = 1;
+        }
+        check(arrtemp, key);
+        change_left(arrtemp, key);
+    } // change_left end
+    
+    
+    private void change_down(int[][] lock, int[][] key)
+    {
+        int temp[][] = new int[len][len];
+        int temp2[][] = new int[len][len];
+        int arrtemp[][] = new int[len][len];
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                temp[i][j] = lock[i][j];
+                temp2[i][j] = lock[i][j];
+            }
+        }
+        change_left(temp2, key);
+        change_right(temp, key);
+        for (int i = 0; i < len; i++)
+        {
+            if (lock[len - 1][i] == 0)
+                return;
+        }
+        // System.out.println("DOWN");
+        for (int i = len - 1; i > 0; i--)
+        {
+            for (int j = 0; j < len; j++)
+                arrtemp[i][j] = lock[i - 1][j];
+        }
+        for (int i = 0; i < len; i++)
+            arrtemp[0][i] = 1;
+        check(arrtemp, key);
+        change_down(arrtemp, key);
+
+    } // change_down end
+    
+    private void change_up(int[][] lock, int[][] key)
+    {
+        int temp[][] = new int[len][len];
+        int temp2[][] = new int[len][len];
+        int arrtemp[][] = new int[len][len];
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                temp[i][j] = lock[i][j];
+                temp2[i][j] = lock[i][j];
+            }
+        }
+        
+        change_left(temp2, key);
+        change_right(temp, key);
+        for (int i = 0; i < len; i++)
+        {
+            if (lock[0][i] == 0)
+                return;
+        }
+        // System.out.println("UP");
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = 0; j < len; j++)
+                arrtemp[i][j] = lock[i + 1][j];
+        }
+        for (int i = 0; i < len; i++)
+            arrtemp[len - 1][i] = 1;
+        check(arrtemp, key);
+        change_up(arrtemp, key);
+    } // change_up end
+    
+    private int[][] change_arr(int[][] lock)
+    {
+        int num = len / 2;
+        int[][] temp = new int[len][len];
+        int t = 0;
+        while (t < num)
+        {
+            for (int i = t; i < len - t; i++)
+            {
+                temp[t][i] = lock[len - 1 - i][t];
+                temp[i][t] = lock[len - 1 - t][i];
+                temp[len - 1 - t][i] = lock[len - 1 - i][len - 1 - t];
+                temp[len - 1 - i][len - 1 - t] = lock[t][len - 1 - i];
+            }
+            t++;
+        }
+        if (num % 2 == 1)
+        {
+            temp[num][num] = lock[num][num];
+        }
+        // for (int i = 0; i < len; i++)
+        // {
+        //     for (int j = 0; j < len; j++)
+        //         System.out.print(temp[i][j]);
+        //     System.out.println();
+        // }
+        // System.out.println();
+        
+        return temp;
+    } // change arr end
+    
+} // class end
+```
+
+> Key 를 돌려서 틀린 케이스 
+>
+> ex) 왼쪽으로 갔다가 한 줄을 지우고 오른쪽으로 다시 검색하는 예외처리가 매우매우 어렵다. 
+>
+> 시간복잡도도 안좋아짐
+>
+> 결국 키를 90, 180, 270 돌려서 왼쪽끝에서 부터 하나씩 비교해보는 방법으로 해야한다.
+>
+> 36, 37 번 케이스를 해결 못했다....
+
+```java
+class Solution {
+    boolean result;
+    int len;
+    int key_len;
+    public boolean solution(int[][] key, int[][] lock) {
+        boolean answer = true;
+        len = lock.length;
+        result = false;
+        key_len = key.length;
+        int[][] temp_key = new int[len][len];
+        for (int i = 0; i < key.length; i++)
+        {
+            for (int j = 0; j < key.length; j++)
+                temp_key[i][j] = key[i][j];
+        }
+        // change up down left right
+        // check
+        if (check_key(temp_key))
+        {
+            // key
+            key_up(lock, temp_key);
+            key_down(lock, temp_key);
+            
+            // 90 key
+            int[][] arr_90 = change_arr(temp_key);
+            key_up(lock, arr_90);
+            key_down(lock, arr_90);
+
+            // 180 key
+            int[][] arr_180 = change_arr(arr_90);
+            key_up(lock, arr_180);
+            key_down(lock, arr_180);
+            
+            // 270 key
+            int[][] arr_270 = change_arr(arr_180);
+            key_up(lock, arr_270);
+            key_down(lock, arr_270);
+        }
+        answer = result;
+        return answer;
+    } //solution end
+    
+    private void key_right(int[][] lock, int[][] key)
+    {
+        check(lock, key);
+        int[][] temp_key = new int[len][len];
+        for (int i = len - 1; i > 0; i--)
+        {
+            for (int j = 0; j < len; j++)
+                temp_key[j][i] = key[j][i - 1];
+        }
+        if (check_key(temp_key) && result == false)
+            key_right(lock, temp_key);
+    } // key_right end
+    
+    private void key_left(int[][] lock, int[][] key)
+    {
+        int[][] temp_key = new int[len][len];
+        check(lock, key);
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = 0; j < len; j++)
+                temp_key[j][i] = key[j][i + 1];
+        }
+        if (check_key(temp_key) && result == false)
+            key_left(lock, temp_key);
+    } // key_left end
+    
+    private void key_up(int[][] lock, int[][] key)
+    {
+        key_left(lock, key);
+        key_right(lock, key);
+        int[][] temp_key = new int[len][len];
+        for (int i = 0; i < len - 1; i++)
+        {
+            for (int j = 0; j < len; j++)
+                temp_key[i][j] = key[i + 1][j];
+        }
+        check(lock, temp_key);
+        if (check_key(temp_key) && result == false)
+            key_up(lock, temp_key);
+    } // key_up end
+    
+    private void key_down(int[][] lock, int[][] key)
+    {
+        key_left(lock, key);
+        key_right(lock, key);
+        int[][] temp_key = new int[len][len];
+        for (int i = len - 1; i > 0; i--)
+        {
+            for (int j = 0; j < len; j++)
+                temp_key[i][j] = key[i - 1][j];
+        }
+        check(lock, temp_key);
+        if (check_key(temp_key) && result == false)
+            key_down(lock, temp_key);
+    } // key_down end
+    
+    private boolean check_key(int[][] key)
+    {
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                if (key[i][j] == 1)
+                    return true;
+            }
+        }
+        return false;
+    } // check_key end
+    
+    private void check(int[][] lock, int[][] key)
+    {
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                if (lock[i][j] + key[i][j] != 1)
+                    return;
+            }
+        }
+        result = true;
+    } // check_end
+    
+    
+    private int[][] change_arr(int[][] lock)
+    {
+        int num = len / 2;
+        int[][] temp = new int[len][len];
+        int t = 0;
+        while (t < num)
+        {
+            for (int i = t; i < len - t; i++)
+            {
+                temp[t][i] = lock[len - 1 - i][t];
+                temp[i][t] = lock[len - 1 - t][i];
+                temp[len - 1 - t][i] = lock[len - 1 - i][len - 1 - t];
+                temp[len - 1 - i][len - 1 - t] = lock[t][len - 1 - i];
+            }
+            t++;
+        }
+        if (num % 2 == 1)
+            temp[num][num] = lock[num][num];
+        return temp;
+    } // change arr end
+    
+} // class end
+```
+
+> 다른 사람코드
+> locksize + keysize * 2  만큼의 표를 만든 후
+> key의 위치를 옮겨가며 비교하는 코드
+``` java
+class Solution {
+    private int lockSize;
+    private int keySize;
+    private int lockCoordStart;
+    private int lockCoordEnd;
+    private int[][] lockWithSpace;
+    private int numHoles;
+    private int[][][] keyRotations;
+
+    public boolean solution(int[][] key, int[][] lock) {
+        lockSize = lock.length;
+        keySize = key.length;
+        lockCoordStart = keySize - 1;
+        lockCoordEnd = lockSize + keySize - 2;
+        lockWithSpace = new int[lockSize + (keySize - 1) * 2][lockSize + (keySize - 1) * 2];
+        numHoles = 0;
+        for (int y = lockCoordStart; y <= lockCoordEnd; y++) {
+            for (int x = lockCoordStart; x <= lockCoordEnd; x++) {
+                lockWithSpace[y][x] = lock[y - lockCoordStart][x - lockCoordStart];
+                if (lockWithSpace[y][x] == 0) numHoles++;
+            }
+        }
+        // rotate
+        keyRotations = new int[4][keySize][keySize];
+        makeKeyRotations(key);
+
+        for (int y = 0; y <= lockCoordEnd; y++) {
+            for (int x = 0; x <= lockCoordEnd; x++) {
+                if (isSolvable(y, x)) return true;
+            }
+        }
+        return false;
+    }
+
+    private void makeKeyRotations(int[][] key) {
+        keyRotations[0] = key;
+        for (int rot = 1; rot < 4; rot++) {
+            for (int y = 0; y < keySize; y++) {
+                for (int x = 0; x < keySize; x++) {
+                    keyRotations[rot][y][x] = keyRotations[rot - 1][x][y];
+                }
+            }
+            for (int y = 0; y < keySize; y++) {
+                for (int x = 0; x < keySize / 2; x++) {
+                    int tmp = keyRotations[rot][y][x];
+                    keyRotations[rot][y][x] = keyRotations[rot][y][keySize - 1 - x];
+                    keyRotations[rot][y][keySize - 1 - x] = tmp;
+                }
+            }
+        }
+    }
+
+    private boolean isSolvable(int keyLUY, int keyLUX) {
+        boolean breakFlag = false;
+        // System.out.println("[" + keyLUY + ", " + keyLUX + "]");
+        // System.out.println("<" + lockCoordStart + " / " + lockCoordEnd + ">");
+        for (int rot = 0; rot < 4; rot++) {
+            // System.out.println(rot);
+            int cnt = 0;
+            int yStart = Math.max(keyLUY, lockCoordStart);
+            int xStart = Math.max(keyLUX, lockCoordStart);
+            int yEnd = Math.min(keyLUY + keySize - 1, lockCoordEnd);
+            int xEnd = Math.min(keyLUX + keySize - 1, lockCoordEnd);
+            for (int y = yStart; y <= yEnd; y++) {
+                for (int x = xStart; x <= xEnd; x++) {
+                    int lockBump = lockWithSpace[y][x];
+                    int keyBump = keyRotations[rot][y - keyLUY][x - keyLUX];
+                    // System.out.println(y + ", " + x + ": " + lockBump + " " + keyBump);
+                    if (keyBump == lockBump) {
+                        breakFlag = true;
+                        break;
+                    }
+                    if (keyBump == 1 && lockBump == 0) cnt++;
+                }
+                if (breakFlag) {
+                    break;
+                }
+            }
+            // System.out.println("cnt: " + cnt);
+            if (breakFlag) {
+                breakFlag = false;
+            } else if (cnt == numHoles) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
 ```
