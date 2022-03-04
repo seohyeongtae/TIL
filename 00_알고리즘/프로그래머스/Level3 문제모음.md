@@ -739,7 +739,8 @@ class Solution {
 } // class end
 ```
 
-> Key 를 돌려서 푼 케이스 
+> Key 를 회전 시켜서 푼 케이스 
+> 36, 37번 테스트 케이스는 통과 못했다.. key_len ==6 len == 6 인 경우 인데...
 > 아래 전체 표를 늘려서 푼 다른 사람 코드도 참고하자.
 
 ```java
@@ -985,5 +986,59 @@ class Solution {
         }
         return false;
     }
+}
+```
+
+### [1차] 셔틀버스
+``` java
+import java.util.*;
+import java.text.*;
+class Solution {
+    public String solution(int n, int t, int m, String[] timetable) {
+        String answer = "";
+        int total_cus = n * m;
+        int total_time = (n - 1) * t;
+        
+        String start_shuttle = "09:00";
+        String finish_shuttle = String.format("%02d:%02d", 9 + total_time / 60, total_time % 60);
+        System.out.println(finish_shuttle);
+        Arrays.sort(timetable);
+        
+        // for (String a : timetable)
+        //     System.out.println(a);
+        // 셔틀운행횟수 = n  셔틀운행간격 = t  셔틀최대크루 = m
+        int cnt = 0;
+        int i = 0;
+        while (i < timetable.length && start_shuttle.compareTo(timetable[i]) > 0)
+        {
+            cnt++;
+            if (cnt == total_cus)
+            {
+                String[] temp_split = timetable[i].split(":");
+                int time = Integer.parseInt(temp_split[0]) * 60 + Integer.parseInt(temp_split[1]) - 1;
+                return String.format("%02d:%02d", time / 60 , time % 60);
+            }
+            i++;
+        }
+        if (cnt <= m)
+            total_cus -= m;
+        else
+            total_cus -= cnt;
+        cnt = 0;
+        while (i < timetable.length)
+        {
+            cnt++;
+            if (finish_shuttle.compareTo(timetable[i]) < 0)
+                    return finish_shuttle;
+            if (cnt == total_cus || i == timetable.length - 1)
+            {
+                String[] temp_split = timetable[i].split(":");
+                int time = Integer.parseInt(temp_split[0]) * 60 + Integer.parseInt(temp_split[1]) - 1;
+                return String.format("%02d:%02d", time / 60 , time % 60);
+            }
+            i++;
+        }
+        return finish_shuttle;
+    } // solution end
 }
 ```
