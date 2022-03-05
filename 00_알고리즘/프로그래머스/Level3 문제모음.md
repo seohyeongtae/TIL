@@ -1042,3 +1042,146 @@ class Solution {
     } // solution end
 }
 ```
+
+
+### 표편집
+
+> 너무 어렵게 생각하려고 하지 말고 문제를 잘읽자 -> Z 시 최근 상태를 되돌리는 거기 때문에
+> 연결리스트를 쉽게 구현 할 수있다!! 
+> S_List array 배열로 구현하고 removed에 따라 결과 출력 (StirngBuilder 를 사용하야 > > 시간 초과가 안뜬다.)
+> 배열로 처리하면 현재 head가 어떤것인지 (기존에 풀었던 복잡한 방식) 그때그때 체크를 안해도된다. 
+```java
+import java.util.*;
+class Solution {
+    public String solution(int n, int k, String[] cmd) {
+        String answer = "";
+        // 연결 리스트 구현
+        S_List[] list_arr = new S_List[n];
+
+        for (int i = 0; i < n; i++)
+            list_arr[i] = new S_List();
+        for (int i = 1; i < n; i++)
+        {
+            list_arr[i - 1].tail = list_arr[i];
+            list_arr[i].head = list_arr[i - 1];
+        }
+        S_List start = list_arr[k];
+        // cmd 처리
+        Stack<S_List> del = new Stack<S_List>();
+        for (int i = 0; i < cmd.length; i++)
+        {
+            String[] cur_cmd = cmd[i].split(" ");
+            if (cur_cmd[0].equals("U")) {
+                for (int t = 0; t < Integer.parseInt(cur_cmd[1]); t++) {
+                    start = start.head;
+                }
+               // System.out.println("UP 위치 = " + start.index);
+            } 
+            else if (cur_cmd[0].equals("D")) {
+                for (int t = 0; t < Integer.parseInt(cur_cmd[1]); t++) {
+                    start = start.tail;
+                } 
+                //System.out.println("DOWN 위치 = " + start.index);   
+            } 
+            else if (cur_cmd[0].equals("C")) {
+                del.push(start);
+                start.removed = true;
+                S_List up = start.head;
+                S_List down = start.tail;
+                
+                if (up != null)
+                    up.tail = down;
+                if (down != null)
+                {
+                    down.head = up;
+                    start = down;
+                }
+                else
+                    start = up;
+            } 
+            else if (cur_cmd[0].equals("Z")) {
+                if (!del.empty())
+                {
+                    S_List sl = del.pop();
+                    sl.removed = false;
+                    S_List up = sl.head;
+                    S_List down = sl.tail;
+                    if (up != null)
+                        up.tail = sl;
+                    if (down != null)
+                        down.head = sl;
+                }
+            }
+        } // big for end
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++)
+        {
+            if (list_arr[i].removed)
+                sb.append("X");
+            else
+                sb.append("O");
+        }
+        answer = sb.toString();
+        return answer;
+    } // solution end
+} // solution class end
+
+class S_List{
+    int index;
+    S_List head;
+    S_List tail;
+    boolean removed;
+} // list class end
+```
+> 다른사람 코드
+> LinkedList 를 사용 안하고 index로 처리를 하였다
+> C -> 전체 길이 -- 하고   stack 에 현재 index 위치 push  
+> Z -> 전체 길이 ++ 이후 전체 길이만큼 sb 에 O 입력하고 
+> stack 에 들어있는 intValue 에 X 삽입...
+> strBuild.insert(removeInfo.pop().intValue(), "X"); 사용
+
+```java
+
+import java.util.Stack;
+
+class Solution {
+    public String solution(int n, int k, String[] cmd) {
+
+
+        Stack<Integer> removeInfo=new Stack<>();
+        int len=n;
+        int cursor=k;
+        for (int i = 0; i < cmd.length; i++) {
+            char operation=cmd[i].charAt(0);
+            if (operation=='D'){
+                cursor+=Integer.parseInt(cmd[i].substring(2));
+            }
+            else if(operation=='U'){
+                cursor-=Integer.parseInt(cmd[i].substring(2));
+            }
+            else if(operation=='C'){
+                removeInfo.add(cursor);
+                len--;
+                if(cursor==len) cursor--;
+            }
+            else if(operation=='Z'){
+                if(removeInfo.pop()<=cursor) cursor++;
+                len++;
+            }
+        }
+
+        StringBuilder strBuild=new StringBuilder();
+        for (int j = 0; j < len; j++) {
+            strBuild.append("O");
+        }
+
+        while(!removeInfo.isEmpty()){
+            strBuild.insert(removeInfo.pop().intValue(), "X");
+        }
+
+        String answer = strBuild.toString();
+        return answer;
+    }
+}
+
+```
