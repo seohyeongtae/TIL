@@ -1185,3 +1185,103 @@ class Solution {
 }
 
 ```
+
+### 보석쇼핑
+> 정확성 100, 효율성이 틀린 코드 단순 for문 사용
+```java
+
+import java.util.*;
+
+class Solution {
+    int size;
+    int len;
+    int result[];
+    
+    private void check_gems(String[] gems, int n)
+    {
+        HashSet<String> arr = new HashSet<String>();
+        for (int i = n; i < gems.length; i++)
+        {
+            if (i - n >= len)
+                break;
+            if (!arr.contains(gems[i]))
+                arr.add(gems[i]);
+            if (arr.size() == size)
+            {
+                if (i - n < len)
+                {
+                    len = i - n;
+                    result[0] = n + 1;
+                    result[1] = i + 1;
+                }
+                break;
+            }
+        }
+    } // check_gems end
+    public int[] solution(String[] gems) {
+        int[] answer = {};
+        result = new int[2];
+        HashSet<String> arr = new HashSet<String>();
+        len = gems.length;
+        for (int i = 0; i < gems.length; i ++)
+        {
+            if (!arr.contains(gems[i]))
+                arr.add(gems[i]);
+        }
+        size = arr.size();
+        for (int i = 0; i <= gems.length - size; i++)
+            check_gems(gems, i);
+        answer = result;
+        return answer;
+    } // solution end
+}
+
+```
+
+> HashSet, HashMap, Queue 을 사용한 통과 코드
+
+```java
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] gems) {
+        int[] answer = new int[2];
+        HashSet<String> arr = new HashSet<String>();
+        int len = gems.length;
+        for (int i = 0; i < gems.length; i++)
+        {
+            if (!arr.contains(gems[i]))
+                arr.add(gems[i]);
+        }
+        int size = arr.size();
+        
+        int start = 0;
+        HashMap<String, Integer> hm = new HashMap<String, Integer>();
+        Queue<String> q = new LinkedList<String>();
+        for (int i = 0; i < gems.length; i++)
+        {
+            q.add(gems[i]);
+            hm.put(gems[i], hm.getOrDefault(gems[i], 0) + 1);
+            if (hm.size() == size)
+            {
+                if (q.peek() != null)
+                {
+                    while (hm.get(q.peek()) > 1)
+                    {
+                        hm.put(q.peek(), hm.get(q.peek()) - 1);
+                        q.poll();
+                        start++;
+                    }
+                    if (i - start < len)
+                    {
+                        answer[0] = start + 1;
+                        answer[1] = i + 1; 
+                        len = i - start;
+                    }
+                }
+            }
+        }
+        return answer;
+    } // solution end
+}
+```
