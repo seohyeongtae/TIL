@@ -1285,3 +1285,95 @@ class Solution {
     } // solution end
 }
 ```
+
+### 불량사용자
+> dfs와 hashset 을 이용하여 풀이함.
+> 처음에는 두개의 hashmap 으로 풀고자 하였으나,
+> ["frodo", "fradi", "crodo", "abc123", "frodoc"]  ["fr*d*", "*rodo", "******", "******"]	
+> 와 같이 "fr*d*", "*rodo" 두곳 모두 해당될 경우 체크가 어려우며 배열의 크기도 8개 밖에 되지 않기 때문에 dfs를 사용했다.
+
+```java
+import java.util.*;
+class Solution {
+    HashSet<String> hs;
+    
+    private void dfs(String[] user_id, String[] banned_id, int depth, boolean[] visit)
+    {
+        if (depth == banned_id.length)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < user_id.length; i++)
+            {
+                if (visit[i] == true)
+                    sb.append(user_id[i]);
+            }
+            hs.add(sb.toString());
+            return;
+        }
+        for (int i = 0; i < user_id.length; i++)
+        {
+            if (visit[i] == false && user_id[i].length() == banned_id[depth].length())
+            {
+                for (int j = 0; j < user_id[i].length(); j++)
+                {
+                    if (banned_id[depth].charAt(j) != '*' 
+                        && banned_id[depth].charAt(j) != user_id[i].charAt(j))
+                    {
+                        break;
+                    }
+                    if (j == user_id[i].length() - 1)
+                    {
+                        visit[i] = true;
+                        dfs(user_id, banned_id, depth + 1, visit);
+                        visit[i] = false;
+                    }
+                }
+            }
+        }
+    }
+    
+    public int solution(String[] user_id, String[] banned_id) {
+        int answer = 0;
+        boolean[] visit = new boolean[user_id.length];
+        hs = new HashSet<String>();
+        dfs(user_id, banned_id, 0, visit);
+        answer = hs.size();
+        return answer;
+    } // solution end
+}
+```
+
+> 비트마스크를 이용한 다른사람 코드
+```java
+import java.util.HashSet;
+import java.util.Set;
+
+public class Solution {
+
+    Set<Integer> set;
+
+    public int solution(String[] user_id, String[] banned_id) {
+        set = new HashSet<>();
+
+        go(0, user_id, banned_id, 0);
+
+        return set.size();
+    }
+
+    public void go(int index, String[] user_id, String[] banned_id, int bit) {
+
+        if(index == banned_id.length) {
+            set.add(bit);
+            return;
+        }
+
+        String reg = banned_id[index].replace("*", "[\\w\\d]");
+        for(int i=0; i<user_id.length; ++i) {
+            if((((bit>>i) & 1) == 1) || !user_id[i].matches(reg)) continue;
+            go(index + 1, user_id, banned_id, (bit | 1<<i));
+        }
+
+    }
+
+}
+```
