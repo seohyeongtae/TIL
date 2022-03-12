@@ -1497,3 +1497,55 @@ public class Solution {
 출처: https://tosuccess.tistory.com/144 [EI_HJ]
 
 ```
+
+
+### 금과 은 운반하기
+> 이분 탐색 문제
+> https://prgms.tistory.com/101 문제해설
+> https://hyunjiishailey.tistory.com/431 문제풀이
+> a<=g_max, b <= s_max, a+b <= g_max + s_mix = g_min + s_max 을 만족해야 한다.
+
+```java
+import java.util.*;
+class Solution {
+    public long solution(int a, int b, int[] g, int[] s, int[] w, int[] t) {
+        long answer = -1;
+        // a 필요한 금  b 필요한 은  g[i] 보유 금   s[i] 보유 은  w[i] 용적량  t[i] 시간
+        // 금과 은을 따로 계산해서 둘 중 최대 걸린 시간을 리턴해야 한다.
+        // 편도, 왕복 따로 고려해야 한다. 이분탐색
+        // 기준은 시간
+        int len = g.length;
+        long max = (long)(1e9 * 2 * 1e5*2);
+        long min = 0;
+        long gold_max, silver_max, gsm_max; // 골드, 실버, 골드+실버 최대치
+        long gold_c_weight, sliver_c_weight;  // 시간 당 몇번 옮길 수 있는지
+        long move_cnt;
+        long w_max;
+        long left = 0;
+        long right = max;
+        
+        while (left <= right)
+        {
+            long mid = (left + right) / 2;
+            gold_max = silver_max = gsm_max = 0;
+            // a 필요한 금  b 필요한 은  g[i] 보유 금   s[i] 보유 은  w[i] 용적량  t[i] 시간
+            for (int i = 0; i < len; i++)
+            {
+                move_cnt = (long)Math.ceil((double)(mid / t[i]) / 2);
+                w_max = move_cnt * w[i];
+                gold_max += Math.min(w_max, g[i]);
+                silver_max += Math.min(w_max, s[i]);
+                gsm_max += Math.min((g[i] + s[i]), w_max);
+            }
+            if (a <= gold_max && b <= silver_max && (a + b) <= gsm_max)
+            {
+                right = mid - 1;
+                answer = mid;
+            }
+            else
+                left = mid + 1;
+        }
+        return answer;
+    }
+}
+```
