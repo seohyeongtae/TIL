@@ -1377,3 +1377,123 @@ public class Solution {
 
 }
 ```
+
+### GPS
+> 참고 링크
+> https://biewoom.github.io/coding%20test/kakao%202017/2020/06/04/GPS.html
+
+```java
+import java.util.*;
+class Solution {
+
+  public void initializeDP(int[][] dp, int inf) {
+    for (int r = 0; r < dp.length; r++) {
+      Arrays.fill(dp[r], inf);
+    }
+  }
+
+  public void initializeEdgeMap(int[][] edge_list,
+                                Map<Integer, ArrayList<Integer>> edgeMap) {
+    for (int i = 0; i < edge_list.length; i++) {
+      int v1 = edge_list[i][0];
+      int v2 = edge_list[i][1];
+
+      if (edgeMap.get(v1) == null)
+        edgeMap.put(v1, new ArrayList<Integer>());
+      if (edgeMap.get(v2) == null)
+        edgeMap.put(v2, new ArrayList<Integer>());
+
+      edgeMap.get(v1).add(v2);
+      edgeMap.get(v2).add(v1);
+    }
+  }
+  public int solution(int n, int m, int[][] edge_list, int k, int[] gps_log) {
+    final int INF = 100000;
+    int Min = INF;
+
+    Map<Integer, ArrayList<Integer>> edgeMap =
+        new Hashtable<Integer, ArrayList<Integer>>();
+    initializeEdgeMap(edge_list, edgeMap);
+
+    int[][] dp = new int[k][n + 1];
+    initializeDP(dp, INF);
+
+    int start = gps_log[0];
+    int end = gps_log[k - 1];
+    dp[0][start] = 0;
+
+    for (int index = 0; index < k - 1; index++) {
+
+      for (int node = 1; node < n + 1; node++) {
+        if (dp[index][node] == INF)
+          continue;
+
+        ArrayList<Integer> nextCandidates = new ArrayList<>(edgeMap.get(node));
+        nextCandidates.add(node);
+
+        for (int nextNode : nextCandidates) {
+          int value = dp[index][node];
+
+          if (nextNode != gps_log[index + 1])
+            value++;
+
+          dp[index + 1][nextNode] = Math.min(dp[index + 1][nextNode], value);
+        }
+      }
+    }
+
+    return ((dp[k - 1][end] != INF) ? dp[k - 1][end] : -1);
+  }
+}
+```
+
+> 또 다른 사람 코드
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+ 
+public class Solution {
+    public int solution(int n, int m, int[][] edge_list, int k, int[] gps_log) {
+        int answer = 0;
+        int inf = 987654321;
+        int dp[][] = new int[k][n+1];            //gps_log가 0부터 시작하지 않기때문에 +1을 준다.
+        ArrayList<ArrayList<Integer>> al = new ArrayList<ArrayList<Integer>>();
+        
+        //graph 초기화
+        for(int i = 0; i < n + 1; i++) {
+            al.add(new ArrayList<Integer>());
+        }
+        //graph 값 넣기
+        for(int i = 0; i < edge_list.length; i++) {
+            int startNode = edge_list[i][0];
+            int endNode = edge_list[i][1];
+            
+            al.get(startNode).add(endNode);            //양방향 그래프
+            al.get(endNode).add(startNode);
+        }
+        for(int i = 0; i < dp.length; i++) {
+            Arrays.fill(dp[i], inf);
+        }
+        dp[0][gps_log[0]] = 0;      
+        //시작점과 오류가 나지 않기 때문에 1 ~
+        for(int i = 1; i < k ; i++) {
+            //gps_log 숫자 표현상 첫 번째 자리는 안쓰는게 편함.
+            for(int j = 1; j < n + 1; j++) {
+                dp[i][j] = Math.min(dp[i][j], dp[i-1][j]);            //어떻게든 최소 오류수정만 있으면 되므로 & 택시가 정차한 경우
+                for(int node : al.get(j)) {
+                    dp[i][j] = Math.min(dp[i-1][node], dp[i][j]);    //자신과 연결된 정점 중 어디서 온것이 가장 적은 오류수정 횟수인지 판단
+                }
+                dp[i][j] += gps_log[i] == j ? 0 : 1;                //지금 최소 오류 수정 루트를 찾고있는 j의 도시가 gps_log가 정해준 도시와 맞는지
+            }
+        }
+        if(dp[k - 1][gps_log[k - 1]] >= inf) {
+            answer = -1;
+        }else {
+            answer = dp[k-1][gps_log[k -1]];
+        }       
+        return answer;
+    }
+}
+출처: https://tosuccess.tistory.com/144 [EI_HJ]
+
+```
