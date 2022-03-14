@@ -1549,3 +1549,223 @@ class Solution {
     }
 }
 ```
+
+
+### 경주로 건설
+> dp 와 dfs 섞어서 사용한 코드 
+> 상하좌우 순서도 중요하다
+```java
+class Solution {
+    int result;
+    int dp[][];
+    int n;
+    // check = 1 -> x증가/감소  check = 2 -> y증가/감소
+    private void make_road(int[][] board, int x, int y, boolean[][] visit, int money, int check)
+    {
+        int m;
+        dp[x][y] = money;
+        if (money >= result)
+            return;
+        if (x == n - 1 && y == n - 1)
+        {
+            result = Math.min(money, result);
+            return;
+        }
+        m = 100;
+        if (y + 1 < n && visit[x][y + 1] == false)
+        {
+            visit[x][y + 1] = true;
+            if (check == 1)
+                m += 500;
+            if (dp[x][y + 1] > money)
+                make_road(board, x, y + 1, visit, money + m, 2);
+            visit[x][y + 1] = false;
+        }
+        m = 100;
+        if (x + 1 < n && visit[x + 1][y] == false)
+        {
+            visit[x + 1][y] = true;
+            if (check == 2)
+                m += 500;
+            if (dp[x + 1][y] > money)
+                make_road(board, x + 1, y, visit, money + m, 1);
+            visit[x + 1][y] = false;
+        }
+        m = 100;
+        if (y - 1 >= 0 && visit[x][y - 1] == false)
+        {
+            visit[x][y - 1] = true;
+            if (check == 1)
+                m += 500;
+            if (dp[x][y - 1] > money)
+                make_road(board, x, y - 1, visit, money + m, 2);
+            visit[x][y - 1] = false;
+        }
+        m = 100;
+        if (x - 1 >= 0 && visit[x - 1][y] == false)
+        {
+            visit[x - 1][y] = true;
+            if (check == 2)
+                m += 500;
+            if (dp[x - 1][y] > money)
+                make_road(board, x - 1, y, visit, money + m, 1);
+            visit[x - 1][y] = false;
+        }
+    } // make_road end
+    
+    public int solution(int[][] board) {
+        int answer = 0;
+        result = Integer.MAX_VALUE;
+        // 직선 100원 코너 500원 0,0 -> n-1 n-1
+        n = board.length;
+        dp = new int[n][n];
+        boolean visit[][] = new boolean[n][n];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (board[i][j] == 1)
+                    visit[i][j] = true;
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        visit[0][0] = true;
+        make_road(board, 0, 0, visit, 0, 0);
+        answer = result;
+        return answer;
+    } // solution end
+}
+```
+
+> BFS 를 사용한 다른 사람 코드
+> 25번은 틀렸다고 나온다 (테스트 케이스가 추가 된듯)
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Solution {
+
+	static int min = Integer.MAX_VALUE;
+	static int xx[] = {-1, 0, 1, 0};
+	static int yy[] = {0, -1, 0, 1};
+	static int map[][];
+	static int n;
+	static int answer;
+	
+    public static int solution(int[][] board) {
+        answer = Integer.MAX_VALUE;
+        n = board.length;
+        map = board;
+        
+        // 초기 방향을 -1 을 주는 이유는 자동차가 시작할때 오른쪽과 아래로 둘다 이동할수 있기 떄문이다.
+        bfs(0, 0, 0, -1);
+        return answer;
+    }   
+    
+    public static void bfs(int x, int y, int cost, int dir) {
+    	
+    	Queue<Road> q = new LinkedList<Road>();
+    	q.add(new Road(x, y, cost, dir));
+    	// 출발지점을 1 로 바꾸어 탐색에서 제외한다.
+    	map[x][y] = 1;
+    	
+    	while(!q.isEmpty()) {
+    		Road temp = q.poll();
+    		// 목적지에 도착했다면 최소비용을 갱신해준다.
+    		if(temp.x == n - 1 && temp.y == n - 1) {
+    			answer = Math.min(answer, temp.cost);
+    			continue;
+    		}
+    
+    		// 4방향으로 이동할수있다 .
+    		for(int i = 0; i < 4; i++) {
+    			int new_x = temp.x + xx[i];
+    			int new_y = temp.y + yy[i];
+    			// 새로 이동하는 곳은 범위안이고 벽이(1) 아니여야한다.
+    			if(new_x >= 0 && new_x < n && new_y >= 0 && new_y < n && map[new_x][new_y] != 1) {
+    				int new_cost = 0;
+    				// 새로운 지점의 비용구하기.
+    				if(temp.dir == -1 || temp.dir == i) {
+    					new_cost = temp.cost + 100;
+    				}else if(temp.dir != i){
+    					new_cost = temp.cost + 600;
+    				}
+    			
+    				//처음가는 곳이라면 정보를 넣어주면된다.
+    				if(map[new_x][new_y] == 0) {
+    					map[new_x][new_y] = new_cost;
+    					q.add(new Road(new_x, new_y, new_cost, i));
+    				}else if(map[new_x][new_y] >= new_cost) { //처음가지않는 곳이라면 비용이 더작거나 같은 경우 넣어주면된다.
+    					map[new_x][new_y] = new_cost;
+    					q.add(new Road(new_x, new_y, new_cost, i));
+    				}
+    				
+    				
+    			}
+    		}
+    		
+    	}
+    }
+}
+class Road{
+	int x,y,cost,dir;
+	public Road(int x, int y, int cost, int dir) {
+		this.x = x;
+		this.y = y;
+		this.cost = cost;
+		this.dir = dir;
+	}
+}
+```
+
+> 테스트 케이스 전부 통과하는 다른 사람 코드
+> 3차원 배열을 이용한 풀이
+```java
+import java.util.*;
+class Info implements Comparable<Info>{
+    int cost;
+    int x, y;
+    int cov;
+    public Info(int c, int x, int y, int cov) {
+        this.cost = c;
+        this.x = x;
+        this.y = y;
+        this.cov = cov;
+    }
+    @Override
+    public int compareTo(Info info) {
+        return info.cost >= this.cost ? 1 : -1;
+    }
+}
+class Solution {
+
+    public int solution(int[][] board) {  
+        int answer = 0;
+        int[] dx = {1,0,-1,0};
+        int[] dy = {0,1,0,-1};
+        int[][][] map = new int[30][30][5];
+        int cost=0,x,y,cov,n=board.length;
+
+        PriorityQueue<Info> pq = new PriorityQueue<Info>();
+        pq.add(new Info(0, 0, 0, 4));
+
+        while (!pq.isEmpty()) {
+            Info cur = pq.poll();
+            cost = -cur.cost;
+            x = cur.x;
+            y = cur.y;
+            cov = cur.cov;
+            if (map[x][y][cov] == 1) continue;
+            map[x][y][cov] = 1;
+            if (x == n - 1 && y == n - 1) break;
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                if (nx >= n || nx < 0 || ny >= n || ny < 0 || board[nx][ny] == 1) continue;
+                pq.add(new Info(-cost-100-500*(cov != i ? 1 : 0), nx, ny, i));
+            }
+        }
+        return cost-500;
+    }
+}
+```
