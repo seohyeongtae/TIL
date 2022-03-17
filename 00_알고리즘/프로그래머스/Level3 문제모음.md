@@ -1769,3 +1769,214 @@ class Solution {
     }
 }
 ```
+
+
+## 2 * n 타일링
+
+> 1부터 시작하는 피보나치 수열
+```java
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        int div = 1000000007;
+        int dp[] = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 1;
+        for (int i = 2; i <= n; i++)
+        {
+            dp[i] = (dp[i - 1] % div) + (dp[i - 2] % div);
+            dp[i] %= div;
+        }
+        answer = dp[n];
+        return answer;
+    }
+}
+```
+
+```java
+
+```
+
+### 아이템 줍기
+> Map 전체 크기를 2배 곱해줘서 계산하기 result 도 / 2 해주기.
+> 11
+> 11  이런 경우를 제외하기 위해 
+```java
+
+import java.util.*;
+class Solution {
+    int result;
+    
+    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
+        int answer = 0;
+        result = 10000000;
+        int map[][] = new int[103][103];
+        for (int i = 0; i < 103; i++)
+            Arrays.fill(map[i], 0);
+        for (int i = 0; i < rectangle.length; i++)
+        {
+            int dx = rectangle[i][0] * 2;
+            int dy = rectangle[i][1] * 2;
+            int ux = rectangle[i][2] * 2;
+            int uy = rectangle[i][3] * 2;
+            
+            for (int j = dx; j <= ux; j++)
+            {
+                if (map[dy][j] == 0)
+                    map[dy][j] = 1;
+                if (map[uy][j] == 0)
+                    map[uy][j] = 1;
+            }
+            
+            for (int j = dy; j <= uy; j++)
+            {
+                if (map[j][dx] == 0)
+                    map[j][dx] = 1;
+                if (map[j][ux] == 0)
+                    map[j][ux] = 1;
+            }
+            
+            for (int k = dy + 1; k < uy; k++)
+            {
+                for (int j = dx + 1; j < ux; j++)
+                {
+                    map[k][j] = 2;
+                }
+            }
+        }
+        boolean visit[][] = new boolean[103][103];
+        visit[characterY * 2][characterX * 2] = true;
+        find_item(characterX * 2, characterY * 2, itemX * 2, itemY * 2, map, 0, visit);
+        answer = result;
+        return answer;
+    } // solution end
+    
+    private void find_item(int cx, int cy, int ix, int iy, int[][] map, int cnt, boolean[][] visit)
+    {
+        if (cnt / 2 > result)
+            return;
+        if (cx == ix && cy == iy)
+        {
+            // System.out.println(cx + "   "  + cy + "   cnt  " + cnt);
+            result = Math.min(result, cnt / 2);
+            return;
+        }
+        
+        if (cx + 1 < 103 && map[cy][cx + 1] == 1 && visit[cy][cx + 1] == false)
+        {
+            visit[cy][cx + 1] = true;
+            find_item(cx + 1, cy, ix, iy, map, cnt + 1, visit);
+            visit[cy][cx + 1] = false;
+        }
+        if (cy + 1 < 103 && map[cy + 1][cx] == 1 && visit[cy + 1][cx] == false)
+        {
+            visit[cy + 1][cx] = true;
+            find_item(cx, cy + 1, ix, iy, map, cnt + 1, visit);
+            visit[cy + 1][cx] = false;    
+        }
+        if (cx - 1 > 0 && map[cy][cx - 1] == 1 && visit[cy][cx - 1] == false)
+        {
+            visit[cy][cx - 1] = true;
+            find_item(cx - 1, cy, ix, iy, map, cnt + 1, visit);
+            visit[cy][cx - 1] = false;
+        }
+            
+        if (cy - 1 > 0 && map[cy - 1][cx] == 1 && visit[cy - 1][cx] == false)
+        {
+            visit[cy - 1][cx] = true;
+            find_item(cx, cy - 1, ix, iy, map, cnt + 1, visit);
+            visit[cy - 1][cx] = false;
+        }
+    }
+}
+```
+
+> 스택을 이용한 다른 사람 코드 (bfs)
+> https://taehoung0102.tistory.com/95
+```java
+import java.util.*;
+class Solution {
+    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
+        int answer = 0;
+        
+        int start_x=characterX*2;
+        int start_y=characterY*2;
+        int end_x=itemX*2;
+        int end_y=itemY*2;
+        
+        boolean[][] map= new boolean[103][103];
+        int ted=0;
+        
+        for(int[] data:rectangle){
+            //1.테두리 포함해서 직사각형 모두 true채우기
+            for(int i=data[1]*2;i<=data[3]*2;i++){
+              for(int j=data[0]*2;j<=data[2]*2;j++){
+                    map[i][j]=true;
+                  
+              }  
+            }
+        }
+        
+        for(int[] data:rectangle){
+            //2.테두리 제외해서 직사각형 내부 모두 false채우기
+            for(int i=data[1]*2+1;i<data[3]*2;i++){
+              for(int j=data[0]*2+1;j<data[2]*2;j++){
+                    map[i][j]=false;
+              }  
+            }
+        }
+    
+        //bfs 탐색
+        Stack<Player> stack = new Stack<>();
+        
+        // 시작점 설정
+        Player p = new Player(start_x,start_y);
+        stack.add(p);
+        
+        List<Integer> result =new ArrayList<>();
+        int cnt=0;
+        
+        while(true){       
+            if(stack.isEmpty()){
+                // 전체 태두리 길이
+                result.add(cnt);
+                break;
+            }
+            Player temp=stack.pop();
+            int x=temp.x;
+            int y=temp.y; 
+           
+            //도착하면 갯수 저장
+            if(x==end_x&&y==end_y){
+                result.add(cnt);         
+            }
+            
+            //지났으면 지난자리 false               
+            map[y][x]=false;
+            
+            if(map[y+1][x]==true) stack.add(new Player(x,y+1));
+            if(map[y][x+1]==true) stack.add(new Player(x+1,y));
+            if(map[y-1][x]==true) stack.add(new Player(x,y-1));
+            if(map[y][x-1]==true) stack.add(new Player(x-1,y));
+            
+            cnt++;
+            
+        } // while end
+        // Math.min(캐릭터위치~아이템거리, 전체 테두리길이 - 캐릭터위치~아이템거리) 출력
+        // 아이템까지 갈수 있는 방법이 2가지가 있기 때문에 
+        answer=Math.min(result.get(0)/2, result.get(1)/2-result.get(0)/2);      
+        return answer;
+    }
+    
+    class Player{
+        int x;
+        int y;
+        
+        public Player(int x, int y){
+            this.x=x;
+            this.y=y;   
+        }
+    }
+}
+```
