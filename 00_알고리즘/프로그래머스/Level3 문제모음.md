@@ -1980,3 +1980,71 @@ class Solution {
     }
 }
 ```
+
+
+### 보행자 천국
+> 상하 좌우 분리해서 따로 생각하자.
+```java
+import java.util.*;
+class Solution {
+    int MOD = 20170805;
+    public int solution(int m, int n, int[][] cityMap) {
+        int answer = 0;
+        int div = 20170805;
+        // citymap  0 다가능  1 통해금지  2 한방향만
+        // 위아래 0   좌우 1
+        int[][][] dp = new int[m + 1][n + 1][2];
+        dp[0][0][0] = 1;
+        // 가로 세로 들어올경우를 나누어서 계산
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (cityMap[i][j] == 0)
+                {
+                    dp[i + 1][j][0] = (dp[i + 1][j][0] + dp[i][j][0] + dp[i][j][1]) % div;
+                    dp[i][j + 1][1] = (dp[i][j + 1][1] + dp[i][j][0] + dp[i][j][1]) % div;
+                }
+                else if (cityMap[i][j] == 2)
+                {
+                    dp[i + 1][j][0] = (dp[i + 1][j][0] + dp[i][j][0]) % div;
+                    dp[i][j + 1][1] = (dp[i][j + 1][1] + dp[i][j][1]) % div;
+                }
+            }
+            // System.out.println();
+        }
+        
+        answer = (dp[m - 1][n - 1][0] + dp[m - 1][n - 1][1]) % div;
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드
+```java
+class Solution {
+  int MOD = 20170805;
+  public int solution(int m, int n, int[][] cityMap) {
+        int answer = 0;
+        int[][] right = new int[m + 1][n + 1];
+        int[][] down = new int[m + 1][n + 1];
+
+        right[1][1] = 1;
+        down[1][1] = 1;
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (cityMap[i - 1][j - 1] == 0) {
+                    right[i][j] += (right[i][j - 1] + down[i - 1][j]) % MOD;
+                    down[i][j] += (down[i - 1][j] + right[i][j - 1]) % MOD;
+                } else if (cityMap[i - 1][j - 1] == 2) {
+                    right[i][j] = right[i][j - 1];
+                    down[i][j] = down[i - 1][j];
+                }
+            }
+        }
+        answer = (right[m][n - 1] + down[m - 1][n]) % MOD;
+        return answer;
+    }
+}
+```
