@@ -2048,3 +2048,298 @@ class Solution {
     }
 }
 ```
+
+### 퍼즐 조각 채우기
+> 처음에는 퍼즐을 N * N 으로 맞춰서 생성했는데 이럴 경우 회전할때 제대로 비교를 할 수 가 없다.
+> 따라서 블록 퍼즐만큼 직사각형을 만들고 회전시켜야 한다.
+```java
+import java.util.*;
+class Solution {
+    boolean[][] visit;
+    int len;
+    int result;
+    private void find_board_table(int[][] table, int y, int x, ArrayList<int[]> a)
+    {
+        if (x + 1 < len && table[y][x + 1] == 1 && visit[y][x + 1] == false)
+        {
+            visit[y][x + 1] = true;
+            find_board_table(table, y, x + 1, a);
+        }
+        
+        if (x - 1 >= 0 && table[y][x - 1] == 1 && visit[y][x - 1] == false)
+        {
+            visit[y][x - 1] = true;
+            find_board_table(table, y, x - 1, a);
+        }
+        if (y + 1 < len && table[y + 1][x] == 1 && visit[y + 1][x] == false)
+        {
+            visit[y + 1][x] = true;
+            find_board_table(table, y + 1, x, a);
+        }
+        if (y - 1 >= 0 && table[y - 1][x] == 1 && visit[y - 1][x] == false)
+        {
+            visit[y - 1][x] = true;
+            find_board_table(table, y - 1, x, a);
+        }
+        
+        int[] temp = {y, x};
+        a.add(temp);
+    } // find_board_table end
+    
+    private void find_board(int[][] game_board, int y, int x, ArrayList<int[]> a)
+    {
+        if (x + 1 < len && game_board[y][x + 1] == 0 && visit[y][x + 1] == false)
+        {
+            visit[y][x + 1] = true;
+            find_board(game_board, y, x + 1, a);
+        }
+        
+        if (x - 1 >= 0 && game_board[y][x - 1] == 0 && visit[y][x - 1] == false)
+        {
+            visit[y][x - 1] = true;
+            find_board(game_board, y, x - 1, a);
+        }
+        if (y + 1 < len && game_board[y + 1][x] == 0 && visit[y + 1][x] == false)
+        {
+            visit[y + 1][x] = true;
+            find_board(game_board, y + 1, x, a);
+        }
+        if (y - 1 >= 0 && game_board[y - 1][x] == 0 && visit[y - 1][x] == false)
+        {
+            visit[y - 1][x] = true;
+            find_board(game_board, y - 1, x, a);
+        }
+        
+        int[] temp = {y, x};
+        a.add(temp);
+    } // find_board_end
+    
+    private int[][] make_rectangle(ArrayList<int[]> a)
+    {
+        int min_x = len;
+        int max_x = 0;
+        int min_y = len;
+        int max_y = 0;
+        for (int i = 0; i < a.size(); i++)
+        {
+            if (a.get(i)[1] < min_x)
+                min_x = a.get(i)[1];
+            if (a.get(i)[1] > max_x)
+                max_x = a.get(i)[1];
+            if (a.get(i)[0] < min_y)
+                min_y = a.get(i)[0];
+            if (a.get(i)[0] > max_y)
+                max_y = a.get(i)[0];
+        }
+        int x = max_x - min_x + 1;
+        int y = max_y - min_y + 1;
+        int[][] rectangle = new int[y][x];
+        
+        for (int i = 0; i < a.size(); i++)
+        {
+            if (a.get(i)[0] >= 0)
+                rectangle[a.get(i)[0] - min_y][a.get(i)[1] - min_x] = 1;
+        }
+        //             System.out.println();
+        // for (int i = 0; i < rectangle.length; i++)
+        // {
+        //     for (int j = 0; j < rectangle[0].length; j++)
+        //         System.out.print(rectangle[i][j]);
+        //     System.out.println();
+        // }
+        return rectangle;
+    } // make_rectangle end
+    
+    private boolean match_table (int[][] temp_game, int[][] temp_table)
+    {
+        if ( Math.max(temp_game.length, temp_game[0].length) != Math.max(temp_table.length, temp_table[0].length) 
+            || Math.min(temp_game.length, temp_game[0].length) != Math.min(temp_table.length, temp_table[0].length) )
+            return false;
+
+        int cnt = 0;
+        int check = 0;
+        
+        if ((temp_game.length == temp_table[0].length && temp_game[0].length == temp_table.length )
+            || (temp_game.length == temp_game[0].length && temp_table.length == temp_table[0].length && temp_table.length == temp_game.length))
+        {
+            // 90, 270 도 계산
+            // 90
+            cnt = 0;
+            check = 0;
+
+            int[][] after_90 = new int[temp_table[0].length][temp_table.length];
+            for (int i = 0; i < after_90.length; i++)
+            {
+                for (int j = 0; j < after_90[0].length; j++)
+                    after_90[i][j] = temp_table[temp_table.length - 1 - j][i];
+            }
+
+            for (int i = 0; i < after_90.length; i++)
+            {
+                for (int j = 0; j < after_90[0].length; j++)
+                {
+                    if (temp_game[i][j] == 1)
+                        cnt++;
+                    if (temp_game[i][j] != after_90[i][j])
+                    {
+                        check = 1;
+                        break;
+                    }
+                }
+            }
+            if (check == 0)
+            {
+                result += cnt;
+                return true;
+            }
+            
+            // 270
+            cnt = 0;
+            check = 0;
+
+            int[][] after_270 = new int[temp_table[0].length][temp_table.length];
+            for (int i = 0; i < after_270.length; i++)
+            {
+                for (int j = 0; j < after_270[0].length; j++)
+                    after_270[i][j] = temp_table[j][temp_table[0].length - 1 - i];
+            }
+
+            for (int i = 0; i < after_270.length; i++)
+            {
+                for (int j = 0; j < after_270[0].length; j++)
+                {
+                    if (temp_game[i][j] == 1)
+                        cnt++;
+                    if (temp_game[i][j] != after_270[i][j])
+                    {
+                        check = 1;
+                        break;
+                    }
+                }
+            }
+            if (check == 0)
+            {
+                result += cnt;
+                return true;
+            }
+            
+        }
+        
+        if (temp_game.length == temp_table.length 
+            || (temp_game.length == temp_game[0].length && temp_table.length == temp_table[0].length && temp_table.length == temp_game.length))
+        {
+            // 기본 , 180
+            cnt = 0;
+            check = 0;
+
+            for (int i = 0; i < temp_game.length; i++)
+            {
+                for (int j = 0; j < temp_game[0].length; j++)
+                {
+                    if (temp_game[i][j] == 1)
+                        cnt++;
+                    if (temp_game[i][j] != temp_table[i][j])
+                    {
+                        check = 1;
+                        break;
+                    }
+                }
+            }
+            if (check == 0)
+            {
+                result += cnt;
+                return true;
+            }
+
+            // 180
+                cnt = 0;
+                check = 0;
+                int[][] after_180 = new int[temp_table.length][temp_table[0].length];
+                for (int i = 0; i < temp_table.length; i++)
+                {
+                    for (int j = 0; j < temp_table[0].length; j++)
+                        after_180[i][j] = temp_table[temp_table.length - 1 - i][temp_table[0].length - 1 - j];
+                }
+
+                for (int i = 0; i < after_180.length; i++)
+                {
+                    for (int j = 0; j < after_180[0].length; j++)
+                    {
+                        if (temp_game[i][j] == 1)
+                            cnt++;
+                        if (temp_game[i][j] != after_180[i][j])
+                        {
+                            check = 1;
+                            break;
+                        }
+                    }
+                }
+                if (check == 0)
+                {
+                    result += cnt;
+                    return true;
+                }
+        }
+        return false;
+    } //match_table end
+    
+    public int solution(int[][] game_board, int[][] table) {
+        int answer = 0;
+        ArrayList<ArrayList<int[]>> game_al = new ArrayList<ArrayList<int[]>>();
+        ArrayList<ArrayList<int[]>> table_al = new ArrayList<ArrayList<int[]>>();
+        len = game_board.length;
+        result = 0;
+        visit = new boolean[len][len];
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                if (game_board[i][j] == 1)
+                    visit[i][j] = true;
+                else if (visit[i][j] == false && game_board[i][j] == 0)
+                {
+                    visit[i][j] = true;
+                    ArrayList<int[]> al = new ArrayList<int[]>();
+                    find_board(game_board, i, j, al);
+                    game_al.add(al);
+                }
+            }
+        }
+        visit = new boolean[len][len];
+        for (int i = 0; i < len; i++)
+        {
+            for (int j = 0; j < len; j++)
+            {
+                if (table[i][j] == 0)
+                    visit[i][j] = true;
+                else if (visit[i][j] == false && table[i][j] == 1)
+                {
+                    visit[i][j] = true;
+                    ArrayList<int[]> al = new ArrayList<int[]>();
+                    find_board_table(table, i, j, al);
+                    table_al.add(al);
+                }
+            }
+        }
+        // System.out.println(game_al.size());
+        // System.out.println(table_al.size());
+        for (int i = 0; i < game_al.size(); i++)
+        {
+            int[][] temp_game = make_rectangle(game_al.get(i));
+            for (int j = 0; j < table_al.size(); j++)
+            {
+                int[][] temp_table = make_rectangle(table_al.get(j));
+                if (match_table(temp_game, temp_table))
+                {
+                    table_al.remove(j);
+                    // System.out.println(result);
+                    break;
+                }
+            }
+        }
+        answer = result;
+        return answer;
+    } // solution end
+}
+```
+
