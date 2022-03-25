@@ -2419,3 +2419,236 @@ class Solution {
 }
 
 ```
+
+
+
+### 기둥과 보 설치
+> 아래 다른 사람이 푼 코드를 참고했다.
+>  x, y 가 0 인경우, 끝인 경우 통일해서 한번에 검사하기 위해 전체 크기를 +3 해주었다. 
+> 어차피 비교할 때는 영향을 받지 않기 때문에
+>  comparator 과 arraylist 를 사용하지 않고 그냥 집어넣었어도 가능한 문제....
+```java
+import java.util.*;
+class Solution {
+    boolean[][] frame;
+    boolean[][] bo;
+    int len;
+    
+    private boolean check_frame(int y, int x)
+    {
+        if (y == 1 || bo[y][x] || bo[y][x - 1] || frame[y - 1][x])
+            return true;
+        return false;
+    }
+    private boolean check_bo(int y, int x)
+    {
+        if (frame[y - 1][x] || frame[y - 1][x + 1] || (bo[y][x + 1] && bo[y][x - 1]))
+            return true;
+        return false;
+    }
+    private boolean check_del()
+    {
+        for (int i = 1; i <= len + 1; i++)
+        {
+            for (int j = 1; j <= len + 1; j++)
+            {
+                if (frame[i][j] && !check_frame(i, j))
+                    return false;
+                if (bo[i][j] && !check_bo(i, j))
+                    return false;
+            }
+        }
+        return true;
+    }
+    public int[][] solution(int n, int[][] build_frame) {
+        
+        frame = new boolean[n + 3][n + 3];
+        bo = new boolean[n + 3][n + 3];
+        len = n;
+        
+        for (int i = 0; i < build_frame.length; i++)
+        {
+            int x = build_frame[i][0] + 1;
+            int y = build_frame[i][1] + 1;
+            int f = build_frame[i][2];
+            int state = build_frame[i][3];
+            
+            // 기둥
+            if (f == 0)
+            {
+                // 삭제
+                if (state == 0)
+                {
+                    frame[y][x] = false;
+                    if (!check_del())
+                        frame[y][x] = true;
+                }
+                // 설치
+                else
+                {
+                    frame[y][x] = true;
+                    if (!check_frame(y, x))
+                        frame[y][x] = false;
+                }
+            }
+            // 보
+            else
+            {
+                // 삭제
+                if (state == 0)
+                {
+                    bo[y][x] = false;
+                    if (!check_del())
+                        bo[y][x] = true;
+                }
+                // 설치
+                else
+                {
+                    bo[y][x] = true;
+                    if (!check_bo(y, x))
+                        bo[y][x] = false;
+                }
+            }
+        }
+        ArrayList<int[]> temp = new ArrayList<int[]>();
+        int[] t = new int[3];
+        for (int i = 1; i <= len + 1; i++)
+        {
+            for (int j = 1; j <= len + 1; j++)
+            {
+                if (frame[i][j])
+                {
+                    t = new int[3];
+                    t[0] = j - 1;
+                    t[1] = i - 1;
+                    t[2] = 0;
+                    temp.add(t);
+                }
+                if (bo[i][j])
+                {
+                    t = new int[3];
+                    t[0] = j - 1;
+                    t[1] = i - 1;
+                    t[2] = 1;
+                    temp.add(t);
+                }
+            }
+        }
+        int[][] answer = new int[temp.size()][3];
+        for (int i = 0; i < temp.size(); i++)
+        {
+            answer[i][0] = temp.get(i)[0];
+            answer[i][1] = temp.get(i)[1];
+            answer[i][2] = temp.get(i)[2];
+        }
+        Arrays.sort(answer, new Comparator<int[]>(){
+            @Override
+            public int compare(int[] o1, int[] o2)
+            {
+                if (o1[0] == o2[0])
+                {
+                    if (o1[1] == o2[1])
+                        return o1[2] - o2[2];
+                    return o1[1] - o2[1];
+                }
+                return o1[0] - o2[0];
+            }
+        });
+        
+        return answer;
+    }
+}
+```
+
+> 다른 사람이 푼 코드 
+> https://velog.io/@hyeon930/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EA%B8%B0%EB%91%A5%EA%B3%BC-%EB%B3%B4-%EC%84%A4%EC%B9%98-Java
+
+```java
+import java.util.*;
+
+class Solution {
+    
+    static final int PILLAR = 0;
+    static final int BEAM = 1;
+    static final int DESTRUCT = 0;
+    static final int CONSTRUCT = 1;
+    
+    boolean[][] pillars, beams; // 기둥, 보
+    
+    public int[][] solution(int n, int[][] build_frame) {
+        int structureCount = 0;
+        
+        pillars = new boolean[n + 3][n + 3];
+        beams = new boolean[n + 3][n + 3];
+        
+        for(int[] frame : build_frame){
+            int x = frame[0] + 1;
+            int y = frame[1] + 1;
+            int structureType = frame[2];
+            int commandType = frame[3];
+            
+            if(commandType == CONSTRUCT){
+                if(structureType == PILLAR && canConstructPillar(x, y)){
+                    pillars[x][y] = true;
+                    structureCount++;
+                }
+                if(structureType == BEAM && canConstructBeam(x, y)){
+                    beams[x][y] = true;
+                    structureCount++;
+                }
+            } else if(commandType == DESTRUCT){
+                if(structureType == PILLAR){
+                    pillars[x][y] = false;
+                } else if(structureType == BEAM){
+                    beams[x][y] = false;
+                }
+ 
+                if(canDestruct(x, y, structureType, n)){
+                    structureCount--;
+                    continue;
+                }
+                
+                if(structureType == PILLAR){
+                    pillars[x][y] = true;
+                } else if(structureType == BEAM){
+                    beams[x][y] = true;
+                }
+            }
+        }
+            
+            int index = 0;
+            int[][] answer = new int[structureCount][3];
+            
+            for(int i = 1 ; i <= n + 1 ; ++i){
+                for(int j = 1 ; j <= n + 1 ; ++j){
+                    if(pillars[i][j]) answer[index++] = new int[]{i - 1, j - 1, PILLAR};
+                    if(beams[i][j]) answer[index++] = new int[]{i - 1, j - 1, BEAM};
+                }
+            }
+            return answer;
+    }
+    
+    private boolean canConstructPillar(int x, int y){
+        return y == 1 || pillars[x][y - 1] || beams[x][y] || beams[x - 1][y];
+    }
+    
+    private boolean canConstructBeam(int x, int y){
+        return pillars[x][y - 1] || pillars[x + 1][y - 1] || (beams[x - 1][y] && beams[x + 1][y]);
+    }
+    
+    private boolean canDestruct(int x, int y, int structureType, int n){       
+        for(int i = 1 ; i <= n + 1 ; ++i){
+            for(int j = 1 ; j <= n + 1 ; ++j){
+                if(pillars[i][j] && !canConstructPillar(i, j)){
+                    return false;
+                }
+                if(beams[i][j] && !canConstructBeam(i, j)){
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+}
+```
