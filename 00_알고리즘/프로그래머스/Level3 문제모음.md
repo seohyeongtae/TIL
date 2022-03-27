@@ -2652,3 +2652,244 @@ class Solution {
     }
 }
 ```
+
+
+
+### 길 찾기 게임
+> 주어진 좌표를 y , x 순으로 정렬 후 이진트리를 만들었기 때문에 부모는 따로 저장할 필요가 없다.
+> head 값을 알기 때문에
+```java
+import java.util.*;
+class Solution {
+    Node[] al;
+    int[][] answer;
+    // ArrayList<Integer> a;
+    
+    private void postorder(Node al, ArrayList<Integer> a)
+    {
+        if (al.left != null) postorder(al.left, a);
+        if (al.right != null) postorder(al.right, a);
+        a.add(al.num);
+        // if (al == null)
+        //     return;
+        // if (al.left != null)
+        //     postorder(al.left);
+        // if (al.right != null)
+        //     postorder(al.right);
+        // if (al.left == null && al.right == null)
+        // {
+        //     a.add(al.num);
+        //     return;
+        // }
+        // a.add(al.num);
+    } // postorder end
+    
+    private void preorder(Node al, ArrayList<Integer> a)
+    {
+        a.add(al.num);
+        if (al.left != null) preorder(al.left, a);
+        if (al.right != null) preorder(al.right, a);
+        
+        // if (al == null)
+        //     return;
+        // if (al.left != null)
+        //     a.add(al.num);
+        //     preorder(al.left);
+        // if (al.left == null)
+        //     a.add(al.num);
+        // if (al.right != null)
+        //     preorder(al.right);
+    } // preorder end
+    
+    private void InsertNode(Node start, Node node)
+    {
+        if (start.x > node.x)
+        {
+            if (start.left == null)
+            {
+                start.left = node;
+                // node.parent = start;
+                return;
+            }
+            InsertNode(start.left, node);
+        }
+        else
+        {
+            if (start.right == null)
+            {
+                start.right = node;
+                // node.parent = start;
+                return;
+            }
+            InsertNode(start.right, node);
+        }
+    } // InsertNode end
+    
+    public int[][] solution(int[][] nodeinfo) {
+        answer = new int[2][nodeinfo.length];
+        int len = nodeinfo.length;
+        al = new Node[len];
+        
+        for (int i = 0; i < len; i++)
+        {
+            int x = nodeinfo[i][0];
+            int y = nodeinfo[i][1];
+            Node node = new Node(i + 1, x, y);
+            al[i] = node;
+        }
+        Arrays.sort(al, new Comparator<Node>(){
+           @Override
+            public int compare(Node o1, Node o2)
+            {
+                if (o2.y == o1.y)
+                    return o1.x - o2.x;
+                return o2.y - o1.y;
+            }
+        });
+        
+        for (int i = 1; i < len; i++)
+            InsertNode(al[0], al[i]);
+        
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        preorder(al[0], a);
+        for (int i = 0; i < len; i++)
+            answer[0][i] = a.get(i);
+        
+        a = new ArrayList<Integer>();
+        postorder(al[0], a);
+        
+        for (int i = 0; i < len; i++)
+            answer[1][i] = a.get(i);    
+        return answer;
+    } // solution end
+    
+    class Node {
+        int num;
+        int x;
+        int y;
+        // Node parent;
+        Node left;
+        Node right;
+        
+        Node(){};
+        Node(int num, int x, int y)
+        {
+            this.num = num;
+            this.x = x;
+            this.y = y;
+        }
+        Node(Node n)
+        {
+            this.num = n.num;
+            this.x = n.x;
+            this.y = n.y;
+            // this.parent = n.parent;
+            this.left = n.left;
+            this.right = n.right;
+        }
+    } // class node end
+}
+```
+
+> 다른 사람 코드
+
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Solution {
+    public static class Node{
+        int x;
+        int y;
+        int idx;
+        Node left;
+        Node right;
+
+        Node(int x, int y, int idx){
+            this.x = x;
+            this.y = y;
+            this.idx = idx;
+            left = null;
+            right = null;
+        }
+    }
+
+    public static class BinaryTree{
+        Node root = null;
+
+        public BinaryTree() {}
+
+        public void insert(int x, int y, int idx) {
+            if(root != null) {
+                Node head = root;
+                Node cNode;
+
+                while(true) {
+                    cNode = head;
+                    if(x < cNode.x) {
+                        if(cNode.left != null) head = cNode.left;
+                        else {
+                            cNode.left = new Node(x, y, idx);
+                            break;
+                        }
+                    }
+                    else {
+                        if(cNode.right != null) head = cNode.right;
+                        else {
+                            cNode.right = new Node(x, y, idx);
+                            break;
+                        }
+                    }
+                }
+            } 
+            else root = new Node(x, y, idx);
+        }
+
+        public void preorder(Node n, ArrayList<Integer> list) {
+            list.add(n.idx);
+            if(n.left != null) preorder(n.left, list);
+            if(n.right != null) preorder(n.right, list);
+        }
+
+        public void postorder(Node n, ArrayList<Integer> list) {
+            if(n.left != null) postorder(n.left, list);
+            if(n.right != null) postorder(n.right, list);
+            list.add(n.idx);
+        }
+    }
+
+    public static int[][] solution(int[][] nodeinfo) {
+        int len = nodeinfo.length;
+        int[][] answer = new int[2][len], infos = new int[len][3];
+
+        for(int idx = 0; idx < len; ++idx) {
+            infos[idx][0] = nodeinfo[idx][0];
+            infos[idx][1] = nodeinfo[idx][1];
+            infos[idx][2] = idx + 1;
+        }
+
+        Arrays.sort(infos, new Comparator<int[]>() {
+            public int compare(int[] o1, int[] o2) {
+                if(o1[1] == o2[1]) {
+                    return o1[0] - o2[0]; 
+                }
+                return o2[1] - o1[1];
+            };
+        });
+
+       BinaryTree binary = new BinaryTree();
+       for(int idx = 0; idx < len; ++idx) binary.insert(infos[idx][0], infos[idx][1], infos[idx][2]);
+       ArrayList<Integer> pre = new ArrayList<>();
+       binary.preorder(binary.root, pre);
+       ArrayList<Integer> post = new ArrayList<>();
+       binary.postorder(binary.root, post);
+
+       for(int idx = 0; idx < len; ++idx) {
+           answer[0][idx] = pre.get(idx);
+           answer[1][idx] = post.get(idx);
+       }
+       return answer;
+    }
+}
+```
