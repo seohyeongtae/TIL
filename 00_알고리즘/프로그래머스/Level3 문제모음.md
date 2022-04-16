@@ -3035,3 +3035,192 @@ class Solution {
 }
 
 ```
+
+### 카드 짝 맞추기
+
+> 틀린 문제 해설 보고 다시 풀기
+> 최단거리 (BFS), 완전탐색 or 백트레킹 사용해야 한다.
+> 최단거리가 단순히 가로 -> 세로 or 세로 -> 가로 가 아니다.
+> 아래 다른 사람 코드들을 참고하여 다시 푼 코드
+```java
+import java.util.*;
+
+class Solution {
+    int c_x;
+    int c_y;
+    static int[] dx = {1,-1,0,0};
+	static int[] dy = {0,0,-1,1}; 
+    HashMap<Integer, ArrayList<Pair>> hm;
+    ArrayList<int[]> total_list;
+    
+    public int solution(int[][] board, int r, int c) {
+        int answer = 0;
+        hm = new HashMap();
+        total_list = new ArrayList();
+        
+        // 모든 점들 리스트 만들기
+        // 여기선 사용 안함 -> 모든 순열을 정한뒤 (카드 번호)
+        // 최단거리 검색을 2번 돌리면 각 카드별 가장 가까운 번호가 나오기 때문에
+        // 카드 2장 을 번갈아 찾은 것과 동일하다.
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                if (board[i][j] != 0)
+                {
+                    if (!hm.containsKey(board[i][j]))
+                    {
+                        int[] temp = {i, j};
+                        hm.put(board[i][j], new ArrayList<>());
+                        Pair p = new Pair(i, j, 0);
+                        hm.get(board[i][j]).add(p);
+                    }
+                    else
+                    {
+                        Pair p = new Pair(i, j, 0);
+                        hm.get(board[i][j]).add(p);
+                    }
+                }
+            }
+        }
+        
+        // 모든 순열 만들기
+        int[] list = new int[hm.size()];
+        permutation(list, hm.size(), 0, new boolean[hm.size() + 1] );
+        int min = Integer.MAX_VALUE;
+        
+        for (int[] c_list : total_list)
+        {
+            int total_move = 0;
+            int[] pos = new int[2];
+            pos[0] = r;
+            pos[1] = c;
+            
+            int[][] copy_board  = new int[4][4];
+			for(int i = 0; i < 4; i++) {
+                for(int j = 0; j < 4; j++) 
+                    copy_board[i][j] = board[i][j];
+			}
+            
+            for (int i = 0; i < c_list.length; i++)
+            {
+                int num = c_list[i];
+                total_move += find_card(pos, num, copy_board);
+                copy_board[pos[0]][pos[1]] = 0;
+                total_move += 1;
+                
+                
+                num = c_list[i];
+                total_move += find_card(pos, num, copy_board);
+                copy_board[pos[0]][pos[1]] = 0;
+                total_move += 1;
+            }
+            
+            min = Math.min(min, total_move);
+        }  // for end
+        
+        return min;
+    } // solution end
+    
+    public int find_card(int[] pos, int num, int[][] copy_board)
+    {
+        Queue<Pair> q = new LinkedList<>();
+        boolean[][] check = new boolean[4][4];
+        int y = pos[0];
+        int x = pos[1];
+        q.add(new Pair(y, x, 0));
+        check[y][x] = true;
+        
+        while (!q.isEmpty())
+        {
+            Pair next = q.poll();
+            int px = next.x;
+            int py = next.y;
+            int dist = next.dist;
+            
+            if (copy_board[py][px] == num)
+            {
+                pos[0] = py;
+                pos[1] = px;
+                return dist;
+            }
+            // 상하좌우 한칸
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = px + dx[i];
+                int ny = py + dy[i];
+                if (nx < 0 || ny < 0 || nx > 3 || ny > 3)
+                    continue;
+                if (check[ny][nx])
+                    continue;
+                check[ny][nx] = true;
+                q.add(new Pair(ny, nx, dist + 1));   
+            }
+            // 컨트롤 한칸
+            for (int i = 0; i < 4; i++)
+            {
+                Pair res = checkRoute(py, px, i, copy_board);
+                int nx = res.x;
+                int ny = res.y;
+                
+                if(nx==x && ny ==y) continue;
+				if(check[ny][nx]) continue;
+                
+                check[ny][nx] = true;
+				q.add(new Pair(ny ,nx, dist + 1));
+            }
+        }
+        return 0;
+    } // find card end
+    
+    public Pair checkRoute(int y, int x, int n, int[][] copy_board)
+    {
+        x += dx[n];
+        y += dy[n];
+        
+        while (x >= 0 && x < 4 && y >= 0 && y < 4)
+        {
+            if (copy_board[y][x] != 0)
+                return new Pair(y, x, 0);
+            x += dx[n];
+            y += dy[n];
+        }
+        return new Pair(y-dy[n], x-dx[n], 0);	
+        
+    }
+    
+    public void permutation(int[] list, int size, int depth, boolean[] visit)
+    {
+        if (size == depth)
+        {
+            int[] t_list = new int[depth];
+            for (int i = 0; i < depth; i++)
+                t_list[i] = list[i];
+            total_list.add(t_list);
+            return;
+        }
+        for (int i = 1; i <= size; i++)
+        {
+            if (visit[i] == false)
+            {
+                visit[i] = true;
+                list[depth] = i;
+                permutation(list, size, depth + 1, visit);
+                visit[i] = false;
+            }
+        }
+        
+    } // permutation end
+    
+    class Pair{
+        int x;
+        int y;
+        int dist;
+        Pair(int y, int x, int dis){
+            this.x = x;
+            this.y = y;
+            this.dist = dis;
+        }
+    } // class Pair end
+}
+```
