@@ -3224,3 +3224,347 @@ class Solution {
     } // class Pair end
 }
 ```
+
+
+> 다른 사람 정답 코드
+``` java
+import java.util.*;
+
+class Solution {
+    int[][] board;
+    int[][] cases;
+    int[] start;
+    int answer;
+    ArrayList<Integer> keys;
+    HashMap<Integer, ArrayList<int[]>> map;
+    public int solution(int[][] board, int r, int c) {
+        this.board = board;
+        this.map = new HashMap<>();
+        this.keys = new ArrayList<>();
+        this.start = new int[]{r,c};
+        this.answer = 100;
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                if(board[i][j] != 0){
+                    if(!map.containsKey(board[i][j])){
+                        map.put(board[i][j], new ArrayList<>());
+                        keys.add(board[i][j]);
+                    }
+                    map.get(board[i][j]).add(new int[]{i,j});
+                }
+            }
+        }
+        
+        permutation(new int[this.keys.size()], 0, new boolean[this.keys.size()]);
+
+        return answer;
+    }
+    
+    int check(int[] aCase){
+        int[] cur = this.start;
+        
+        int dist = 0;
+        for(int i = 0; i < aCase.length; i++){
+            int dist1 = getDistance(cur, this.map.get(aCase[i]).get(0));
+            int dist2 = getDistance(cur, this.map.get(aCase[i]).get(1));
+            if(dist1 < dist2){
+                dist += dist1+2;
+                dist += getDistance(this.map.get(aCase[i]).get(0), this.map.get(aCase[i]).get(1));
+                cur = this.map.get(aCase[i]).get(1);
+            }else{
+                dist += dist2+2;
+                dist += getDistance(this.map.get(aCase[i]).get(1), this.map.get(aCase[i]).get(0));
+                cur = this.map.get(aCase[i]).get(0);
+            }
+            
+            this.board[this.map.get(aCase[i]).get(0)[0]][this.map.get(aCase[i]).get(0)[1]] = 0;
+            this.board[this.map.get(aCase[i]).get(1)[0]][this.map.get(aCase[i]).get(1)[1]] = 0;
+        }
+        
+        for(int key: this.map.keySet()){
+            board[this.map.get(key).get(0)[0]][this.map.get(key).get(0)[1]] = key;
+            board[this.map.get(key).get(1)[0]][this.map.get(key).get(1)[1]] = key;
+        }
+        
+        return dist;
+    }
+    
+    void permutation(int[] aCase, int idx, boolean[] visited){
+        if(idx == aCase.length){
+            int dist = check(aCase);
+            this.answer = dist < answer ? dist : answer;
+        }
+        
+        for(int i = 0; i < this.keys.size(); i++){
+            if(!visited[i]){
+                visited[i] = true;
+                aCase[idx] = this.keys.get(i);
+                permutation(aCase, idx+1, visited);
+                visited[i] = false;
+                aCase[idx] = 0;
+            }
+        }
+    }
+
+    int getDistance(int[] start, int[] end){
+        Queue<Node> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[4][4];
+
+        visited[start[0]][start[1]] = true;
+        queue.add(new Node(start[0], start[1], 0));
+        while(!queue.isEmpty()){
+            Node cur = queue.poll();
+            int w_ctrl;
+            if(cur.x == end[0] && cur.y == end[1])
+                return cur.dist;
+
+            if(cur.x-1 >= 0) {
+                if(!visited[cur.x-1][cur.y]) {
+                    visited[cur.x - 1][cur.y] = true;
+                    queue.add(new Node(cur.x - 1, cur.y, cur.dist + 1));
+                }
+
+                w_ctrl = cur.x-1;
+                while(w_ctrl > 0 && board[w_ctrl][cur.y] == 0)
+                    w_ctrl--;
+                if(!visited[w_ctrl][cur.y]) {
+                    visited[w_ctrl][cur.y] = true;
+                    queue.add(new Node(w_ctrl, cur.y, cur.dist + 1));
+                }
+            }
+
+            if(cur.y-1 >= 0) {
+                if(!visited[cur.x][cur.y-1]) {
+                    visited[cur.x][cur.y - 1] = true;
+                    queue.add(new Node(cur.x, cur.y - 1, cur.dist + 1));
+                }
+
+                w_ctrl = cur.y-1;
+                while(w_ctrl > 0 && board[cur.x][w_ctrl] == 0)
+                    w_ctrl--;
+                if(!visited[cur.x][w_ctrl]) {
+                    visited[cur.x][w_ctrl] = true;
+                    queue.add(new Node(cur.x, w_ctrl, cur.dist + 1));
+                }
+            }
+
+            if(cur.x+1 < 4) {
+                if(!visited[cur.x+1][cur.y]) {
+                    visited[cur.x + 1][cur.y] = true;
+                    queue.add(new Node(cur.x + 1, cur.y, cur.dist + 1));
+                }
+
+                w_ctrl = cur.x+1;
+                while(w_ctrl < 3 && board[w_ctrl][cur.y] == 0)
+                    w_ctrl++;
+                if(!visited[w_ctrl][cur.y]) {
+                    visited[w_ctrl][cur.y] = true;
+                    queue.add(new Node(w_ctrl, cur.y, cur.dist + 1));
+                }
+            }
+
+            if(cur.y+1 < 4 ){
+                if(!visited[cur.x][cur.y+1]) {
+                    visited[cur.x][cur.y + 1] = true;
+                    queue.add(new Node(cur.x, cur.y + 1, cur.dist + 1));
+                }
+
+                w_ctrl = cur.y+1;
+                while(w_ctrl < 3 && board[cur.x][w_ctrl] == 0)
+                    w_ctrl++;
+                if(!visited[cur.x][w_ctrl]) {
+                    visited[cur.x][w_ctrl] = true;
+                    queue.add(new Node(cur.x, w_ctrl, cur.dist + 1));
+                }
+
+            }
+        }
+        return 0;
+    }
+
+    class Node{
+        int x, y, dist;
+        public Node(int x, int y, int dist){
+            this.x = x;
+            this.y = y;
+            this.dist = dist;
+        }
+    }
+}
+```
+
+> 비슷한 다른 사람 코드
+```java
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+class Pair{
+	int x;
+	int y;
+	int move;
+	
+	public Pair(int x, int y, int move){
+		this.x =x;
+		this.y =y;
+		this.move = move;
+	}
+}
+
+class Solution {
+	
+	static List<String> orders;
+	static int[] dx = {1,-1,0,0};
+	static int[] dy = {0,0,1,-1}; 
+	public int solution(int[][] board, int r, int c) {		 
+		 int cardNum =0;
+		 
+		 // 카드 개수 
+		 for(int i=0; i<4; i++) {
+			for(int j=0; j<4; j++) {
+				if(board[i][j] != 0) {
+					cardNum ++;
+				}
+			}	
+		 }
+		 cardNum /=2;
+		
+		 int[] card = new int[cardNum];
+		 for(int i=0; i<cardNum; i++) {
+			 card[i] = i+1;
+		 }
+		 
+		 // 카드조합 순서 경우의 수 구하기 (123,132,231 ...) 
+		 orders = new ArrayList<>();
+		 permutation("", 0, card);
+		 
+		 int min = Integer.MAX_VALUE;
+		 for(String comb : orders) {
+			 String[] order = comb.split("");
+			 
+			 int total_move =0;
+			 int[] pos = new int[2];
+			 pos[0] =r;
+			 pos[1] =c;			
+			 
+			 int[][] copy_board  = new int[4][4];
+			 for(int i=0; i<4; i++) {
+				 for(int j=0; j<4; j++) {
+					 copy_board[i][j] = board[i][j];
+				 }
+			 }
+			 
+			 for(String target_card : order) {
+				 int card_num = Integer.parseInt(target_card);
+				 
+				 // -------------------------------------------
+				 // 첫 번째 카드 찾기 
+				 total_move += cardSearch(pos, card_num, copy_board);				 
+				 copy_board[pos[0]][pos[1]] = 0;
+				 // enter 
+				 total_move += 1;
+				 // -------------------------------------------
+				 
+				 // -------------------------------------------
+				 // 두 번째 카드 찾기 
+				 total_move += cardSearch(pos, card_num, copy_board);
+				 copy_board[pos[0]][pos[1]] = 0;
+				 
+				 // enter 
+				 total_move += 1;
+				 // -------------------------------------------
+			 }
+			 
+			 min = Math.min(min, total_move);
+		 }
+		 
+		 return min;
+	}
+
+	// 1. 카드 찾기 순서 경우의 수 모두 구하기 
+	static void permutation(String comb, int depth,int[] card) {
+		if(card.length == depth) {
+			orders.add(comb);
+			return ;
+		}
+		
+		for(int i=0; i<card.length; i++) {
+			int num = card[i];
+			if(!comb.contains(""+num)) {
+				permutation(comb+num, depth+1, card);
+			}
+		}
+		
+	}
+	
+	// 2. 카드 찾으러 이동하기  
+	static int cardSearch(int[] pos, int target_card, int[][] copy_board) {
+		Queue<Pair> q = new LinkedList<>();
+		boolean[][] check = new boolean[4][4];
+		int x= pos[0];
+		int y= pos[1];
+		
+		check[x][y] = true;
+		q.add(new Pair(x,y,0));
+		while(!q.isEmpty()) {
+			Pair next = q.poll();
+			int px = next.x;
+			int py = next.y;
+			int move =next.move;
+			
+			if(copy_board[next.x][next.y] == target_card) {
+				System.out.println("["+target_card+ "] find! "+ next.x+","+next.y+ ":"+ move);
+				pos[0] = next.x;
+				pos[1] = next.y;
+				return move;
+			}
+			
+			//상하좌우 1칸 move 
+			for(int i=0; i<4; i++) {
+				int nx = px + dx[i];
+				int ny = py + dy[i];
+				
+				if(nx<0 || ny<0 || nx>3 || ny>3) continue;
+				if(check[nx][ny]) continue;
+				
+				check[nx][ny] = true;
+				q.add(new Pair(nx,ny, move+1));
+			}
+			
+			// ctrl+상하좌우 move
+			for(int i=0; i<4; i++) {
+				Pair res = checkRoute(px,py, i, copy_board);
+				int nx = res.x, ny =res.y;
+				
+				if(nx==x && ny ==y) continue;
+				if(check[nx][ny]) continue;
+				
+				check[nx][ny] = true;
+				q.add(new Pair(nx,ny, move+1));
+			}
+		}
+		return 0;
+		
+		
+		
+	}
+	// ctrl 이동 시 해당 경로에 카드가 있는지 확인 
+	static Pair checkRoute(int x, int y, int direction, int[][] copy_board) {
+		x += dx[direction];
+		y += dy[direction];
+		
+		while(x >= 0 && x < 4 && y >= 0 && y < 4) {
+			if(copy_board[x][y] != 0) return new Pair(x,y,0);
+			
+			x += dx[direction];
+			y += dy[direction];
+		}
+		
+		// 카드 없으면 끝 
+		return new Pair(x-dx[direction],y-dy[direction],0);	
+		
+	}
+}
+```
