@@ -3568,3 +3568,119 @@ class Solution {
 	}
 }
 ```
+
+### 외벽점검
+> https://dev-note-97.tistory.com/241
+> 외벽 (원형) 직선으로 풀어서 생각하기 (n만큼 더해서 반시계, 시계방향 생각하지말고 한 방향으로만). 
+> 모든 weak, dist 케이스(순열) 만들어서 완전탐색하기.
+
+```java
+import java.util.*;
+
+class Solution {
+    HashSet<int[]> hs;
+    HashSet<int[]> dist_hs;
+    int[] list;
+    
+    public int solution(int n, int[] weak, int[] dist) {
+        // 원형을 직선으로 펼쳐서 생각해라!!
+        int answer = -1;
+        int len = weak.length;
+        list = new int[len * 2];
+        for (int i = 0; i < len * 2; i++)
+        {
+            if (i < len)
+                list[i] = weak[i % len];
+            else
+                list[i] = weak[i % len] + n;
+        }
+        int cnt = 1;
+        while (cnt <= dist.length)
+        {
+            hs = new HashSet<int[]>();
+            permutation(cnt, weak, 0);
+            Iterator<int[]> a = hs.iterator();
+            while (a.hasNext())
+            {
+                int[] ttemp = a.next();
+                dist_hs = new HashSet<int[]>();
+                permutation_dist(new int[dist.length], dist, 0, new boolean[dist.length]);
+                Iterator<int[]> b = dist_hs.iterator();
+                while (b.hasNext())
+                {
+                    int check_num = 0;
+                    boolean[] final_check = new boolean[weak.length];
+                    int current_num = ttemp[0];
+                    final_check[0] = true;
+                    int[] dtemp = b.next();
+                    while (check_num < cnt)
+                    {
+                        int t = current_num + dtemp[dist.length - 1 - check_num];
+                        for (int i = 0; i < ttemp.length; i++)
+                        {
+                            if (t >= ttemp[i])
+                                final_check[i] = true;
+                            else
+                            {
+                                current_num = ttemp[i];
+                                break;
+                            }
+                        }
+                        check_num++;
+                    }
+                    int c = 0;
+                    for (int i = 0; i < weak.length; i++)
+                    {
+                        if (final_check[i] == false)
+                        {
+                            c = 1;
+                            break;
+                        }      
+                    }
+                    if (c == 0)
+                        return cnt;
+                }
+            }
+            cnt++;
+        } // while end
+        return answer;
+    } // solution end
+    
+    private void permutation_dist(int[] arr, int[] dist, int depth, boolean[] visit)
+    {
+        if (arr.length == depth)
+        {
+            dist_hs.add(arr);
+            return;
+        }
+        for (int i = 0; i < dist.length; i++)
+        {
+            if (visit[i] == false)
+            {
+                visit[i] = true;
+                int[] temp_arr = new int[dist.length];
+                for (int j = 0; j < dist.length; j++)
+                    temp_arr[j] = arr[j];
+                temp_arr[depth] = dist[i];
+                permutation_dist(temp_arr, dist, depth + 1, visit);
+                visit[i] = false;
+            }
+        }
+    }
+    private void permutation(int cnt, int[] weak, int depth)
+    {
+        if (list.length - depth < weak.length)
+            return;
+        int[] arr = new int[weak.length];
+        int num = 0;
+        for (int i = depth; i < depth + weak.length; i++)
+        {
+            arr[num] = list[i];
+            num++;
+        }
+        hs.add(arr);
+        permutation(cnt, weak, depth + 1);
+    }
+}
+
+```
