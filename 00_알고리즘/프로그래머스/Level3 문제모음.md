@@ -3684,3 +3684,73 @@ class Solution {
 }
 
 ```
+
+
+### 110 옮기기
+> char 배열을 만들고 110 이 생길때만다 sp -= 3 을 통해 덮어쓰기 -> 110 없애는 방법
+
+```java
+class Solution {
+    
+    private String make_str(String str)
+    {
+        String result = "";
+        
+        StringBuilder sb = new StringBuilder();
+        int cnt = 0;
+        String temp = str;
+        char[] stack = new char[temp.length()];
+        int sp = 0;
+        for (int i = 0; i < temp.length(); i++)
+        {
+            stack[sp++] = temp.charAt(i);
+            if (sp >= 3)
+            {
+                int end = sp - 1;
+                if (stack[end] == '0' && stack[end - 1] == '1' && stack[end - 2] == '1')
+                {
+                    sp -= 3;
+                    cnt++;
+                }
+            }   
+        }
+        temp = new String(stack).substring(0, sp);
+        
+        for (int k = 0; k < temp.length(); k++)
+        {
+            if (cnt > 0 && k < temp.length() - 1 && temp.charAt(k) == '1' && temp.charAt(k + 1) == '1'
+               || (cnt > 0 && k == temp.length() - 1 && temp.charAt(k) == '1' ) )
+            {
+                while (cnt > 0)
+                {
+                    sb.append("110");
+                    cnt--;
+                }
+                sb.append(temp.substring(k, temp.length()));
+                break;
+            }
+            else
+                sb.append(temp.charAt(k));
+        } 
+
+        while (cnt != 0)
+        {
+            sb.append("110");
+            cnt--;
+        }
+        result = sb.toString();
+        return result;
+    }
+    
+    public String[] solution(String[] s) {
+        String[] answer = new String[s.length];
+        int len_cnt = 0;
+        for (int i = 0; i < s.length; i++)
+        {
+            String result = make_str(s[i]);
+            answer[len_cnt++] = result;
+        } 
+        return answer;
+    }
+}
+```
