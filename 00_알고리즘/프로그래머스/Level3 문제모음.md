@@ -3685,7 +3685,6 @@ class Solution {
 
 ```
 
-
 ### 110 옮기기
 > char 배열을 만들고 110 이 생길때만다 sp -= 3 을 통해 덮어쓰기 -> 110 없애는 방법
 
@@ -3751,6 +3750,165 @@ class Solution {
             answer[len_cnt++] = result;
         } 
         return answer;
+    }
+}
+```
+
+
+### 블록 이동하기
+```java
+import java.util.*;
+class Solution {
+    public int solution(int[][] board) {
+        int answer = Integer.MAX_VALUE;
+        int len = board.length;
+        boolean[][][] visit = new boolean[len][len][2];
+        
+        Queue<Node> q = new LinkedList<Node>();
+        Node start = new Node(0, 1, true, 0);
+        q.add(start);
+        visit[0][1][0] = true;
+        while(!q.isEmpty())
+        {
+            Node cur = q.poll();
+            int y = cur.y;
+            int x = cur.x;
+            // true 가로   false 세로
+            boolean c = cur.c;
+            int move = cur.move;
+            
+            if (x == len - 1 && y == len - 1)
+            {
+                answer = Math.min(answer, move);
+                // return move;
+            }
+                
+            
+            // 기계 가로
+            if (c == true)
+            {
+                // 오른쪽
+                if (x < len - 1 && visit[y][x + 1][0] == false && board[y][x + 1] == 0)
+                {
+                    visit[y][x + 1][0] = true;
+                    q.add(new Node(y, x + 1, true, move + 1));
+                }
+                // 왼쪽 ->  board 에서 -2 가 0인지 확인해야 한다.
+                if (x > 1 && visit[y][x - 1][0] == false && board[y][x - 2] == 0)
+                {
+                    visit[y][x - 1][0] = true;
+                    q.add(new Node(y, x - 1, true, move + 1));
+                }
+                // 아래
+                if (y < len - 1 && x > 0 && visit[y + 1][x][0] == false && board[y + 1][x] == 0 && board[y + 1][x - 1] == 0)
+                {
+                    visit[y + 1][x][0] = true;
+                    q.add(new Node(y + 1, x, true, move + 1));
+                }
+                // 위
+                if (y > 0 && x > 0 && visit[y - 1][x][0] == false && board[y - 1][x] == 0 && board[y - 1][x - 1] == 0)
+                {
+                    visit[y - 1][x][0] = true;
+                    q.add(new Node(y - 1, x, true, move + 1));
+                }
+                
+                
+                // 방향 전환 가로 -> 세로
+                if (y < len - 1 && x > 0 && visit[y + 1][x][1] == false && board[y + 1][x] == 0 && board[y + 1][x - 1] == 0)
+                {
+                    visit[y + 1][x][1] = true;
+                    q.add(new Node(y + 1, x, false, move + 1));
+                }
+                if (y < len - 1 && x > 0 && visit[y + 1][x - 1][1] == false && board[y + 1][x] == 0 && board[y + 1][x - 1] == 0)
+                {
+                    visit[y + 1][x - 1][1] = true;
+                    q.add(new Node(y + 1, x - 1, false, move + 1));
+                }
+                
+                
+                if (y > 0 && x > 0 && visit[y][x][1] == false && board[y - 1][x] == 0 && board[y - 1][x - 1] == 0)
+                {
+                    visit[y][x][1] = true;
+                    q.add(new Node(y, x, false, move + 1));
+                }
+                if (y > 0 && x > 0 && visit[y][x - 1][1] == false && board[y - 1][x] == 0 && board[y - 1][x - 1] == 0)
+                {
+                    visit[y][x - 1][1] = true;
+                    q.add(new Node(y, x - 1, false, move + 1));
+                }
+
+            }
+            // 기계 세로
+            else
+            {
+                // 오른쪽
+                if (x < len - 1 && y > 0 && visit[y][x + 1][1] == false && board[y][x + 1] == 0 && board[y - 1][x + 1] == 0)
+                {
+                    visit[y][x + 1][1] = true;
+                    q.add(new Node(y, x + 1, false, move + 1));
+                }
+                // 왼쪽
+                if (x > 0 && y > 0 && visit[y][x - 1][1] == false && board[y][x - 1] == 0 && board[y - 1][x - 1] == 0)
+                {
+                    visit[y][x - 1][1] = true;
+                    q.add(new Node(y, x - 1, false, move + 1));
+                }
+                // 아래
+                if (y < len - 1 && visit[y + 1][x][1] == false && board[y + 1][x] == 0)
+                {
+                    visit[y + 1][x][1] = true;
+                    q.add(new Node(y + 1, x, false, move + 1));
+                }
+                // 위 board 에서 -2 가 0인지 확인해야 한다.
+                if (y > 1 && visit[y - 1][x][1] == false && board[y - 2][x] == 0)
+                {
+                    visit[y - 1][x][1] = true;
+                    q.add(new Node(y - 1, x, false, move + 1));
+                }
+                
+                
+                // 방향 전환 세로 -> 가로
+                if (y > 0 && x < len - 1 && visit[y][x + 1][0] == false && board[y][x + 1] == 0 && board[y - 1][x + 1] == 0)
+                { 
+                    visit[y][x + 1][0] = true;
+                    q.add(new Node(y, x + 1, true, move + 1));
+                }
+                if (y > 0 && x < len - 1 && visit[y - 1][x + 1][0] == false && board[y][x + 1] == 0 && board[y - 1][x + 1] == 0)
+                { 
+                    visit[y - 1][x + 1][0] = true;
+                    q.add(new Node(y - 1, x + 1, true, move + 1));
+                }
+                
+                if (y > 0 && x > 0 && visit[y][x][0] == false && board[y][x - 1] == 0 && board[y - 1][x - 1] == 0)
+                { 
+                    visit[y][x][0] = true;
+                    q.add(new Node(y, x, true, move + 1));
+                }
+                if (y > 0 && x > 0 && visit[y - 1][x][0] == false && board[y][x - 1] == 0 && board[y - 1][x - 1] == 0)
+                { 
+                    visit[y - 1][x][0] = true;
+                    q.add(new Node(y - 1, x, true, move + 1));
+                }
+                
+                
+            }
+            
+        }
+        return answer;
+    }
+    class Node
+    {
+        int x;
+        int y;
+        boolean c;
+        int move;
+        Node(int y, int x, boolean c, int move)
+        {
+            this.x = x;
+            this.y = y;
+            this.c = c;
+            this.move = move;
+        }
     }
 }
 ```
