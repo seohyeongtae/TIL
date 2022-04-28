@@ -3912,3 +3912,78 @@ class Solution {
     }
 }
 ```
+
+
+
+### 공 이동 시뮬레이션
+> // https://velog.io/@gkak1121/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EA%B3%B5-%EC%9D%B4%EB%8F%99-%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%EC%85%98
+> 역추적해서 구하기
+```java
+class Solution {
+    public long solution(int n, int m, int x, int y, int[][] queries) {
+        long answer = 0;
+        int len = queries.length;
+        long[] result = new long[4];
+        // [x][y]
+        result[0] = x;
+        result[1] = x;
+        result[2] = y;
+        result[3] = y;
+        
+        for (int i = len - 1; i >= 0; i--)
+        {
+            // System.out.println("x ===  " + temp_x + "  y ==== " + temp_y);
+            int dir = queries[i][0];
+            int dis = queries[i][1];
+            // 반대로 역추적하기 
+            // 왼쪽으로 이동
+            if (dir == 0)
+            {
+                if (result[2] != 0)
+                    result[2] += dis;
+            
+                result[3] += dis;
+                if (result[3] > m - 1)
+                    result[3] = m - 1;
+            }
+            // 오른쪽으로 이동
+            else if (dir == 1)
+            {
+                result[2] -= dis;
+                if (result[2] < 0)
+                  result[2] = 0;
+                
+                if (result[3] != m - 1)
+                    result[3] -= dis;
+            }
+            
+            // 위로 이동
+            else if (dir == 2)
+            {
+                if (result[0] != 0)
+                    result[0] += dis;
+            
+                result[1] += dis;
+                if (result[1] > n - 1)
+                    result[1] = n - 1;
+            }
+            // 아래로 이동
+            else if (dir == 3)
+            {
+                result[0] -= dis;
+                if (result[0] < 0)
+                  result[0] = 0;
+                
+                if (result[1] != n - 1)
+                    result[1] -= dis;
+
+            }
+            
+        }
+        if (result[0] > n - 1 || result[1] < 0 || result[2] > m - 1 || result[3] < 0)
+                return answer;
+        answer = (result[1] - result[0] + 1) * (result[3] - result[2] + 1);
+        return answer;
+    }
+}
+```
