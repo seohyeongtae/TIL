@@ -3987,3 +3987,78 @@ class Solution {
     }
 }
 ```
+
+### 풍선 터트리기
+> 양 방향에서 탐색하면서 최솟값을 두개의 배열에다가 넣어 놓고 마지막에 비교한다 O(2n) 시간복잡도
+> a[i]가 양쪽 최솟값들 보다 모두 크다면 터트릴 수 없는 값이다. 
+```java
+class Solution {
+    public int solution(int[] a) {
+        int answer = 0;
+        int num = a[0];
+        int[] left = new int[a.length];
+        int[] right = new int[a.length];
+        left[0] = a[0];
+        right[a.length - 1] = a[a.length - 1];
+        for (int i = 1; i < a.length - 1; i++)
+        {
+            left[i] = Math.min(left[i - 1], a[i]);
+            right[a.length - 1 - i] = Math.min(right[a.length - i], a[a.length - 1 - i]);
+        }
+        for (int i = 0; i < a.length; i++)
+        {
+            if (!(a[i] > left[i] && a[i] > right[i]))
+                answer++;
+        }
+        return answer;
+    }
+}
+```
+
+> 다른 사람 코드들
+```java
+import java.util.PriorityQueue;
+
+class Solution {
+    public int solution(int[] a) {
+        int answer = 2, aLen = a.length;
+        if(aLen < 3) return aLen;
+        int left = a[0];
+        PriorityQueue<Integer> right = new PriorityQueue<>();
+        right.add(a[aLen - 1]);
+        for(int idx = aLen - 2; idx > 0; --idx) {
+            if(right.peek() > a[idx]) right.add(a[idx]);
+        }
+
+        for(int idx = 1; idx < aLen - 1; ++idx) {
+            int current = a[idx];
+            if(right.peek() == current) right.poll();
+            if(current < left || current < right.peek()) ++answer;
+            if(current < left) left = current;
+        }
+
+        return answer;
+    }
+}
+
+
+
+import java.util.*;
+
+class Solution {
+    public int solution(int[] a) {
+        int answer = 0;
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+        HashSet<Integer> hs = new HashSet<>();
+        for(int i=0;i<a.length;i++){
+            min1=Math.min(min1,a[i]);
+            min2=Math.min(min2,a[a.length-1-i]);
+            hs.add(min1);
+            hs.add(min2);
+        }
+        return hs.size();
+    }
+}
+
+```
