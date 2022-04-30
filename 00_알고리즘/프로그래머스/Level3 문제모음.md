@@ -4062,3 +4062,44 @@ class Solution {
 }
 
 ```
+
+
+### 가장 긴 팬린드롬
+```java
+class Solution
+{
+    public int solution(String s)
+    {
+        int answer = 1;
+        // 짝수, 홀수 나누어서
+        for (int i = 1; i < s.length(); i++)
+        {
+            // 홀수 일 때
+            int c = 1;
+            int cnt = 1;
+            while (i - c >= 0 && i + c < s.length())
+            {
+                if (s.charAt(i - c) == s.charAt(i + c))
+                    cnt += 2;
+                else
+                    break;
+                c++;
+            }
+            answer = Math.max(answer, cnt);
+            // 짝수 일때
+            c = 0;
+            cnt = 0;
+            while (i - c >= 0 && i + c + 1 < s.length())
+            {
+                if (s.charAt(i - c) == s.charAt(i + 1 + c))
+                    cnt += 2;
+                else
+                    break;
+                c++;
+            }
+            answer = Math.max(answer, cnt);
+        }
+        return answer;
+    }
+}
+```
