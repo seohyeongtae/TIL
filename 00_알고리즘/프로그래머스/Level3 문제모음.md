@@ -4103,3 +4103,45 @@ class Solution
     }
 }
 ```
+
+
+### 기지국 설치
+```java
+class Solution {
+    public int solution(int n, int[] stations, int w) {
+        int answer = 0;
+        int min = 1;
+        int len = (w * 2) + 1;
+        int station_len = stations.length;;
+        // station 1부터 시작
+        for (int i = 0; i < station_len; i++)
+        {
+            int cur_min = stations[i] - w;
+            int cur_max = stations[i] + w;
+            if (min < cur_min)
+            {
+                int mid = cur_min - min;
+                if (i != 0)
+                    mid -= 1;
+                while (mid > 0)
+                {
+                    mid -= len;
+                    answer++;
+                }
+            }
+            if (cur_max < n)
+                min = cur_max;
+            else
+                min = n;
+        }
+        // System.out.println(min);
+        while (min < n)
+        {
+            min += len;
+            answer++;
+        }
+
+        return answer;
+    }
+}
+```
