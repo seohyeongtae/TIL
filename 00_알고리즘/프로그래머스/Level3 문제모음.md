@@ -4145,3 +4145,30 @@ class Solution {
     }
 }
 ```
+
+
+### 숫자게임
+```java
+import java.util.*;
+class Solution {
+    public int solution(int[] A, int[] B) {
+        int answer = 0;
+        Arrays.sort(A);
+        Arrays.sort(B);
+        int len = A.length;
+        int cnt = 0;
+        for (int i = 0; i < len; i++)
+        {
+            while (cnt < len && A[i] >= B[cnt])
+                cnt++;
+            if (cnt == len)
+                break;
+            answer++;
+            // System.out.println(i + "  " + A[i] + "   " + B[cnt]);
+            cnt++;
+            
+        }
+        return answer;
+    }
+}
+```
