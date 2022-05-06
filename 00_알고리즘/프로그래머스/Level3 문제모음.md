@@ -4172,3 +4172,94 @@ class Solution {
     }
 }
 ```
+
+### 스티커 모으기(2)
+```java
+class Solution {
+    public int solution(int sticker[]) {
+        // dp 문제??
+        int answer = 0;
+        int[] dp = new int [sticker.length];
+        int[] dp2 = new int [sticker.length];
+        // 0을 찢었을 경우, 안찢었을 경우 생각하기 원형이기 때문에
+        int len = sticker.length;
+        if (len < 4)
+        {
+            if (len == 1)
+            {
+                return sticker[0];
+            }
+            else if (len == 2)
+            {
+                return Math.max(sticker[0], sticker[1]);
+            }
+            else if (len == 3)
+            {
+                return Math.max(sticker[0] + sticker[2] , sticker[1]);
+            }
+        }
+        else
+        {
+            // 첫번째 뜯었을때
+            dp[0] = sticker[0];
+            dp[1] = sticker[0];
+            // dp[2] = sticker[1];
+            
+            // 첫번쨰 안뜯었을때
+            dp2[0] = 0;
+            dp2[1] = sticker[1];
+            // dp2[2] = sticker[2];
+            
+            for (int i = 2; i < len - 1; i++)
+            {
+                dp[i] = Math.max( (dp[i - 2] + sticker[i]), dp[i - 1] );
+                dp2[i] = Math.max( (dp2[i - 2] + sticker[i + 1]), dp2[i - 1] );
+            }
+            
+            for (int i = 2; i < len; i++)
+            {
+                dp[i] = Math.max( (dp[i - 2] + sticker[i]), dp[i - 1] );
+                dp2[i] = Math.max( (dp2[i - 2] + sticker[i]), dp2[i - 1] );
+            }
+            answer = Math.max(dp[sticker.length - 2], dp2[sticker.length - 1]);
+        }
+        
+        return answer;
+    }
+}
+```
+
+> 이전에 풀었던 도둑질과 같은 풀이방법이다 (DP)
+> https://programmers.co.kr/learn/courses/30/lessons/42897
+```java
+class Solution {
+    public int solution(int[] money) {
+        int answer = 0;
+        int len = money.length;
+        int[] dp1 = new int[len];
+        int[] dp2 = new int[len];
+        
+        for (int i = 0; i < len - 1; i++)
+        {
+            if (i == 0)
+                dp1[i] = money[i];
+            else if (i == 1)
+                dp1[i] = money[i - 1];
+            else
+                dp1[i] = Math.max(dp1[i - 2] + money[i], dp1[i - 1]);
+            answer = Math.max(answer, dp1[i]);
+        }
+        for (int i = 0; i < len; i++)
+        {
+            if (i == 0)
+                dp2[i] = 0;
+            else if (i == 1)
+                dp2[i] = money[i];
+            else
+                dp2[i] = Math.max(dp2[i - 2] + money[i], dp2[i - 1]);
+            answer = Math.max(answer, dp2[i]);
+        }
+        return answer;
+    }// solution end
+}
+```
