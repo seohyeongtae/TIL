@@ -4263,3 +4263,31 @@ class Solution {
     }// solution end
 }
 ```
+
+### 거스름돈
+> https://programmers.co.kr/questions/25161
+> dp를 이용하여 푸는 문제 위의 링크에 자세한 설명이 있다.
+> div로 나머지 안구해도 통과하는 문제
+```java
+import java.util.*;
+class Solution {
+    public int solution(int n, int[] money) {
+        int answer = 0;
+        Arrays.sort(money);
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        int div =  1000000007;
+        
+        for (int i = 0; i < money.length; i++)
+        {
+            for (int j = 1; j <= n; j++)
+            {
+                if (j < money[i])
+                    continue;
+                dp[j] += dp[j - money[i]];
+            }
+        }
+        return dp[n];
+    }
+}
+```
