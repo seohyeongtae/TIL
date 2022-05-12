@@ -4291,3 +4291,22 @@ class Solution {
     }
 }
 ```
+
+### 멀리뛰기
+```java
+class Solution {
+    public long solution(int n) {
+        long answer = 0;
+        long[] dp = new long[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++)
+        {
+            for (int j = 1; j <= 2; j++)
+                dp[i] = (dp[i] + dp[i - j]) % 1234567; 
+        }
+        answer = dp[n];
+        return answer;
+    }
+}
+```
