@@ -4310,3 +4310,46 @@ class Solution {
     }
 }
 ```
+
+### 야근 지수
+```java
+import java.util.*;
+
+class Solution {
+    public long solution(int n, int[] works) {
+        long answer = 0;
+        long time = 0;
+        int len = works.length;
+        Arrays.sort(works);
+        for (int i = 0; i < len; i++)
+            time += works[i];
+        if (time <= n)
+            return 0;
+        time -= n;
+        // 작업량 자체를 늘릴 수는 없다.
+        if (len == 1)
+            return (time * time);
+        while (n > 0)
+        {
+            for (int i = len - 1; i >= 0; i--)
+            {
+                if (i == 0)
+                {
+                    n--;
+                    works[i]--;
+                    break;
+                }
+                if (works[i] > works[i - 1])
+                {
+                    n--;
+                    works[i]--;
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < len; i++)
+            answer += (works[i] * works[i]);
+        return answer;
+    }
+}
+```
