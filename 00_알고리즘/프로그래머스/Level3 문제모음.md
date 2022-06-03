@@ -4353,3 +4353,102 @@ class Solution {
     }
 }
 ```
+
+### 줄 서는 방법
+> 밑에 두가지 해설 참고 및 결합하여 해결
+> https://programmers.co.kr/questions/24730
+> https://programmers.co.kr/questions/28488
+
+```java
+class Solution {
+    public int[] solution(int n, long k) {
+        int[] answer = new int[n];
+        
+        boolean[] arr = new boolean[n + 1];
+        long[] facto = new long[n + 1];
+        facto[0] = 1;
+        for (int i = 1; i <= n; i++)
+            facto[i] = facto[i - 1] * i;
+        
+        int index = 0;
+        int temp_n = n;
+        
+        while (n != 0)
+        {
+            int num = (int)((k - 1) / facto[n - 1]) + 1;
+            int check = 0;
+            if (k == 0)
+            {
+                for (int i = temp_n; i >= 1; i--)
+                {
+                    if (arr[i] == false)
+                    {
+                        answer[index] = i;
+                        arr[i] = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i <= temp_n; i++)
+                {
+                    if (arr[i] == false)
+                    {
+                        check++;
+                        if (check == num)
+                        {
+                            answer[index] = i;
+                            arr[i] = true;
+                            break;
+                        }
+                    }
+                }    
+            }
+            k = k % facto[n - 1];
+            index++;
+            n -= 1; 
+        }
+        
+        return answer;
+    }
+}
+```
+
+> Array list 를 사용한 다른 사람 코드
+```java
+import java.util.Arrays;
+import java.util.ArrayList;
+
+class Solution {
+    public int[] solution(int n, long k) {
+        int[] answer = new int[n];
+        long temp = k - 1;
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            list.add(i);
+        }
+        for (int i = 0; i < n; i++) {
+            if (temp == 0) {
+                answer[i] = list.get(0);
+                list.remove(0);
+                continue;
+            }
+            long num = temp / factorial(n - i - 1);
+            answer[i] = list.get((int)num);
+            list.remove((int)num);
+            temp = temp % factorial(n - i - 1);
+        }
+
+        return answer;
+    }
+
+    public long factorial(int n) {
+        long result = 1;
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+}
+```
