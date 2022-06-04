@@ -3036,3 +3036,133 @@ public class programmers {
 
 ```
 
+### 양궁대회
+```java
+import java.util.*;
+class Solution {
+    ArrayList<int[]> al;
+    int N;
+    int max = 0;
+    int[] answer;
+    public int[] solution(int n, int[] info) {
+        answer = null;
+        //순열을 모두 만들고 그떄마다 비교를 하자
+        al = new ArrayList<int[]>();
+        int[] pre = new int[info.length];
+        N = n;
+        boolean[] visit = new boolean[info.length];
+        precision(pre, visit, 0, 0);
+        for (int i = 0; i < al.size(); i++)
+            check_al(info, al.get(i));
+        if (answer == null)
+        {
+            answer = new int[1];
+            answer[0] = -1;
+        }
+            
+        return answer;
+    } // main end
+    private void check_al(int[] info, int[] a)
+    {
+        int sum_lion = 0;
+        int sum_apeach = 0;
+        for (int i = 0; i < a.length; i++)
+        {
+            if (a[i] > info[i])
+                sum_lion += (10 - i);
+            else if (info[i] != 0)
+                sum_apeach += (10 - i);
+        }
+        
+        if (sum_lion > sum_apeach && (sum_lion - sum_apeach) > max)
+        {
+            max = sum_lion - sum_apeach;
+            answer = a;
+        }
+        else if ((sum_lion - sum_apeach) == max && max != 0)
+        {
+            for (int i = 0; i < a.length; i++)
+            {
+                if (answer[a.length - 1 - i] < a[a.length - 1 - i])
+                {
+                    answer = a;
+                    break;
+                }
+                else if (answer[a.length - 1 - i] > a[a.length - 1 - i])
+                    break;
+            }
+        }
+    }
+    
+    private void precision(int[] pre, boolean[] visit, int n, int depth)
+    {
+        if (n == N - 1)
+            al.add(pre);
+        if (depth == pre.length)
+            return;
+        boolean[] v = new boolean[visit.length];
+        int[] tem_pre = new int[pre.length];
+        for (int i = 0; i < visit.length; i++)
+        {
+            v[i] = visit[i];
+            tem_pre[i] = pre[i];
+        }
+            
+        if (n >= N)
+            return;
+        
+        for (int i = 0; i <= N - n; i++)
+        {
+            if (v[depth] == false)
+            {
+                v[depth] = true;
+                tem_pre[depth] = i;
+                precision(tem_pre, v, n + i, depth + 1);
+                v[depth] = false;
+            }
+        }
+        
+    }
+}
+```
+
+> 다른 사람 코드
+```java
+class Solution {
+
+    int max, ans[], apeach[];
+
+    void find(int n, int cur) {
+        int score = 0, state[] = new int[11];
+        for(int i=1; i<=10; i++) {
+            if((cur&1<<i) > 0) {
+                n -= state[10-i] = apeach[10-i]+1;
+                if(n < 0) return;
+                score += i;
+            }else if(apeach[10-i] > 0) score -= i;
+        }
+        if(score <= 0) return;
+        state[10] = n;
+        if(max < score) {
+            max = score;
+            ans = state;
+        }else if(max == score) {
+            for(int i=10; i>=0; i--) {
+                if(ans[i] != state[i]) {
+                    if(state[i] > ans[i]) 
+                        ans = state;
+                    return;
+                }
+            }
+        }
+    }
+    int[] solution(int n, int[] info) {
+        apeach = info;
+        for(int i=1; i<1<<11; i++)
+            if(Integer.bitCount(i) <= n)
+                find(n, i);
+
+        return max == 0 ? new int[] {-1} : ans;
+    }
+}
+```
